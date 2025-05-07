@@ -1,0 +1,160 @@
+# .github/workflows/release-python.yml
+# See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+
+name: Release Python Package
+
+on:
+  push:
+    tags:
+      # Trigger on SemVer tags. Commitizen configured in pyproject.toml (Area 12)
+      # uses PEP 440 which is SemVer compatible.
+      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-*" # Include pre-release tags
+
+  # Allow workflow to be run manually from the Actions tab for a specific tag
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Git tag to build and release (e.g., v1.2.3). Must already exist.'
+        required: true # User must provide a tag when manually dispatching
+
+jobs:
+  # Job 1: Build the package and publish to TestPyPI
+  build_and_testpypi:
+    name: Build & Publish to TestPyPI
+    # Run on a consistent, standard build environment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: {% raw %}${{ github.event_name == 'push' && github.ref || github.event.inputs.tag }}{% endraw %}
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - name: Upload built package artifacts
+        # Upload packages so the publish job can access them.
+        uses: actions/upload-artifact@v4
+        with:
+          name: distribution-packages # Name the artifact
+          path: dist/ # Path to the built sdist/wheel files
+          retention-days: 7 # Keep built artifacts for 7 days
+
+      - name: Download built package artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: distribution-packages-{% raw %}{{ github.event.inputs.tag }}{% endraw %}
+          path: dist/
+
+      # --- Publish to TestPyPI Step ---
+      # This step runs within the same job after build.
+      - name: Publish to TestPyPI
+        # Execute the Task Automation publish session for TestPyPI.
+        # This calls uv publish dist/* with TestPyPI credentials/config (Topic 10).
+        env:
+          # TestPyPI credentials stored as secrets in GitHub Settings -> Secrets
+          TWINE_USERNAME: __token__ # Standard username when using API tokens
+          TWINE_PASSWORD: {% raw %}[{% raw %} ${{ secrets.TESTPYPI_API_TOKEN }} {% raw %}]{% endraw %} # Use GitHub Encrypted Secret
+          # Optional: If uv publish requires different config for repository URL, pass TWINE_REPOSITORY or similar
+        run: uvx nox -s publish-package -- --repository testpypi # Call the publish-package session, passing repository arg
+
+      # --- Get Changelog Content for Release Notes ---
+      # Use a standard action to extract changelog content.
+      # This action requires a standard CHANGELOG.md format.
+      - name: Get Release Notes from Changelog
+        id: changelog
+        uses: simple-changelog/action@v3 # Action to parse CHANGELOG.md
+        with:
+          path: CHANGELOG.md # Path to your CHANGELOG.md
+          tag: {% raw %}${{ github.event_name == 'push' && github.ref_name || github.event.inputs.tag }}{% endraw %} # Pass the tag name
+
+      # Define outputs from this job that other jobs (like create_github_release) can use.
+    outputs:
+      changelog_body:
+        description: "Release notes body extracted from CHANGELOG.md"
+        value: {% raw %}${{ steps.changelog.outputs.changes }}{% endraw %} # Output the extracted changelog body
+
+  # Job 2: Publish to Production PyPI
+  # This job runs only if Job 1 completes successfully (implicit dependency)
+  # and only on tag push events (NOT manual dispatch for production).
+  publish_pypi:
+    name: Publish to Production PyPI
+    runs-on: ubuntu-latest
+    # This job explicitly depends on build_and_testpypi completing successfully
+    needs: build_and_testpypi
+
+    # Only run on tag push events, NOT on manual dispatch for the final PyPI publish
+    if: {% raw %}github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'){% endraw %}
+
+    steps:
+      - name: Download package artifacts # Get packages built in the previous job
+        uses: actions/download-artifact@v4
+        with:
+          name: distribution-packages # Must match the artifact name from build job
+          path: dist/ # Download into the 'dist' directory
+
+      - name: Set up Python # Needed to run uvx/publish task
+        uses: actions/setup-python@v5
+        with:
+          python-version: {% raw %}3.x{% endraw %} # Same version as build job for consistency
+
+      - name: Set up uv # Install uv for this job
+        uses: astral-sh/setup-uv@v6
+
+      # --- Publish to Production PyPI Step ---
+      - name: Publish to PyPI
+        # Execute the Task Automation publish session for Production PyPI.
+        # Calls uv publish dist/* which defaults to pypi.org (Topic 10).
+        # Configure Production PyPI credentials securely.
+        env:
+          # Production PyPI credentials stored as secrets in GitHub Settings -> Secrets
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: {% raw %}[{% raw %} ${{ secrets.PYPI_API_TOKEN }} {% raw %}]{% endraw %} # Use GitHub Encrypted Secret
+          # Optional: TWINE_REPOSITORY if publishing to a custom production index
+        run: uvx nox -s publish-package # Call the publish-package session (defaults to pypi.org)
+
+
+  # Job 3: Create GitHub Release (Runs regardless of PyPI publish success, relies on build job for info/artifacts)
+  create_github_release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    # Needs the build job (which includes getting changelog)
+    needs: build_and_testpypi
+
+    # Only run this job if triggered by a tag push
+    if: {% raw %}github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'){% endraw %}
+
+    steps:
+      - name: Download package artifacts # Get built artifacts for release assets
+        uses: actions/download-artifact@v4
+        with:
+          name: distribution-packages
+
+      - name: Get tag name
+        id: get_tag
+        run: echo "tag={% raw %}${{ github.ref_name }}{% endraw %}" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        # Uses a standard action to create a release in GitHub based on the tag.
+        uses: softprops/action-gh-release@v2
+        with:
+          # The Git tag the release is associated with
+          tag_name: {% raw %}${{ steps.get_tag.outputs.tag }}{% endraw %}
+          # The name of the release (often the same as the tag)
+          name: Release {% raw %}${{ steps.get_tag.outputs.tag }}{% endraw %}
+          # The body of the release notes - access the output from the 'build_and_testpypi' job
+          body: {% raw %}${{ needs.build_and_testpypi.outputs.changelog_body }}{% endraw %} # Access changelog body from dependent job output
+
+
+          files: dist/* # Attach built sdist and wheel files as release assets
+          # Optional: Mark as a draft release for manual review before publishing
+          # draft: true
+          # Optional: Mark as a pre-release for tags containing hyphens (e.g., v1.0.0-rc1)
+          prerelease: {% raw %}${{ contains(steps.get_tag.outputs.tag, '-') }}{% endraw %} # Checks if tag contains hyphen (e.g. v1.0.0-rc.1)

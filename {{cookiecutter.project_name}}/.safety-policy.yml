@@ -1,0 +1,41 @@
+version: "3.0"
+
+scanning-settings:
+  max-depth: 6
+  exclude: []
+  include-files: []
+  system:
+    targets: []
+
+report:
+  dependency-vulnerabilities:
+    enabled: true
+    auto-ignore-in-report:
+      python:
+        environment-results: true
+        unpinned-requirements: true
+      cvss-severity: []
+
+fail-scan-with-exit-code:
+  dependency-vulnerabilities:
+    enabled: true
+    fail-on-any-of:
+      cvss-severity:
+        - critical
+        - medium
+        - high
+      exploitability:
+        - critical
+        - medium
+        - high
+
+security-updates:
+  dependency-vulnerabilities:
+    auto-security-updates-limit:
+      - patch
+
+security:
+  ignore-vulnerabilities:
+    70612:
+      reason: Jinja2 has no intentions of fixing this vulnerability.
+      expires: "2025-01-01"

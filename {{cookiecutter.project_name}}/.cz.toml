@@ -1,0 +1,48 @@
+# .cz.toml
+# See https://commitizen-tools.github.io/commitizen/config/
+
+# Commitizen configuration for project release management (using Conventional Commits).
+
+[tool.commitizen]
+# Format for Git tags created by cz bump. '$version' is replaced by the new version.
+tag_format = "v$version"
+
+# Versioning scheme to use for deciding the next version based on commit types.
+# See https://commitizen-tools.github.io/commitizen/versioning/ for options.
+# 'pep440' (default) is common for Python (e.g., 0.1.0, 1.2.3)
+# 'semver' is another popular standard (major.minor.patch)
+version_scheme = "pep440"
+
+# Set to true to allow bumping to 0.y.z from 0.(y-1).z when commit types normally trigger major bump.
+# Recommended for initial development phases before 1.0.0.
+major_version_zero = true
+
+# Files where the version string should be updated when 'cz bump' is run.
+# Ensure these paths and variable names match your project.
+write_version_files = [
+    # Updates the [project].version in pyproject.toml (PEP 621)
+    "pyproject.toml:version",
+    # Example: Update __version__ in your package's __init__.py
+    "src/{{ cookiecutter.package_name }}/__init__.py:__version__",
+    # Add other files if needed (e.g., YOUR_APP/__init__.py for complex structures)
+]
+
+# File where Commitizen reads/writes the commit message for manual commits (standard).
+commit_msg_file = ".git/COMMIT_EDITMSG"
+
+# Optional: Define specific commit types and their impact on version bumping/changelog sections.
+# See https://commitizen-tools.github.io/commitizen/getting_started/#setting-the-cz-config
+# The default types are usually sufficient (feat, fix, breaking changes, etc.) but can be customized.
+# [tool.commitizen.commit_types]
+# feat = { description = "A new feature", section = "Features" }
+# fix = { description = "A bug fix", section = "Bug Fixes" }
+# chore = { description = "Build process or auxiliary tool changes", hidden = true }
+
+
+# Optional: Configuration for Git host integrations (e.g., creating GitHub releases).
+# See https://commitizen-tools.github.io/commitizen/changelog/#git-host-configuration
+[tool.commitizen.github]
+release = true # Enable GitHub release creation
+release_asset_path = "dist/*" # Attach build artifacts from the 'dist' directory
+release_asset_descriptions = { "*.tar.gz": "Source distribution", "*.whl": "Python Wheel" }
+base_url = "https://github.com/{{ cookiecutter.github_username | lower | replace(' ', '-') }}/{{ cookiecutter.project_slug.replace('_', '-') }}" # Your repo URL

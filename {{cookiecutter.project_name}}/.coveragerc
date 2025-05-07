@@ -1,0 +1,19 @@
+[paths]
+source =
+    src
+    */site-packages
+tests =
+    tests
+    */tests
+
+[run]
+branch = true
+source =
+    {{cookiecutter.package_name}}
+    tests
+
+[report]
+exclude_also =
+    if TYPE_CHECKING:
+show_missing = true
+fail_under = 100

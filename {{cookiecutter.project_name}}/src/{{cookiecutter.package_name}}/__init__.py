@@ -1,0 +1,1 @@
+"""{{cookiecutter.friendly_name}}."""

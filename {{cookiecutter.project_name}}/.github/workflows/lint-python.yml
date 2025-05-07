@@ -1,0 +1,48 @@
+# .github/workflows/lint-python.yml
+# See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+
+name: Lint Python Code
+
+on:
+  pull_request:
+    paths:
+      - 'src/**/*.py'
+      - 'tests/**/*.py'
+      - 'noxfile.py'
+      - 'pyproject.toml'
+      - '.ruff.toml'
+      - '.pydocstyle'
+      - '.github/workflows/lint-python.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**/*.py'
+      - 'tests/**/*.py'
+      - 'noxfile.py'
+      - 'pyproject.toml'
+      - '.ruff.toml'
+      - '.pydocstyle'
+      - '.github/workflows/lint-python.yml'
+
+  workflow_dispatch:
+
+jobs:
+  lint-python:
+    name: Run Python Linting Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - name: Run linting checks
+        run: uvx nox -s lint-python

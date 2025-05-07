@@ -1,0 +1,64 @@
+# .github/workflows/test-python.yml
+# See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+
+name: Test Python Code
+
+on:
+  pull_request:
+    paths:
+      - 'src/**/*.py'
+      - 'tests/**/*.py'
+      - 'noxfile.py'
+      - 'pyproject.toml'
+      - '.coveragerc'
+      - '.github/workflows/test-python.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**/*.py'
+      - 'tests/**/*.py'
+      - 'noxfile.py'
+      - 'pyproject.toml'
+      - '.coveragerc'
+      - '.github/workflows/test-python.yml'
+
+  workflow_dispatch:
+
+jobs:
+  test-python:
+    name: Run Python Tests on {% raw %}${{ matrix.os }}/{{"{{"}} matrix.python-version{{"}}"}} {% endraw %}
+    runs-on: {% raw %}${{ matrix.os }}{% endraw %}
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: {% raw %}${{ matrix.python-version }}{% endraw %}
+
+      - name: Run test suite
+        run: uvx nox -s test-python
+
+      - name: Upload test reports
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results-{% raw %}${{ matrix.os }}{% endraw %}-py{% raw %}${{ matrix.python-version }}{% endraw %}
+          path: test-results/*.xml
+          retention-days: 5
+
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report-{% raw %}${{ matrix.os }}{% endraw %}-py{% raw %}${{ matrix.python-version }}{% endraw %}
+          path: coverage.xml
+          retention-days: 5

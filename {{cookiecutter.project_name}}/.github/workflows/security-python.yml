@@ -1,0 +1,48 @@
+# .github/workflows/security-python.yml
+# See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+
+name: Check Python Code Security
+
+on:
+  pull_request:
+    paths:
+      - 'src/**/*.py'
+      - 'tests/**/*.py'
+      - 'noxfile.py'
+      - 'pyproject.toml'
+      - '.bandit'
+      - '.ruff.toml'
+      - '.github/workflows/security-python.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**/*.py'
+      - 'tests/**/*.py'
+      - 'noxfile.py'
+      - 'pyproject.toml'
+      - '.bandit'
+      - '.ruff.toml'
+      - '.github/workflows/security-python.yml'
+
+  workflow_dispatch:
+
+jobs:
+  security-python:
+    name: Run Python Code Security Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: .python-version
+
+      - name: Run Python code security analysis
+        run: uvx nox -s security-python

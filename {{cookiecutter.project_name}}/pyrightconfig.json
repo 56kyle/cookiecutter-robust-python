@@ -1,0 +1,94 @@
+// pyrightconfig.json
+// See https://github.com/microsoft/pyright/blob/main/docs/configuration.md
+// This file configures the Pyright static type checker.
+
+{
+  "include": [
+    "src",
+    "tests"
+  ],
+  "exclude": [
+    ".venv",
+    "venv",
+    ".git",
+    "__pycache__",
+    "build",
+    "dist",
+    ".nox",
+    ".ruff_cache",
+    ".pytest_cache",
+    ".mypy_cache",
+    ".coverage",
+    "rust"
+  ],
+  // Path to search for virtual environments relative to this config file.
+  // "." searches in the current directory and subdirectories (like .venv).
+  "venvPath": ".",
+  // Name of the default virtual environment directory to search within venvPath.
+  // UV's default is ".venv" relative to the project root.
+  "venv": ".venv",
+  // Execution environments help map source paths to target Python versions/extra paths.
+  "executionEnvironments": [
+    {
+      // Analyze source code within the 'src' directory
+      "root": "src",
+      "pythonVersion": "{{ cookiecutter.python_version }}",
+      // Paths to add to sys.path for analysis within this environment
+      "extraPaths": []
+    },
+    {
+      "root": "tests",
+      "pythonVersion": "{{ cookiecutter.python_version }}",
+      "extraPaths": []
+    }
+  ],
+  // === Reporting Severity Levels ===
+  // Control severity for different types of issues (error, warning, information, ignore)
+  // Change these to "error" once you have addressed issues in your project for stricter enforcement.
+
+  // Reporting level for basic type issues.
+  "reportMissingImports": true,
+  // Flag imports Pyright cannot find
+  "reportMissingTypeStubs": true,
+  // Flag imported libraries without type stubs
+
+  "reportGeneralTypeIssues": "warning",
+  // Warn about common type problems
+  "reportPropertyTypeMismatch": "warning",
+  // Warn if getter/setter types don't align
+  "reportReturnTypeFromAnnotation": "warning",
+  // Check consistency between return annotation and actual code path returns
+
+  // === Strictness Flags ===
+  // Enabling "strict": true turns on a comprehensive set of strict type checking rules.
+  // It's recommended to enable this once your project is well-typed for maximum safety.
+  // It's equivalent to enabling all "report..." rules listed below.
+  // "strict": true, # Uncomment and set to true for strict mode
+
+  // Alternatively, enable individual strict rules progressively:
+  // "basic": true # Enables a moderate set of strict rules (often a good starting point before full strict)
+  // See Pyright docs for descriptions of all strict rules:
+  // https://github.com/microsoft/pyright/blob/main/docs/configuration.md#information-about-type-checking-rules
+
+  // Examples of strict rules included in "strict": true or "basic": true
+  // "reportAny": "warning",                 # Disallows explicit or implicit use of 'Any'
+  // "reportUndefinedVariable": "error",     # Required. Flags uses of variables before assignment.
+  // "reportUnusedImport": "warning",        # Flags unused imports (also caught by Ruff).
+  // "reportUnusedVariable": "warning",      # Flags unused variables (also caught by Ruff).
+  // "reportMissingParameterType": "warning",# Flags function parameters missing type annotations
+  // "reportMissingReturnType": "warning",   # Flags functions missing return type annotations
+  // "reportOptionalOperand": "warning",     # Flags operations on potentially None values
+
+  // --- Other Configuration ---
+  // Set the python version explicitly for analysis context
+  "pythonVersion": "{{ cookiecutter.python_version }}"
+
+  // Set the python platform explicitly if cross-platform analysis is needed (less common for typical projects)
+  // "pythonPlatform": "Linux", # "Linux", "Darwin" (macOS), "Windows"
+
+  // Define custom typeshed paths if needed
+  // "typeshedPath": "path/to/typeshed",
+
+  // Specify a minimum threshold of confidence for inferred types (advanced)
+  // "analyzeUnannotatedFunctions": true, # Analyze functions even if not annotated (part of basic)
+}

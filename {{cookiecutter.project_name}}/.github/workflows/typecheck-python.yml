@@ -1,0 +1,52 @@
+# .github/workflows/typecheck-python.yml
+# See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
+
+name: Type Check Python Code
+
+on:
+  pull_request:
+    paths:
+      - 'src/**/*.py'
+      - 'tests/**/*.py'
+      - 'noxfile.py'
+      - 'pyproject.toml'
+      - 'pyrightconfig.json'
+      - '.github/workflows/typecheck-python.yml'
+      - '**/*.pyi' # Include explicit type stub files
+  push:
+    branches:
+      - main
+    paths:
+      - 'src/**/*.py'
+      - 'tests/**/*.py'
+      - 'noxfile.py'
+      - 'pyproject.toml'
+      - 'pyrightconfig.json'
+      - '.github/workflows/typecheck-python.yml'
+      - '**/*.pyi'
+
+  workflow_dispatch:
+
+jobs:
+  typecheck-python:
+    name: Run Python Type Checks on {% raw %}${{ matrix.os }}/{{"{{"}} matrix.python-version{{"}}"}} {% endraw %}
+    runs-on: {% raw %}${{ matrix.os }}{% endraw %}
+    strategy:
+      matrix:
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+        os: [ubuntu-latest]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: {% raw %}${{ matrix.python-version }}{% endraw %}
+
+      - name: Run Python type checking
+        run: uvx nox -s typecheck-python
