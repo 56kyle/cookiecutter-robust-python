@@ -98,13 +98,20 @@ I can guarantee that if the [Robust Python Cookiecutter] ever sees any amount of
 of trusted individuals to ensure the project is taken care of.
 
 [bitbucket-pipelines]: https://support.atlassian.com/bitbucket-cloud/docs/write-a-pipe-for-bitbucket-pipelines/
+[cookiecutter]: https://cookiecutter.readthedocs.io/en/stable/
 [cookiecutter-hypermodern-python]: https://github.com/cjolowicz/cookiecutter-hypermodern-python
+[cookiecutter-robust-python]: https://github.com/56kyle/cookiecutter-robust-python
+[cruft]: https://cruft.github.io/cruft/
 [github-actions]: https://docs.github.com/en/actions
 [Hypermodern Python Cookiecutter]: https://github.com/cjolowicz/cookiecutter-hypermodern-python
+[just]: https://github.com/casey/just?tab=readme-ov-fil
 [maturin]: https://github.com/PyO3/maturin
-[cookiecutter-robust-python]: https://github.com/56kyle/cookiecutter-robust-python
+[noxfile]: https://github.com/56kyle/cookiecutter-robust-python/blob/main/%7B%7Bcookiecutter.project_name%7D%7D/noxfile.py
+[poetry]: https://python-poetry.org/docs/
+[polars]: https://github.com/pola-rs/polars
 [Robust Python Cookiecutter]: https://github.com/56kyle/cookiecutter-robust-python
 [ruff]: https://docs.astral.sh/ruff/
+[rust]: https://www.rust-lang.org/learn
 [Rye]: https://rye.astral.sh/
 [uv]: https://docs.astral.sh/uv/
 
