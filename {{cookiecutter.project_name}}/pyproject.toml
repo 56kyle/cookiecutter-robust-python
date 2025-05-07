@@ -1,16 +1,16 @@
 [project]
 name = "{{ cookiecutter.package_name }}"
 version = "0.1.0"
-description = "{{ cookiecutter.project_description }}"
+description = "{{ cookiecutter.package_name }}"
 authors = [
     { name = "{{ cookiecutter.author_name }}", email = "{{ cookiecutter.author_email }}" },
 ]
 license = { text = "{{ cookiecutter.license }}" }
 readme = "README.md"
-requires-python = ">={{ cookiecutter.python_version }},<4.0"
+requires-python = ">={{ cookiecutter.min_python_version}},<4.0"
 
 keywords = [
-    "{{ cookiecutter.project_slug.replace('_', '-') }}",
+    "{{ cookiecutter.project_name.replace('_', '-') }}",
 ]
 
 classifiers = [
@@ -71,10 +71,6 @@ requires = [
 ]
 build-backend = {% if cookiecutter.add_rust_extension == 'y' -%} "maturin" {% else -%} "setuptools.build_meta" {% endif %}
 
-
-# --- Tool-specific configurations ---
-# Configuration details are often in separate files (.ruff.toml, pyrightconfig.json)
-# Link to their documentation for full config options.
 
 [tool.uv]
 # See https://docs.astral.sh/uv/reference/configuration/
