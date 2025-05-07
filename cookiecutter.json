@@ -3,7 +3,7 @@
   "package_name": "{{ cookiecutter.project_name.replace('-', '_') }}",
   "friendly_name": "{{ cookiecutter.project_name.replace('-', ' ').title() }}",
   "min_python_version": "3.9",
-  "max_python_version": "3.12",
+  "max_python_version": "3.13",
   "author": "Kyle Oliver",
   "email": "56kyleoliver+cookiecutter-robust-python@gmail.com",
   "github_user": "56kyle",
