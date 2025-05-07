@@ -1,68 +1,23 @@
 # .pre-commit-config.yaml
 # See https://pre-commit.com/
+default_stages: [commit]
 
-# This file configures the pre-commit framework, listing hooks that run on staged files before commits.
-# Ruff is configured to run the full set of enabled linting rules and formatting on files in the commit.
-
-# --- Default settings for hooks if not overridden ---
-default_stages: [commit] # Run hooks by default on 'commit' stage
-
-# Exclude patterns for hooks (relative to project root).
-# Ensure consistency with .gitignore. Hooks often have built-in excludes for standard dirs.
-# exclude: ^docs/.*$ # Example exclude for documentation source files (handled by Ruff excludes often)
-
-# --- Repositories containing hooks ---
 repos:
-  # Standard pre-commit hooks provided by the framework developers.
-  # See https://github.com/pre-commit/pre-commit-hooks
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    # Use a specific tag or commit hash (pinning for reproducibility).
-    rev: v4.6.0 # Update periodically to get newer hooks/fixes.
+    rev: v4.6.0
     hooks:
-      # Prevent adding large files that should probably be in Git LFS or ignored.
       - id: check-added-large-files
-        args: ["--max-size=1000000"] # Set max file size to 1MB (adjust as needed).
-
-      # Check YAML files (e.g., CI workflows, Docker Compose) for syntax errors.
+        args: ["--max-size=1000000"]
       - id: check-yaml
-
-      # Check TOML files (e.g., pyproject.toml, .ruff.toml) for syntax errors.
       - id: check-toml
-
-      # Ensure files end with a single newline and are not excessively blank at the end.
       - id: end-of-file-fixer
-
-      # Removes unwanted trailing whitespace from lines.
       - id: trailing-whitespace
 
-  # Ruff hooks (Formatter and Linter checks) from Astral.
-  # See https://github.com/astral-sh/ruff-pre-commit
-  # Match the rev/version to the version of Ruff used in the template's pyproject.toml dependencies.
-  - repo: https://github.com/astral-sh/ruff-pre-commit # Official hooks from Astral (Ruff creator)
-    # Pin to the version of Ruff used in pyproject.toml (or a compatible version).
-    rev: v0.3.5 # **Ensure this matches/is compatible with the Ruff version in pyproject.toml**
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.3.5
     hooks:
-      # Run the Ruff formatter (covers code formatting and import sorting).
-      # Automatically fixes issues like line length, spacing, quotes, and sorts imports.
-      # Run this hook first so the linter doesn't report fixable style issues.
       - id: ruff-format
-        # Explicitly point to the separate ruff config file.
-        args: [--config={{ PROJECT_SLUG }}/.ruff.toml] # Path relative to project root.
+        args: [--config={{ PROJECT_SLUG }}/.ruff.toml]
 
-      # Run the Ruff linter.
-      # This hook runs the *full set of enabled linting rules* configured in .ruff.toml.
-      # Use --fix to automatically fix many lint issues.
-      # Use --exit-non-zero-on-fix to make the commit fail if any fixes were applied
-      # (prompts user to 'git add' and re-commit the corrected files).
       - id: ruff
         args: [--fix, --exit-non-zero-on-fix, --config={{ PROJECT_SLUG }}/.ruff.toml]
-
-
-  # --- Optional Hooks ---
-  # Add hooks for other tools if they are fast enough for pre-commit and needed.
-  # Ensure any tools used here are listed as development dependencies in pyproject.toml
-  # so pre-commit can install them.
-
-# Note: More time-consuming checks (e.g., full Pyright, comprehensive Bandit/pip-audit scans)
-# are typically too slow for mandated pre-commit hooks across large projects.
-# These are run via Task Automation (Nox) and enforced in CI.

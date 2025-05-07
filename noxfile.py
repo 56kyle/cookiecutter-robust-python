@@ -113,7 +113,7 @@ def test(session: Session) -> None:
         "author_name='Test Author'",
         "author_email='test@example.com'",
         "license='MIT'",
-        "python_version='3.12'", # Use a fixed version for test stability
+        "python_version='3.13'", # Use a fixed version for test stability
         "add_rust_extension='n'", # Test without Rust initially, add another test session for Rust
         # Add other variables needed by cookiecutter.json here to ensure no prompts
     ])
@@ -176,7 +176,3 @@ def release_template(session: Session):
     session.log("Template version bumped and tag created locally via Commitizen/uvx.")
     session.log("IMPORTANT: Push commits and tags to remote (`git push --follow-tags`) to trigger CD for the TEMPLATE.")
 
-
-# Default sessions to run if no arguments are given to Nox in the template repo.
-# Often includes core checks and potentially documentation build and/or template tests.
-nox.options.sessions = ["check", "docs"]
