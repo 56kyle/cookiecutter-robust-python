@@ -113,7 +113,7 @@ def test(session: Session) -> None:
         "author_name='Test Author'",
         "author_email='test@example.com'",
         "license='MIT'",
-        "python_version='3.12'", # Use a fixed version for test stability
+        "python_version='3.13'", # Use a fixed version for test stability
         "add_rust_extension='n'", # Test without Rust initially, add another test session for Rust
         # Add other variables needed by cookiecutter.json here to ensure no prompts
     ])
