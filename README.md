@@ -23,7 +23,7 @@ a handfull of issues with it that prevented it from being able to adapt to new P
 
 # Okay, so what's different this time?
 The [Robust Python Cookiecutter] exists to solve a few main concerns
-- [Template Update Propogation](#template-update-propogation)
+- [Template Update Propagation](#template-update-propagation)
 - [Project Domain Expansion](#project-domain-expansion)
 - [Documenting Tooling Decisions](#documenting-tooling-decisions)
 - [CI/CD Vendor Lock](#cicd-vendor-lock)
