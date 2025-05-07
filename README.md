@@ -2,6 +2,15 @@
 
 A Python project template robust enough to follow up [cookiecutter-hypermodern-python]
 
+# Caveat
+I really believe this idea has a lot of good ideas and best practices, however creating it is a ton of work.
+
+There is definitely a lot left to do before this project is truly a daily driver, but I think there are just a few more pieces missing from this being at least useful in many cases.
+
+If you have any interest in this project please don't hesitate to reach out!
+Any and all advice, support, PR's, etc are welcome and would be greatly appreciated.
+
+
 # Why does this project exist?
 Unfortunately the [Hypermodern Python Cookiecutter] is no longer maintained nor modern.
 While it will always have a place in my heart, there have been far too many improvements in Python tooling to keep using it as is.
