@@ -5,7 +5,7 @@
   "min_python_version": "3.9",
   "max_python_version": "3.12",
   "author": "Kyle Oliver",
-  "email": "56kyleoliver@gmail.com",
+  "email": "56kyleoliver+cookiecutter-robust-python@gmail.com",
   "github_user": "56kyle",
   "version": "0.0.0",
   "copyright_year": "{% now 'utc', '%Y' %}",
