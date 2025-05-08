@@ -1,0 +1,64 @@
+.mypy_cache/
+/.coverage
+/.coverage.*
+/.nox/
+/.python-version
+/.pytype/
+/dist/
+/docs/_build/
+/src/*.egg-info/
+
+# Byte-code files
+*.pyc
+__pycache__
+*.pyd
+*.so
+*.o
+*.pyo # Older optimization files
+
+# Virtual environments
+.venv
+venv
+env
+__pypackages__ # If using PEP 582 default (uv does standard venv by default)
+.nox           # Nox environments
+# Other env dirs like virtualenvwrapper workdirs if applicable
+
+# Build outputs
+dist/          # Package distributions (sdist, wheel)
+build/         # Build artifacts from setuptools/build backends
+.hypothesis/   # Hypothesis testing cache
+
+# Test/Coverage related
+.pytest_cache/ # Pytest cache directory
+htmlcov/       # Coverage HTML reports (default output dir)
+.coverage*     # Coverage data files (default name pattern)
+test-results/  # Directory for JUnit/Coverage XML reports (as configured in noxfile)
+
+# Editor/IDE specific files
+.vscode/       # VS Code settings (if not shared via devcontainer)
+.idea/         # JetBrains IDE files
+*.swp          # Vim swap files
+
+# OS specific
+.DS_Store      # macOS files
+Thumbs.db      # Windows thumbnail cache
+
+# MyPy cache (if used standalone or by IDE)
+.mypy_cache/
+
+# Pyright cache
+.pyright/
+
+# Ruff cache
+.ruff_cache/
+
+# Bandit cache/baselines (if used standalone)
+.bandit_baseline
+
+# Development logs/outputs
+debug.log
+nohup.out
+
+# Cookiecutter/Cruft metadata (for template updates)
+.cruft.json
