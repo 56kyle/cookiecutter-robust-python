@@ -13,7 +13,7 @@ from nox.sessions import Session
 
 nox.options.default_venv_backend = "uv"
 
-DEFAULT_TEMPLATE_PYTHON_VERSION = "3.12"
+DEFAULT_TEMPLATE_PYTHON_VERSION = "3.13"
 
 REPO_ROOT: Path = Path(__file__).parent.resolve()
 TEMPLATE_FOLDER: Path = REPO_ROOT / "{{cookiecutter.project_name}}"
@@ -125,19 +125,7 @@ def test(session: Session) -> None:
     # Run cookiecutter to generate a project
     # Need to find cookiecutter executable - it's in the template dev env installed by uv sync.
     cookiecutter_command: list[str] = ["uv", "run", "cookiecutter", "--no-input", "--output-dir", str(temp_dir), "."]
-    # Add cookiecutter variables to customize the generated project for testing, using --extra-context
-    cookiecutter_command.extend([
-        "--extra-context",
-        "project_name='Test Project'",
-        "project_slug='test_project'",
-        "package_name='test_package'",
-        "author_name='Test Author'",
-        "author_email='test@example.com'",
-        "license='MIT'",
-        "python_version='3.13'", # Use a fixed version for test stability
-        "add_rust_extension='n'", # Test without Rust initially, add another test session for Rust
-        # Add other variables needed by cookiecutter.json here to ensure no prompts
-    ])
+
 
     session.run(*cookiecutter_command, external=True)
 

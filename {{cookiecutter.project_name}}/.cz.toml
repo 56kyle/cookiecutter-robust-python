@@ -16,4 +16,4 @@ commit_msg_file = ".git/COMMIT_EDITMSG"
 release = true
 release_asset_path = "dist/*"
 release_asset_descriptions = { "*.tar.gz": "Source distribution", "*.whl": "Python Wheel" }
-base_url = "https://github.com/{{ cookiecutter.github_username | lower | replace(' ', '-') }}/{{ cookiecutter.project_slug.replace('_', '-') }}"
+base_url = "https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}"

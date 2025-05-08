@@ -17,7 +17,7 @@ repos:
     rev: v0.3.5
     hooks:
       - id: ruff-format
-        args: [--config={{ PROJECT_SLUG }}/.ruff.toml]
+        args: [--config={{ cookiecutter.project_name }}/.ruff.toml]
 
       - id: ruff
-        args: [--fix, --exit-non-zero-on-fix, --config={{ PROJECT_SLUG }}/.ruff.toml]
+        args: [--fix, --exit-non-zero-on-fix, --config={{ cookiecutter.project_name }}/.ruff.toml]

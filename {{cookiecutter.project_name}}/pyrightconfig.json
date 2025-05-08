@@ -39,5 +39,5 @@
   "basic": true,
   "reportMissingParameterType": "warning",
   "reportOptionalOperand": "warning",
-  "pythonVersion": "{{ cookiecutter.python_version }}"
+  "pythonVersion": "{{ cookiecutter.min_python_version }}"
 }
