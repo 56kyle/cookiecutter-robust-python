@@ -8,11 +8,34 @@ import tempfile
 import sys
 
 import nox
+import platformdirs
 from nox.sessions import Session
 
 nox.options.default_venv_backend = "uv"
 
 DEFAULT_TEMPLATE_PYTHON_VERSION = "3.12"
+
+REPO_ROOT: Path = Path(__file__).parent.resolve()
+TEMPLATE_FOLDER: Path = REPO_ROOT / "{{cookiecutter.project_name}}"
+
+
+COOKIECUTTER_ROBUST_PYTHON_CACHE_FOLDER: Path = Path(
+    platformdirs.user_cache_path(
+        appname="cookiecutter-robust-python",
+        appauthor="56kyle",
+        ensure_exists=True,
+    )
+).resolve()
+
+PROJECT_DEMOS_FOLDER: Path = COOKIECUTTER_ROBUST_PYTHON_CACHE_FOLDER / "project_demos"
+DEFAULT_DEMO_NAME: str = "demo-project"
+DEMO_ROOT_FOLDER: Path = PROJECT_DEMOS_FOLDER / DEFAULT_DEMO_NAME
+
+GENERATE_DEMO_PROJECT_OPTIONS: tuple[str, ...] = (
+    *("--repo-folder", REPO_ROOT),
+    *("--demos-cache-folder", PROJECT_DEMOS_FOLDER),
+    *("--demo-name", DEFAULT_DEMO_NAME),
+)
 
 TEMPLATE_PYTHON_LOCATIONS: tuple[Path, ...] = (
     Path("noxfile.py"),
@@ -34,8 +57,15 @@ TEMPLATE_CONFIG_AND_DOCS: tuple[Path, ...] = (
 )
 
 
-# === TEMPLATE MAINTENANCE TASKS ===
-# Sessions for checking, formatting, building, and releasing the template itself.
+@nox.session(name="generate-demo-project", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+def generate_demo_project(session: Session) -> None:
+    session.install("cookiecutter", "platformdirs", "loguru", "typer")
+    session.run(
+        "python",
+        "scripts/generate-demo-project.py",
+        *GENERATE_DEMO_PROJECT_OPTIONS,
+        external=True,
+    )
 
 
 @nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
@@ -72,15 +102,6 @@ def docs(session: Session):
     session.run("uv", "run", "sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-W", external=True)
 
     session.log(f"Template documentation built in {docs_build_dir.resolve()}.")
-
-
-@nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
-def generate_project(session: Session) -> None:
-    """Generate a demo project using the template."""
-    session.log("Installing demo project generation dependencies...")
-    session.install("cookiecutter", "typer")
-    session.run("generate-demo-project", "--repo-folder=.", "--demos-cache-folder=.", "--demo-name=demo_project")
-
 
 
 @nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)

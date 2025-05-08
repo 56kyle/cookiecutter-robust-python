@@ -9,7 +9,7 @@ import typer
 
 from cookiecutter.main import cookiecutter
 
-FOLDER_TYPE: click.Path = click.Path(dir_okay=True, file_okay=False, resolve_path=True, path_type=Path)
+FolderOption: partial[typer.Option] = partial(typer.Option, dir_okay=True, file_okay=False, resolve_path=True, path_type=Path)
 
 
 def generate_demo_project(repo_folder: Path, demos_cache_folder: Path, demo_name: str) -> Path:
@@ -31,15 +31,14 @@ def _remove_any_existing_demo(parent_path: Path) -> None:
     for path in parent_path.iterdir():
         shutil.rmtree(path)
 
+cli: typer.Typer = typer.Typer()
 
-@typer.command()
-@click.option("--repo-folder", "-r", required=True, type=FOLDER_TYPE)
-@click.option("--demos-cache-folder", "-c", required=True, type=FOLDER_TYPE)
-@click.option("--demo-name", "-d", required=True, type=str)
+
+@cli.callback(invoke_without_command=True)
 def main(
-    repo_folder: Annotated[Path, typer.Option()],
-    demos_cache_folder: Path,
-        demo_name: str
+    repo_folder: Annotated[Path, FolderOption("--repos-folder", "-r")],
+    demos_cache_folder: Annotated[Path, FolderOption("--demos-cache-folder", "-c")],
+    demo_name: Annotated[str, typer.Option("--demo-name", "-d")]
 ) -> None:
     """Updates the poetry.lock file."""
     try:
