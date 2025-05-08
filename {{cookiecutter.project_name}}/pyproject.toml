@@ -20,8 +20,8 @@ classifiers = [
 ]
 
 dependencies = [
-    # Add core production dependencies here, e.g.,
-    # "requests>=2.31.0",
+    "loguru",
+    "platformdirs>=4.3.8",
 ]
 
 [project.optional-dependencies]

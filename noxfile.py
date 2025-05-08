@@ -13,7 +13,7 @@ from nox.sessions import Session
 
 nox.options.default_venv_backend = "uv"
 
-DEFAULT_TEMPLATE_PYTHON_VERSION = "3.13"
+DEFAULT_TEMPLATE_PYTHON_VERSION = "3.9"
 
 REPO_ROOT: Path = Path(__file__).parent.resolve()
 TEMPLATE_FOLDER: Path = REPO_ROOT / "{{cookiecutter.project_name}}"
@@ -33,6 +33,12 @@ DEMO_ROOT_FOLDER: Path = PROJECT_DEMOS_FOLDER / DEFAULT_DEMO_NAME
 
 GENERATE_DEMO_PROJECT_OPTIONS: tuple[str, ...] = (
     *("--repo-folder", REPO_ROOT),
+    *("--demos-cache-folder", PROJECT_DEMOS_FOLDER),
+    *("--demo-name", DEFAULT_DEMO_NAME),
+)
+
+SYNC_UV_WITH_DEMO_OPTIONS: tuple[str, ...] = (
+    *("--template-folder", TEMPLATE_FOLDER),
     *("--demos-cache-folder", PROJECT_DEMOS_FOLDER),
     *("--demo-name", DEFAULT_DEMO_NAME),
 )
@@ -64,6 +70,37 @@ def generate_demo_project(session: Session) -> None:
         "python",
         "scripts/generate-demo-project.py",
         *GENERATE_DEMO_PROJECT_OPTIONS,
+        external=True,
+    )
+
+
+@nox.session(name="sync-uv-with-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+def sync_uv_with_demo(session: Session) -> None:
+    session.install("cookiecutter", "platformdirs", "loguru", "typer")
+    session.run(
+        "python",
+        "scripts/sync-uv-with-demo.py",
+        *SYNC_UV_WITH_DEMO_OPTIONS,
+        external=True,
+    )
+
+@nox.session(name="uv-in-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+def uv_in_demo(session: Session) -> None:
+    session.install("cookiecutter", "platformdirs", "loguru", "typer")
+    session.run(
+        "python",
+        "scripts/generate-demo-project.py",
+        *GENERATE_DEMO_PROJECT_OPTIONS,
+        external=True,
+    )
+    original_dir: Path = Path.cwd()
+    session.cd(DEMO_ROOT_FOLDER)
+    session.run("uv", *session.posargs)
+    session.cd(original_dir)
+    session.run(
+        "python",
+        "scripts/sync-uv-with-demo.py",
+        *SYNC_UV_WITH_DEMO_OPTIONS,
         external=True,
     )
 
