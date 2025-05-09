@@ -155,8 +155,7 @@ def build_rust(session: Session) -> None:
     session.run("cargo", "build", "--release", external=True, cwd=str(rust_crate_dir)) # cwd ensures command runs in Rust dir
     session.log("Rust crate built.")
 
-# Note: publish_rust session might go here for publishing Rust crates (e.g. to crates.io)
-{% endif %} # End of conditional Rust build session
+{% endif %}
 
 @nox.session(python=DEFAULT_PYTHON_VERSION)
 def build_python(session: Session) -> None:
@@ -218,11 +217,14 @@ def publish_python(session: Session) -> None:
     session.run("uv", "publish", "dist/*", external=True)
 
 
-# Note: publish_rust session might go here for publishing Rust crates (e.g. to crates.io)
+@nox.session(python=None)
+def publish_rust(session: Session) -> None:
+    """Publish built crates to crates.io."""
+    session.log("Publishing crates to crates.io")
+    for cargo_toml in CRATES_FOLDER.glob("*/Cargo.toml"):
+        crate_folder: Path = cargo_toml.parent
+        session.run("cargo", "publish", "-p", crate_folder.name)
 
-
-# === RELEASING SESSIONS ===
-# These sessions prepare or perform releases. Often run manually first, then potentially automated.
 
 @nox.session(venv_backend="none")
 def release(session: Session) -> None:

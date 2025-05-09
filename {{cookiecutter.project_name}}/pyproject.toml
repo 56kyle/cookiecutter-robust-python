@@ -3,7 +3,7 @@ name = "{{ cookiecutter.package_name }}"
 version = "0.1.0"
 description = "{{ cookiecutter.package_name }}"
 authors = [
-    { name = "{{ cookiecutter.author_name }}", email = "{{ cookiecutter.author_email }}" },
+    { name = "{{ cookiecutter.author }}", email = "{{ cookiecutter.email }}" },
 ]
 license = { text = "{{ cookiecutter.license }}" }
 readme = "README.md"
@@ -14,14 +14,14 @@ keywords = [
 ]
 
 classifiers = [
-    "Programming Language :: Python :: {{cookiecutter.python_version}}",
+    "Programming Language :: Python :: {{ cookiecutter.min_python_version }}",
     "Programming Language :: Python :: 3 :: Only",
     "License :: OSI Approved :: {{ cookiecutter.license }}",
 ]
 
 dependencies = [
-    # Add core production dependencies here, e.g.,
-    # "requests>=2.31.0",
+    "loguru",
+    "platformdirs>=4.3.8",
 ]
 
 [project.optional-dependencies]
@@ -59,8 +59,8 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/{{ cookiecutter.github_username | lower | replace(' ', '-') }}/{{ cookiecutter.project_slug.replace('_', '-') }}"
-Repository = "https://github.com/{{ cookiecutter.github_username | lower | replace(' ', '-') }}/{{ cookiecutter.project_slug.replace('_', '-') }}"
+Homepage = "https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}"
+Repository = "https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}"
 
 [build-system]
 requires = [

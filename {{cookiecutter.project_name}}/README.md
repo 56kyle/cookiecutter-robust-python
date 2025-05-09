@@ -1,10 +1,10 @@
 # {{ cookiecutter.project_name }}
 
-{{ cookiecutter.project_description }}
+{{ cookiecutter.package_name }}
 
 ---
 
-**[📚 View Documentation](https://{{ cookiecutter.project_slug.replace('_', '-') }}.readthedocs.io/)** | **[🐛 Report a Bug](https://github.com/{{ cookiecutter.github_username | lower | replace(' ', '-') }}/{{ cookiecutter.project_slug.replace('_', '-') }}/issues)** | **[✨ Request a Feature](https://github.com/{{ cookiecutter.github_username | lower | replace(' ', '-') }}/{{ cookiecutter.project_slug.replace('_', '-') }}/issues)**
+**[📚 View Documentation](https://{{ cookiecutter.project_name.replace('_', '-') }}.readthedocs.io/)** | **[🐛 Report a Bug](https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/issues)** | **[✨ Request a Feature](https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/issues)**
 
 ---
 
@@ -22,8 +22,8 @@ To set up `{{ cookiecutter.package_name }}` for local development:
 
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/{{ cookiecutter.github_username | lower | replace(' ', '-') }}/{{ cookiecutter.project_slug.replace('_', '-') }}.git
-    cd {{ cookiecutter.project_slug }}
+    git clone https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}.git
+    cd {{ cookiecutter.project_name }}
     ```
 2.  Install dependencies using [:term:`uv`](uv-documentation):
     ```bash
@@ -55,11 +55,11 @@ If your project defines command-line entry points in `pyproject.toml`:
 
 ```bash
 # Example usage of your CLI application
-# {{ cookiecutter.project_slug }} --help
-# {{ cookiecutter.project_slug }} do-something --input file.txt
+# {{ cookiecutter.project_name }} --help
+# {{ cookiecutter.project_name }} do-something --input file.txt
 ```
 
-For detailed API documentation and CLI command references, see the **[Documentation](https://{{ cookiecutter.project_slug.replace('_', '-') }}.readthedocs.io/)**.
+For detailed API documentation and CLI command references, see the **[Documentation](https://{{ cookiecutter.project_name.replace('_', '-') }}.readthedocs.io/)**.
 
 ## Development Workflow
 
@@ -77,7 +77,7 @@ Explore the `noxfile.py` and the project documentation for detailed information 
 
 (This section should guide contributions *to this specific generated project*, not the template. It should refer to the project's `CODE_OF_CONDUCT.md` and link to a `CONTRIBUTING.md` specific to the project, if you choose to generate one.)
 
-Report bugs or suggest features via the [issue tracker](https://github.com/{{ cookiecutter.github_username | lower | replace(' ', '-') }}/{{ cookiecutter.project_slug.replace('_', '-') }}/issues).
+Report bugs or suggest features via the [issue tracker](https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/issues).
 
 See [CONTRIBUTING.md](#) for contribution guidelines.
 

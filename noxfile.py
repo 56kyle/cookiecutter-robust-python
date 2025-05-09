@@ -8,11 +8,40 @@ import tempfile
 import sys
 
 import nox
+import platformdirs
 from nox.sessions import Session
 
 nox.options.default_venv_backend = "uv"
 
-DEFAULT_TEMPLATE_PYTHON_VERSION = "3.12"
+DEFAULT_TEMPLATE_PYTHON_VERSION = "3.9"
+
+REPO_ROOT: Path = Path(__file__).parent.resolve()
+TEMPLATE_FOLDER: Path = REPO_ROOT / "{{cookiecutter.project_name}}"
+
+
+COOKIECUTTER_ROBUST_PYTHON_CACHE_FOLDER: Path = Path(
+    platformdirs.user_cache_path(
+        appname="cookiecutter-robust-python",
+        appauthor="56kyle",
+        ensure_exists=True,
+    )
+).resolve()
+
+PROJECT_DEMOS_FOLDER: Path = COOKIECUTTER_ROBUST_PYTHON_CACHE_FOLDER / "project_demos"
+DEFAULT_DEMO_NAME: str = "demo-project"
+DEMO_ROOT_FOLDER: Path = PROJECT_DEMOS_FOLDER / DEFAULT_DEMO_NAME
+
+GENERATE_DEMO_PROJECT_OPTIONS: tuple[str, ...] = (
+    *("--repo-folder", REPO_ROOT),
+    *("--demos-cache-folder", PROJECT_DEMOS_FOLDER),
+    *("--demo-name", DEFAULT_DEMO_NAME),
+)
+
+SYNC_UV_WITH_DEMO_OPTIONS: tuple[str, ...] = (
+    *("--template-folder", TEMPLATE_FOLDER),
+    *("--demos-cache-folder", PROJECT_DEMOS_FOLDER),
+    *("--demo-name", DEFAULT_DEMO_NAME),
+)
 
 TEMPLATE_PYTHON_LOCATIONS: tuple[Path, ...] = (
     Path("noxfile.py"),
@@ -34,8 +63,46 @@ TEMPLATE_CONFIG_AND_DOCS: tuple[Path, ...] = (
 )
 
 
-# === TEMPLATE MAINTENANCE TASKS ===
-# Sessions for checking, formatting, building, and releasing the template itself.
+@nox.session(name="generate-demo-project", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+def generate_demo_project(session: Session) -> None:
+    session.install("cookiecutter", "platformdirs", "loguru", "typer")
+    session.run(
+        "python",
+        "scripts/generate-demo-project.py",
+        *GENERATE_DEMO_PROJECT_OPTIONS,
+        external=True,
+    )
+
+
+@nox.session(name="sync-uv-with-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+def sync_uv_with_demo(session: Session) -> None:
+    session.install("cookiecutter", "platformdirs", "loguru", "typer")
+    session.run(
+        "python",
+        "scripts/sync-uv-with-demo.py",
+        *SYNC_UV_WITH_DEMO_OPTIONS,
+        external=True,
+    )
+
+@nox.session(name="uv-in-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+def uv_in_demo(session: Session) -> None:
+    session.install("cookiecutter", "platformdirs", "loguru", "typer")
+    session.run(
+        "python",
+        "scripts/generate-demo-project.py",
+        *GENERATE_DEMO_PROJECT_OPTIONS,
+        external=True,
+    )
+    original_dir: Path = Path.cwd()
+    session.cd(DEMO_ROOT_FOLDER)
+    session.run("uv", *session.posargs)
+    session.cd(original_dir)
+    session.run(
+        "python",
+        "scripts/sync-uv-with-demo.py",
+        *SYNC_UV_WITH_DEMO_OPTIONS,
+        external=True,
+    )
 
 
 @nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
@@ -75,15 +142,6 @@ def docs(session: Session):
 
 
 @nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
-def generate_project(session: Session) -> None:
-    """Generate a demo project using the template."""
-    session.log("Installing demo project generation dependencies...")
-    session.install("cookiecutter", "typer")
-    session.run("generate-demo-project", "--repo-folder=.", "--demos-cache-folder=.", "--demo-name=demo_project")
-
-
-
-@nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def test(session: Session) -> None:
     """Run tests for the template's own functionality.
 
@@ -104,19 +162,7 @@ def test(session: Session) -> None:
     # Run cookiecutter to generate a project
     # Need to find cookiecutter executable - it's in the template dev env installed by uv sync.
     cookiecutter_command: list[str] = ["uv", "run", "cookiecutter", "--no-input", "--output-dir", str(temp_dir), "."]
-    # Add cookiecutter variables to customize the generated project for testing, using --extra-context
-    cookiecutter_command.extend([
-        "--extra-context",
-        "project_name='Test Project'",
-        "project_slug='test_project'",
-        "package_name='test_package'",
-        "author_name='Test Author'",
-        "author_email='test@example.com'",
-        "license='MIT'",
-        "python_version='3.13'", # Use a fixed version for test stability
-        "add_rust_extension='n'", # Test without Rust initially, add another test session for Rust
-        # Add other variables needed by cookiecutter.json here to ensure no prompts
-    ])
+
 
     session.run(*cookiecutter_command, external=True)
 

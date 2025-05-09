@@ -1,0 +1,45 @@
+[project]
+name = "cookiecutter-robust-python"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.9,<4.0"
+dependencies = [
+    "cookiecutter>=2.6.0",
+    "cruft>=2.16.0",
+    "loguru>=0.7.3",
+    "platformdirs>=4.3.8",
+]
+[project.optional-dependencies]
+dev = [
+    "nox>=2024.3.2",
+    "commitizen>=3.11.1",
+    "pre-commit>=3.7.0",
+]
+
+test = [
+    "pytest>=8.1.1",
+    "pytest-cov>=5.0.0",
+]
+
+typecheck = [
+    "pyright>=1.1.356"
+]
+
+lint = [
+    "ruff>=0.3.5",
+    "pydocstyle>=6.3.0",
+]
+
+security = [
+    "pip-audit>=2.8.4",
+    "bandit>=1.7.7",
+]
+
+docs = [
+    "sphinx>=7.3.7",
+    "myst-parser>=2.0.0",
+    "furo>=2024.3.4",
+    "sphinx-copybutton>=0.5",
+    "sphinx-autodoc-typehints>=1.24.0",
+]
