@@ -71,45 +71,6 @@ myst_enable_extensions = [
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "pip": ("https://pip.pypa.io/en/stable/", None),
-    "venv": ("https://docs.python.org/3/library/venv.html", None),
-    "virtualenv": ("https://virtualenv.pypa.io/en/latest/", None),
-    "piptools": ("https://pip-tools.readthedocs.io/en/latest/", None),
-    "poetry": ("https://python-poetry.org/docs/", None),
-    "pdm": ("https://pdm.fming.dev/latest/", None),
-    "hatch": ("https://hatch.pypa.io/latest/", None),
-    "uv": ("https://docs.astral.sh/uv/", None),
-    "ruff": ("https://docs.astral.sh/ruff/", None),
-    "pytest": ("https://docs.pytest.org/en/stable/", None),
-    "nox": ("https://nox.thea.codes/en/stable/", None),
-    "build": ("https://pypa-build.readthedocs.io/en/stable/", None),
-    "twine": ("https://twine.readthedocs.io/en/stable/", None),
-    "pre-commit": ("https://pre-commit.com/", None),
-    "docker": ("https://docs.docker.com/", None),
-    "podman": ("https://podman.io/docs/", None),
-    "commitizen": ("https://commitizen-tools.github.io/commitizen/", None),
-    "pyright": ("https://pyright.readthedocs.io/en/latest/", None),
-    "bandit": ("https://bandit.readthedocs.io/en/latest/", None),
-    "pip-audit": ("https://pip-audit.readthedocs.io/en/latest/", None),
-    "pydocstyle": ("https://pydocstyle.readthedocs.io/en/latest/", None),
-    "setuptools": ("https://setuptools.pypa.io/en/latest/", None),
-    "maturin": ("https://www.maturin.rs/", None),
-    "typer": ("https://typer.tiangolo.com/", None),
-    "click": ("https://click.palletsprojects.com/en/latest/", None),
-    "coveragepy": ("https://coverage.readthedocs.io/en/latest/", None),
-    "pytest-cov": ("https://pytest-cov.readthedocs.io/en/latest/", None),
-    "myst-parser": ("https://myst-parser.readthedocs.io/en/latest/", None),
-    "furo": ("https://pradyunsg.me/furo/latest/", None),
-    "sphinxautodoctypehints": ("https://sphinx-autodoc-typehints.readthedocs.io/en/stable/", None),
-    "virtualenvwrapper": ("https://virtualenvwrapper.readthedocs.io/en/latest/", None),
-    "tox": ("https://tox.wiki/en/latest/", None),
-    "invoke": ("https://docs.pyinvoke.org/en/latest/", None),
-    "poethepoet": ("https://poethepoet.natpad.net/latest/", None),
-    "just": ("https://github.com/casey/just/", None),
-    "sonarcloud": ("https://docs.sonarcloud.io/", None),  # SonarCloud docs (check if .inv exists)
-    "argocd": ("https://argo-cd.readthedocs.io/en/stable/", None),  # Argo CD docs
-    "helm": ("https://helm.sh/docs/", None),  # Helm docs (check for .inv)
-    "cookiecutter": ("https://cookiecutter.readthedocs.io/en/latest/", None),  # cookiecutter itself
-    "cruft": ("https://cruft.github.io/", None),  # cruft
 }
 
 # -- Options for HTML output -------------------------------------------------
