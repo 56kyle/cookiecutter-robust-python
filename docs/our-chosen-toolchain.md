@@ -107,5 +107,3 @@ The true power of this template lies in how these chosen tools work together coh
 8.  **Development Environment:** Consistent locally ([:term:`uv`](uv-documentation) venvs, [:term:`pre-commit`](pre-commit-documentation)) and reproducibly within a container via Dev Containers ([17](#area-17-containerized-development-environments)), simplifying setup and ensuring uniformity.
 
 By choosing `cookiecutter-robust-python`, users gain this pre-configured, integrated, and documented workflow, allowing them to focus on building their application with a strong, modern, and robust foundation.
-
----

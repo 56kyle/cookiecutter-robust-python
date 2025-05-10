@@ -134,5 +134,3 @@ Use [:term:`Commitizen`](commitizen-documentation) ([Topic 12](topics/12_task-au
 *   **Production Deployment:** Review guidance on deploying the generated artifacts to production ([Topic 16](topics/16_prod-deploy-guidance.md)).
 
 This guide covers the main interactions you will have with the template's toolchain. The remaining documentation topics provide the in-depth rationale and evaluation process that led to these choices.
-
----

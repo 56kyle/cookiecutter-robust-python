@@ -88,5 +88,3 @@ This builds the project documentation website into the `docs/_build/html` direct
 *   Set up [CI](topics/13_ci-orchestration.md)/[CD](topics/14_cd-orchestration.md) using the example workflow files (e.g., in `.github/workflows/`).
 
 For detailed information on any of these tools or workflows, navigate through the template's full documentation.
-
----
