@@ -10,7 +10,7 @@
 
 ## Installation
 
-You can install `{{ cookiecutter.package_name }}` via [:py:mod:`pip`](pip-documentation) from PyPI:
+You can install `{{ cookiecutter.package_name }}` via [pip](pip-documentation) from PyPI:
 
 ```bash
 pip install {{ cookiecutter.package_name }}

@@ -126,7 +126,7 @@ Use [:term:`Commitizen`](commitizen-documentation) ([Topic 12](topics/12_task-au
 ## Advanced Usage & Customization
 
 *   **Template Update Management:** Use [:term:`cruft`](cruft-documentation) to update your project from newer versions of the template. (See [Template Maintenance](maintenance.md) in the template documentation for maintainers).
-*   **CI/CD Configuration:** Explore the example workflow files in `.github/workflows/` (etc.) and adapt them to your specific needs ([Topic 13](topics/13_ci_orchestration.md), [Topic 14](topics/14_cd_orchestration.md)).
+*   **CI/CD Configuration:** Explore the example workflow files in `.github/workflows/` (etc.) and adapt them to your specific needs ([Topic 13](topics/13_ci-orchestration.md), [Topic 14](topics/14_cd-orchestration.md)).
 *   **Custom Task Automation:** Modify the `noxfile.py` to add or change automation tasks ([Topic 12](topics/12_task-automation.md)).
 *   **Tool Configuration:** Adjust the configuration files (e.g., `.ruff.toml`, `pyrightconfig.json`) to tailor tool behavior to your project's specific requirements. Refer to each tool's official documentation (linked from the [Criteria](criteria.md) and [Toolchain Topics](topics/index.md) pages).
 *   **Dev Container Customization:** Modify the `.devcontainer/` configuration for specific editor settings or tools needed in the container ([Topic 17](topics/17_dev-containers.md)).

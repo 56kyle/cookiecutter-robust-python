@@ -29,8 +29,8 @@ Reading these topics provides a deep understanding of the template's design choi
 10_packaging-publish.md
 11_container-build.md
 12_task-automation.md
-13_ci_orchestration.md
-14_cd_orchestration.md
+13_ci-orchestration.md
+14_cd-orchestration.md
 15_compose-local.md
 16_prod-deploy-guidance.md
 17_dev-containers.md
