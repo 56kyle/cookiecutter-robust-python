@@ -3,7 +3,7 @@
 This section contains the detailed documentation for each of the 18 topics that make up the **cookiecutter-robust-python** template's integrated toolchain. For each topic, you will find:
 
 *   The specific goals this area addresses.
-*   The criteria used to evaluate tools within this area, derived from the template's philosophy ([Template Philosophy](philosophy.md)) and core criteria ([Criteria](criteria.md)).
+*   The criteria used to evaluate tools within this area, derived from the template's philosophy ([Template Philosophy](../philosophy.md)) and core criteria ([Criteria](../criteria.md)).
 *   A list of the key tools and approaches that were evaluated.
 *   A detailed breakdown and comparison of these tools against the criteria.
 *   The final tool(s) or approach chosen for the template, with a comprehensive justification explaining *why* based on meeting the criteria and comparing favorably against alternatives.
