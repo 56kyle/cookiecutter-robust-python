@@ -59,10 +59,8 @@ exclude_patterns = [
 
 # MyST-Parser settings (allows using Markdown + Sphinx features)
 myst_enable_extensions = [
-    "amsmath", "assign_short_names", "colon_fence", "deflist", "dollarmath",
-    "html_admonition", "html_image", "linkify", "replacements", "smartquotes",
-    "strikethrough", "substitution", "tasklist", "attrs_inline", "attrs_block",
-    "codefence_description"
+    "amsmath", "colon_fence", "deflist", "dollarmath", "html_admonition", "html_image", "replacements",
+    "smartquotes", "strikethrough", "substitution", "tasklist", "attrs_inline", "attrs_block",
 ]
 
 # Intersphinx mapping: Link to documentation of standard libraries or tools mentioned
