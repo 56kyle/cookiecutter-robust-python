@@ -82,5 +82,3 @@ Releasing a new version of the template itself follows a standard process, often
 ## Documenting Template Changes
 
 Maintain a `CHANGELOG.md` file at the **template repository root** to clearly document the changes included in each template release (often generated automatically by [:term:`Commitizen`](commitizen-documentation)). This helps users understand the benefits and potential impacts of updating their generated projects to a newer template version. Link to specific documentation topics if updates involve significant changes in tooling or workflows.
-
----

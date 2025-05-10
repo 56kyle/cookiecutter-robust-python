@@ -14,10 +14,16 @@ This documentation is structured to guide you through the template's core philos
 :maxdepth: 2
 :caption: Contents
 
+quickstart
+usage
 philosophy
+workflow/index
+our-chosen-toolchain
+topics/index
 criteria
 getting-started-template-contributing
-our-chosen-toolchain
+maintenance
+glossary
 ```
 
 ## Evaluated Toolchain Topics
@@ -41,7 +47,7 @@ topics/10_packaging-publish
 topics/11_container-build
 topics/12_task-automation
 topics/13_ci-orchestration
-topics/14_cd_orchestration
+topics/14_cd-orchestration
 topics/15_compose-local
 topics/16_prod-deploy-guidance
 topics/17_dev-containers

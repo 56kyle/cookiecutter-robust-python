@@ -9,8 +9,15 @@ from typing import Annotated
 import typer
 
 from cookiecutter.main import cookiecutter
+from typer.models import OptionInfo
 
-FolderOption: partial[typer.Option] = partial(typer.Option, dir_okay=True, file_okay=False, resolve_path=True, path_type=Path)
+FolderOption: partial[OptionInfo] = partial(
+    typer.Option,
+    dir_okay=True,
+    file_okay=False,
+    resolve_path=True,
+    path_type=Path
+)
 
 
 def generate_demo_project(repo_folder: Path, demos_cache_folder: Path, demo_name: str) -> Path:
@@ -31,6 +38,7 @@ def _remove_any_existing_demo(parent_path: Path) -> None:
     """Removes any existing demos."""
     for path in parent_path.iterdir():
         shutil.rmtree(path)
+
 
 cli: typer.Typer = typer.Typer()
 

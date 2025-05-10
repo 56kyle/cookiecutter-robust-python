@@ -3,7 +3,7 @@
 This section contains the detailed documentation for each of the 18 topics that make up the **cookiecutter-robust-python** template's integrated toolchain. For each topic, you will find:
 
 *   The specific goals this area addresses.
-*   The criteria used to evaluate tools within this area, derived from the template's philosophy ([Template Philosophy](philosophy.md)) and core criteria ([Criteria](criteria.md)).
+*   The criteria used to evaluate tools within this area, derived from the template's philosophy ([Template Philosophy](../philosophy.md)) and core criteria ([Criteria](../criteria.md)).
 *   A list of the key tools and approaches that were evaluated.
 *   A detailed breakdown and comparison of these tools against the criteria.
 *   The final tool(s) or approach chosen for the template, with a comprehensive justification explaining *why* based on meeting the criteria and comparing favorably against alternatives.
@@ -29,8 +29,8 @@ Reading these topics provides a deep understanding of the template's design choi
 10_packaging-publish.md
 11_container-build.md
 12_task-automation.md
-13_ci_orchestration.md
-14_cd_orchestration.md
+13_ci-orchestration.md
+14_cd-orchestration.md
 15_compose-local.md
 16_prod-deploy-guidance.md
 17_dev-containers.md
