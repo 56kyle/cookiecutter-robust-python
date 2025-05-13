@@ -9,6 +9,7 @@ dependencies = [
     "cruft>=2.16.0",
     "loguru>=0.7.3",
     "platformdirs>=4.3.8",
+    "retrocookie>=0.4.3",
     "typer>=0.15.3",
 ]
 
