@@ -119,41 +119,6 @@ def docs_build(session: Session) -> None:
     session.run("uv", "run", "sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-W", external=True)
 
 
-# Note: Sessions for building Rust (build_rust) and possibly publishing Rust artifacts
-# would be added here, potentially conditionally based on the 'add_rust_extension' prompt.
-# Example conditional session inclusion based on cookiecutter variable:
-{% if cookiecutter.add_rust_extension == 'y' %}
-@nox.session(python=DEFAULT_PYTHON_VERSION)
-def build_rust(session: Session) -> None:
-    """Build the Rust crate.
-
-    Requires Rust toolchain (managed separately or via CI setup).
-    Requires uvx in PATH. Requires Cargo.toml in the rust/ directory.
-    """
-    session.log("Checking Rust toolchain availability via uvx/cargo.")
-    # uvx can run cargo if rustup is on the PATH or configured.
-    # or the CI setup ensures rust toolchain is installed (e.g., via actions-rs/toolchain).
-    try:
-        session.run("cargo", "--version", success_codes=[0], external=True, silent=True)
-    except nox.command.CommandFailed:
-         session.log("Rust toolchain (cargo) not found in PATH.")
-         session.skip("Rust toolchain not available.")
-         return
-
-    # Change to the directory containing Cargo.toml
-    rust_crate_dir = Path("rust") # Assumes rust/ directory contains Cargo.toml
-    if not (rust_crate_dir / "Cargo.toml").exists():
-        session.log(f"Cargo.toml not found in {rust_crate_dir}.")
-        session.skip("Rust crate not found.")
-        return
-
-    session.log(f"Building Rust crate in {rust_crate_dir}.")
-    # Use cargo build command, typically run from the crate root directory
-    session.run("cargo", "build", "--release", external=True, cwd=str(rust_crate_dir)) # cwd ensures command runs in Rust dir
-    session.log("Rust crate built.")
-
-{% endif %}
-
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="build-python")
 def build_python(session: Session) -> None:
     """Build sdist and wheel packages (uv build)."""
@@ -162,10 +127,15 @@ def build_python(session: Session) -> None:
     session.run("uv", "sync", "--locked", "--clean", "--groups", "dev", external=True)
 
     session.log(f"Building sdist and wheel packages with py{session.python}.")
+    {% if cookiecutter.add_rust_extension == 'y' -%}
     session.run("uv", "build", "--sdist", "--wheel", "--outdir", "dist/", external=True)
+    {% else -%}
+    session.run("uvx", "maturin", "develop", "--uv", external=True)
+    {% endif -%}
 
     session.log("Built packages in ./dist directory:")
-    session.run("uv", "run", "ls", "-l", "dist/", external=True)
+    for path in Path("dist/").glob("*"):
+        session.log(f"- {path.name}")
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="build-container")
