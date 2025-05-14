@@ -29,7 +29,7 @@ PACKAGE_NAME: str = "{{cookiecutter.package_name}}"
 # These sessions perform specific types of checks or builds.
 # Their names align with modular CI workflow files.
 
-@nox.session(python=DEFAULT_PYTHON_VERSION)
+@nox.session(python=DEFAULT_PYTHON_VERSION, name="format-python")
 def format_python(session: Session) -> None:
     """Run Python code formatter (Ruff format)."""
     session.log("Installing formatting dependencies...")
@@ -40,7 +40,7 @@ def format_python(session: Session) -> None:
     session.run("uv", "run", "ruff", "format", *session.posargs, external=True)
 
 
-@nox.session(python=DEFAULT_PYTHON_VERSION)
+@nox.session(python=DEFAULT_PYTHON_VERSION, name="lint-python")
 def lint_python(session: Session) -> None:
     """Run Python code linters (Ruff check, Pydocstyle rules)."""
     session.log("Installing linting dependencies...")
