@@ -23,11 +23,18 @@ CRATES_FOLDER: Path = REPO_ROOT / "rust"
 PACKAGE_NAME: str = "{{cookiecutter.package_name}}"
 
 
+@nox.session(python=DEFAULT_PYTHON_VERSION, name="pre-commit")
+def pre_commit(session: Session) -> None:
+    """Run pre-commit checks."""
+    session.log("Installing pre-commit dependencies...")
+    session.run("uv", "sync", "--locked", "--group", "dev", "pre-commit", external=True)
+
+
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="format-python")
 def format_python(session: Session) -> None:
     """Run Python code formatter (Ruff format)."""
     session.log("Installing formatting dependencies...")
-    session.run("uv", "sync", "--locked", "--clean", "--groups", "dev", "lint", external=True)
+    session.run("uv", "sync", "--locked", "--group", "dev", "lint", external=True)
 
     session.log(f"Running Ruff formatter check with py{session.python}.")
     # Use --check, not fix. Fixing is done by pre-commit or manual run.
@@ -38,7 +45,7 @@ def format_python(session: Session) -> None:
 def lint_python(session: Session) -> None:
     """Run Python code linters (Ruff check, Pydocstyle rules)."""
     session.log("Installing linting dependencies...")
-    session.run("uv", "sync", "--locked", "--clean", "--groups", "dev", "lint", external=True)
+    session.run("uv", "sync", "--locked", "--group", "dev", "lint", external=True)
 
     session.log(f"Running Ruff check with py{session.python}.")
     session.run("uv", "run", "ruff", "check", "--verbose", external=True)
@@ -48,7 +55,7 @@ def lint_python(session: Session) -> None:
 def typecheck(session: Session) -> None:
     """Run static type checking (Pyright) on Python code."""
     session.log("Installing type checking dependencies...")
-    session.run("uv", "sync", "--locked", "--clean", "--groups", "dev", "typecheck", external=True)
+    session.run("uv", "sync", "--locked", "--group", "dev", "typecheck", external=True)
 
     session.log(f"Running Pyright check with py{session.python}.")
     session.run("uv", "run", "pyright", external=True)
@@ -58,7 +65,7 @@ def typecheck(session: Session) -> None:
 def security_python(session: Session) -> None:
     """Run code security checks (Bandit) on Python code."""
     session.log("Installing security dependencies...")
-    session.run("uv", "sync", "--locked", "--clean", "--groups", "dev", "security", external=True)
+    session.run("uv", "sync", "--locked", "--group", "dev", "security", external=True)
 
     session.log(f"Running Bandit static security analysis with py{session.python}.")
     session.run("uv", "run", "bandit", "-r", PACKAGE_NAME, "-c", ".bandit", "-ll", "-s", external=True)
@@ -71,7 +78,7 @@ def security_python(session: Session) -> None:
 def tests_python(session: Session) -> None:
     """Run the Python test suite (pytest with coverage)."""
     session.log("Installing test dependencies...")
-    session.run("uv", "sync", "--locked", "--clean", "--groups", "dev", "test", external=True)
+    session.run("uv", "sync", "--locked", "--group", "dev", "test", external=True)
 
     session.log(f"Running test suite with py{session.python}.")
     test_results_dir = Path("test-results")
@@ -101,7 +108,7 @@ def tests_rust(session: Session) -> None:
 def docs_build(session: Session) -> None:
     """Build the project documentation (Sphinx)."""
     session.log("Installing documentation dependencies...")
-    session.run("uv", "sync", "--locked", "--clean", "--groups", "dev", "docs", external=True)
+    session.run("uv", "sync", "--locked", "--group", "dev", "docs", external=True)
 
     session.log(f"Building documentation with py{session.python}.")
     docs_build_dir = Path("docs") / "_build" / "html"
@@ -118,7 +125,7 @@ def build_python(session: Session) -> None:
     """Build sdist and wheel packages (uv build)."""
     session.log("Installing build dependencies...")
     # Sync core & dev deps are needed for accessing project source code.
-    session.run("uv", "sync", "--locked", "--clean", "--groups", "dev", external=True)
+    session.run("uv", "sync", "--locked", "--group", "dev", external=True)
 
     session.log(f"Building sdist and wheel packages with py{session.python}.")
     {% if cookiecutter.add_rust_extension == 'y' -%}
@@ -154,7 +161,7 @@ def build_container(session: Session) -> None:
 
     current_dir = Path(".")
     session.log(f"Ensuring core dependencies are synced in {current_dir.resolve()} for build context...")
-    session.run("uv", "sync", "--locked", "--clean", external=True)
+    session.run("uv", "sync", "--locked", external=True)
 
     session.log(f"Building Docker image using {container_cli}.")
     project_image_name = PACKAGE_NAME.replace("_", "-").lower()
@@ -300,7 +307,7 @@ def coverage(session: Session) -> None:
     session.log("Note: Ensure 'nox -s test-python' was run across all desired Python versions first to generate coverage data.")
 
     session.log("Installing dependencies for coverage report session...")
-    session.run("uv", "sync", "--locked", "--clean", "--groups", "dev", "test", external=True)
+    session.run("uv", "sync", "--locked", "--group", "dev", "test", external=True)
 
     coverage_combined_file = Path(".") / ".coverage"
 
