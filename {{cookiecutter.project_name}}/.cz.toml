@@ -15,5 +15,5 @@ commit_msg_file = ".git/COMMIT_EDITMSG"
 [tool.commitizen.github]
 release = true
 release_asset_path = "dist/*"
-release_asset_descriptions = { "*.tar.gz": "Source distribution", "*.whl": "Python Wheel" }
+release_asset_descriptions = { "*.tar.gz" = "Source distribution", "*.whl" = "Python Wheel" }
 base_url = "https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}"
