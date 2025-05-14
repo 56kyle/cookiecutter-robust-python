@@ -44,5 +44,8 @@ jobs:
         with:
           python-version-file: .python-version
 
+      - name: Run formatting checks
+        run: uvx nox -s format-python
+
       - name: Run linting checks
         run: uvx nox -s lint-python
