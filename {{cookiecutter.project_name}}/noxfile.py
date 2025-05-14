@@ -13,8 +13,6 @@ nox.options.default_venv_backend = "uv"
 MIN_PYTHON_VERSION_SLUG: int = int("{{cookiecutter.min_python_version}}".lstrip("3."))
 MAX_PYTHON_VERSION_SLUG: int = int("{{cookiecutter.max_python_version}}".lstrip("3."))
 
-# Python versions to test against. As of April {{cookiecutter.copyright_year}}, generally {{cookiecutter.min_python_version}}-{{cookiecutter.max_python_version}} are actively supported.
-# See: https://devguide.python.org/versions/ and https://endoflife.date/python
 PYTHON_VERSIONS: List[str] = [
     f"3.{VERSION_SLUG}" for VERSION_SLUG in range(MIN_PYTHON_VERSION_SLUG, MAX_PYTHON_VERSION_SLUG + 1)
 ]
@@ -24,10 +22,6 @@ REPO_ROOT: Path = Path(__file__).parent
 CRATES_FOLDER: Path = REPO_ROOT / "rust"
 PACKAGE_NAME: str = "{{cookiecutter.package_name}}"
 
-
-# --- GRANULAR TASK AUTOMATION SESSIONS ---
-# These sessions perform specific types of checks or builds.
-# Their names align with modular CI workflow files.
 
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="format-python")
 def format_python(session: Session) -> None:
@@ -173,7 +167,7 @@ def build_container(session: Session) -> None:
 def publish_python(session: Session) -> None:
     """Publish sdist and wheel packages to PyPI via uv publish.
 
-    Requires packages to be built first (`nox -s build_python` or `nox -s build`).
+    Requires packages to be built first (`nox -s build-python` or `nox -s build`).
     Requires TWINE_USERNAME/TWINE_PASSWORD or TWINE_API_KEY environment variables set (usually in CI).
     """
     session.log("Checking built packages with Twine.")
@@ -266,14 +260,14 @@ def build(session: Session) -> None:
     session.notify("build_rust") # Build Rust crate first if Rust is enabled
     {% endif %}
     # Then build the Python package (uv build)
-    session.notify("build_python") # Build Python sdist/wheel
+    session.notify("build-python") # Build Python sdist/wheel
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION) # Run the orchestrator on the default Python version
 def publish(session: Session) -> None:
     """Orchestrates publishing all project artifacts (Python packages, potentially Rust)."""
     session.log(f"Queueing publish sessions for py{session.python} if applicable.")
-    session.notify("publish_python") # Publish Python sdist/wheel
+    session.notify("publish-python") # Publish Python sdist/wheel
     # Note: publish_rust session might be notified here if needed.
 
 
@@ -281,13 +275,10 @@ def publish(session: Session) -> None:
 def check(session: Session) -> None:
     """Run primary quality checks (format, lint, typecheck, security)."""
     session.log(f"Queueing core check sessions for py{session.python} if applicable.")
-    # Notify granular sessions. Their python version is controlled by their decorators.
-    # Sessions without explicit python versions or limited run on DEFAULT_PYTHON_VERSION.
-    session.notify("format_python")
-    session.notify("lint_python")
-    session.notify("typecheck_python")
-    session.notify("security_python")
-    session.notify("security_deps")
+    session.notify("format-python")
+    session.notify("lint-python")
+    session.notify("typecheck")
+    session.notify("security-python")
 
 
 @nox.session(python=PYTHON_VERSIONS, name="full-check")
@@ -295,7 +286,7 @@ def full_check(session: Session) -> None:
    """Run all core quality checks and tests."""
    session.log(f"Queueing all check and test sessions for py{session.python} if applicable.")
    session.notify("check")
-   session.notify("test_python")
+   session.notify("tests-python")
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION)
