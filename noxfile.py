@@ -45,6 +45,8 @@ SYNC_UV_WITH_DEMO_OPTIONS: tuple[str, ...] = (
 
 TEMPLATE_PYTHON_LOCATIONS: tuple[Path, ...] = (
     Path("noxfile.py"),
+    Path("scripts/*"),
+    Path("hooks/*")
 )
 
 TEMPLATE_CONFIG_AND_DOCS: tuple[Path, ...] = (
@@ -103,6 +105,31 @@ def uv_in_demo(session: Session) -> None:
         *SYNC_UV_WITH_DEMO_OPTIONS,
         external=True,
     )
+
+
+@nox.session(name="in-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+def in_demo(session: Session) -> None:
+    session.install("cookiecutter", "platformdirs", "loguru", "typer")
+    session.run(
+        "python",
+        "scripts/generate-demo-project.py",
+        *GENERATE_DEMO_PROJECT_OPTIONS,
+    )
+    original_dir: Path = Path.cwd()
+    session.cd(DEMO_ROOT_FOLDER)
+    session.run(*session.posargs)
+    session.cd(original_dir)
+
+
+@nox.session(name="clear-cache", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+def clear_cache(session: Session) -> None:
+    """Clear the cache of generated project demos.
+
+    Not commonly used, but sometimes permissions might get messed up if exiting mid-build and such.
+    """
+    session.log("Clearing cache of generated project demos...")
+    shutil.rmtree(PROJECT_DEMOS_FOLDER, ignore_errors=True)
+    session.log("Cache cleared.")
 
 
 @nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
