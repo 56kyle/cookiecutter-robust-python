@@ -3,11 +3,12 @@
 import typer
 
 
-@typer.command()
-@typer.version_option()
+app: typer.Typer = typer.Typer()
+
+@app.command(name="{{cookiecutter.project_name}}")
 def main() -> None:
     """{{cookiecutter.friendly_name}}."""
 
 
 if __name__ == "__main__":
-    main(prog_name="{{cookiecutter.project_name}}")  # pragma: no cover
+    app()

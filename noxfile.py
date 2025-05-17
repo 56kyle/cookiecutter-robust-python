@@ -1,15 +1,13 @@
-# noxfile.py
-# Nox configuration for the cookiecutter-robust-python TEMPLATE development and maintenance.
-# See https://nox.thea.codes/en/stable/config.html
-
+"""Noxfile for the cookiecutter-robust-python template."""
 from pathlib import Path
 import shutil
 import tempfile
-import sys
 
 import nox
 import platformdirs
+from nox.command import CommandFailed
 from nox.sessions import Session
+
 
 nox.options.default_venv_backend = "uv"
 
@@ -197,7 +195,6 @@ def test(session: Session) -> None:
     generated_project_dir = temp_dir / "test_project" # Use the slug defined in --extra-context
     if not generated_project_dir.exists():
         session.error(f"Generated project directory not found: {generated_project_dir}")
-        return
 
     session.log(f"Changing to generated project directory: {generated_project_dir}")
     session.cd(generated_project_dir)
@@ -223,10 +220,9 @@ def release_template(session: Session):
     session.log("Running release process for the TEMPLATE using Commitizen...")
     try:
         session.run("git", "version", success_codes=[0], external=True, silent=True)
-    except nox.command.CommandFailed:
+    except CommandFailed:
         session.log("Git command not found. Commitizen requires Git.")
         session.skip("Git not available.")
-        return
 
     session.log("Checking Commitizen availability via uvx.")
     session.run("uvx", "cz", "--version", successcodes=[0], external=True)

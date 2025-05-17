@@ -1,26 +1,19 @@
 """Fixtures used in all tests for cookiecutter-robust-python."""
-import json
-import os
-from pathlib import Path
-from typing import Any, Generator
 
-import platformdirs
+import os
+import subprocess
+
+from pathlib import Path
+from typing import Generator
+
 import pytest
-from _pytest.fixtures import FixtureRequest
 from _pytest.tmpdir import TempPathFactory
 from cookiecutter.main import cookiecutter
 
+from tests.constants import REPO_FOLDER
+
 
 pytest_plugins: list[str] = ["pytester"]
-
-
-REPO_FOLDER: Path = Path(__file__).parent.parent
-COOKIECUTTER_FOLDER: Path = REPO_FOLDER / "{{cookiecutter.project_name}}"
-HOOKS_FOLDER: Path = REPO_FOLDER / "hooks"
-SCRIPTS_FOLDER: Path = REPO_FOLDER / "scripts"
-
-COOKIECUTTER_JSON_PATH: Path = COOKIECUTTER_FOLDER / "cookiecutter.json"
-COOKIECUTTER_JSON: dict[str, Any] = json.loads(COOKIECUTTER_JSON_PATH.read_text())
 
 
 @pytest.fixture(scope="session")
@@ -37,7 +30,9 @@ def robust_python_demo_path(tmp_path_factory: TempPathFactory) -> Path:
             "add_rust_extension": False
         }
     )
-    return demos_path / "robust-python-demo"
+    path: Path = demos_path / "robust-python-demo"
+    subprocess.run(["uv", "lock"], cwd=path)
+    return path
 
 
 @pytest.fixture(scope="session")
@@ -54,7 +49,9 @@ def robust_maturin_demo_path(tmp_path_factory: TempPathFactory) -> Path:
             "add_rust_extension": True
         }
     )
-    return demos_path / "robust-maturin-demo"
+    path: Path = demos_path / "robust-maturin-demo"
+    subprocess.run(["uv", "sync"], cwd=path)
+    return path
 
 
 @pytest.fixture(scope="function")
@@ -66,3 +63,9 @@ def inside_robust_python_demo(robust_python_demo_path: Path) -> Generator[Path, 
     os.chdir(original_path)
 
 
+@pytest.fixture(scope="function")
+def inside_robust_maturin_demo(robust_maturin_demo_path: Path) -> Generator[Path, None, None]:
+    original_path: Path = Path.cwd()
+    os.chdir(robust_maturin_demo_path)
+    yield robust_maturin_demo_path
+    os.chdir(original_path)
