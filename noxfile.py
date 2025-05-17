@@ -1,15 +1,13 @@
-# noxfile.py
-# Nox configuration for the cookiecutter-robust-python TEMPLATE development and maintenance.
-# See https://nox.thea.codes/en/stable/config.html
-
+"""Noxfile for the cookiecutter-robust-python template."""
 from pathlib import Path
 import shutil
 import tempfile
-import sys
 
 import nox
 import platformdirs
+from nox.command import CommandFailed
 from nox.sessions import Session
+
 
 nox.options.default_venv_backend = "uv"
 
@@ -45,6 +43,8 @@ SYNC_UV_WITH_DEMO_OPTIONS: tuple[str, ...] = (
 
 TEMPLATE_PYTHON_LOCATIONS: tuple[Path, ...] = (
     Path("noxfile.py"),
+    Path("scripts/*"),
+    Path("hooks/*")
 )
 
 TEMPLATE_CONFIG_AND_DOCS: tuple[Path, ...] = (
@@ -103,6 +103,31 @@ def uv_in_demo(session: Session) -> None:
         *SYNC_UV_WITH_DEMO_OPTIONS,
         external=True,
     )
+
+
+@nox.session(name="in-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+def in_demo(session: Session) -> None:
+    session.install("cookiecutter", "platformdirs", "loguru", "typer")
+    session.run(
+        "python",
+        "scripts/generate-demo-project.py",
+        *GENERATE_DEMO_PROJECT_OPTIONS,
+    )
+    original_dir: Path = Path.cwd()
+    session.cd(DEMO_ROOT_FOLDER)
+    session.run(*session.posargs)
+    session.cd(original_dir)
+
+
+@nox.session(name="clear-cache", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+def clear_cache(session: Session) -> None:
+    """Clear the cache of generated project demos.
+
+    Not commonly used, but sometimes permissions might get messed up if exiting mid-build and such.
+    """
+    session.log("Clearing cache of generated project demos...")
+    shutil.rmtree(PROJECT_DEMOS_FOLDER, ignore_errors=True)
+    session.log("Cache cleared.")
 
 
 @nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
@@ -170,7 +195,6 @@ def test(session: Session) -> None:
     generated_project_dir = temp_dir / "test_project" # Use the slug defined in --extra-context
     if not generated_project_dir.exists():
         session.error(f"Generated project directory not found: {generated_project_dir}")
-        return
 
     session.log(f"Changing to generated project directory: {generated_project_dir}")
     session.cd(generated_project_dir)
@@ -196,10 +220,9 @@ def release_template(session: Session):
     session.log("Running release process for the TEMPLATE using Commitizen...")
     try:
         session.run("git", "version", success_codes=[0], external=True, silent=True)
-    except nox.command.CommandFailed:
+    except CommandFailed:
         session.log("Git command not found. Commitizen requires Git.")
         session.skip("Git not available.")
-        return
 
     session.log("Checking Commitizen availability via uvx.")
     session.run("uvx", "cz", "--version", successcodes=[0], external=True)

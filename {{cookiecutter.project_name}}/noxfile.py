@@ -1,11 +1,11 @@
 """Noxfile for the {{cookiecutter.project_name}} project."""
-
 from pathlib import Path
 from typing import List
 
 import nox
 from nox.command import CommandFailed
 from nox.sessions import Session
+
 
 nox.options.default_venv_backend = "uv"
 
@@ -86,12 +86,11 @@ def tests_python(session: Session) -> None:
     junitxml_file = test_results_dir / f"test-results-py{session.python}.xml"
 
     session.run(
-        "uv", "run", "pytest",
+        "pytest",
         "--cov={}".format(PACKAGE_NAME),
         "--cov-report=xml",
         f"--junitxml={junitxml_file}",
-        "tests/",
-        external=True
+        "tests/"
     )
 
 
@@ -151,15 +150,15 @@ def build_container(session: Session) -> None:
     try:
         session.run("docker", "info", success_codes=[0], external=True, silent=True)
         container_cli = "docker"
-    except nox.command.CommandFailed:
+    except CommandFailed:
         try:
             session.run("podman", "info", success_codes=[0], external=True, silent=True)
             container_cli = "podman"
-        except nox.command.CommandFailed:
+        except CommandFailed:
             session.log("Neither Docker nor Podman command found. Please install a container runtime.")
             session.skip("Container runtime not available.")
 
-    current_dir = Path(".")
+    current_dir: Path = Path.cwd()
     session.log(f"Ensuring core dependencies are synced in {current_dir.resolve()} for build context...")
     session.run("uv", "sync", "--locked", external=True)
 
@@ -177,6 +176,8 @@ def publish_python(session: Session) -> None:
     Requires packages to be built first (`nox -s build-python` or `nox -s build`).
     Requires TWINE_USERNAME/TWINE_PASSWORD or TWINE_API_KEY environment variables set (usually in CI).
     """
+    session.run("uv", "sync", "--locked", "--group", "dev", external=True)
+
     session.log("Checking built packages with Twine.")
     session.run("uvx", "twine", "check", "dist/*", external=True)
 
@@ -201,9 +202,11 @@ def release(session: Session) -> None:
     Optionally accepts increment (major, minor, patch) after '--'.
     """
     session.log("Running release process using Commitizen...")
+    session.run("uv", "sync", "--locked", "--group", "dev", external=True)
+
     try:
         session.run("git", "version", success_codes=[0], external=True, silent=True)
-    except nox.command.CommandFailed:
+    except CommandFailed:
         session.log("Git command not found. Commitizen requires Git.")
         session.skip("Git not available.")
 
@@ -243,6 +246,8 @@ def tox(session: Session) -> None:
     Accepts tox args after '--' (e.g., `nox -s tox -- -e py39`).
     """
     session.log("Running Tox test matrix via uvx...")
+    session.run("uv", "sync", "--locked", "--group", "dev", external=True)
+
     tox_ini_path = Path("tox.ini")
     if not tox_ini_path.exists():
         session.log("tox.ini file not found at %s. Tox requires this file.", str(tox_ini_path))
@@ -309,13 +314,13 @@ def coverage(session: Session) -> None:
     session.log("Installing dependencies for coverage report session...")
     session.run("uv", "sync", "--locked", "--group", "dev", "--group", "test", external=True)
 
-    coverage_combined_file = Path(".") / ".coverage"
+    coverage_combined_file: Path = Path.cwd() / ".coverage"
 
     session.log("Combining coverage data.")
     try:
         session.run("uv", "run", "coverage", "combine", external=True)
         session.log(f"Combined coverage data into {coverage_combined_file.resolve()}")
-    except nox.command.CommandFailed as e:
+    except CommandFailed as e:
         if e.returncode == 1:
              session.log("No coverage data found to combine. Run tests first with coverage enabled.")
         else:
@@ -329,4 +334,4 @@ def coverage(session: Session) -> None:
     session.log("Running terminal coverage report.")
     session.run("uv", "run", "coverage", "report", external=True)
 
-    session.log(f"Coverage reports generated in ./{str(coverage_html_dir)} and terminal.")
+    session.log(f"Coverage reports generated in ./{coverage_html_dir} and terminal.")
