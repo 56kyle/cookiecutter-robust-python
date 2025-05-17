@@ -43,8 +43,8 @@ SYNC_UV_WITH_DEMO_OPTIONS: tuple[str, ...] = (
 
 TEMPLATE_PYTHON_LOCATIONS: tuple[Path, ...] = (
     Path("noxfile.py"),
-    Path("scripts/*"),
-    Path("hooks/*")
+    Path("scripts"),
+    Path("hooks")
 )
 
 TEMPLATE_CONFIG_AND_DOCS: tuple[Path, ...] = (
@@ -134,9 +134,9 @@ def clear_cache(session: Session) -> None:
 def lint(session: Session):
     """Lint the template's own Python files and configurations."""
     session.log("Installing linting dependencies for the template source...")
-    session.run("uv", "sync", "--locked", "--group", "dev", "--group", "lint", external=True)
+    session.install("-e", ".", "--group", "dev", "--group", "lint")
 
-    locations: list[str] = [str(loc) for loc in TEMPLATE_PYTHON_LOCATIONS + TEMPLATE_CONFIG_AND_DOCS]
+    locations: list[str] = [str(loc) for loc in TEMPLATE_PYTHON_LOCATIONS]
     session.log(f"Running Ruff formatter check on template files with py{session.python}.")
     session.run("uv", "run", "ruff", "format", *locations, "--check", external=True)
 
@@ -148,7 +148,7 @@ def lint(session: Session):
 def docs(session: Session):
     """Build the template documentation website."""
     session.log("Installing documentation dependencies for the template docs...")
-    session.run("uv", "sync", "--locked", "--group", "dev", "--group", "docs", external=True)
+    session.install("-e", ".", "--group", "dev", "--group", "docs")
 
     session.log(f"Building template documentation with py{session.python}.")
     # Set path to allow Sphinx to import from template root if needed (e.g., __version__.py)
@@ -178,7 +178,7 @@ def test(session: Session) -> None:
     session.log("Running template tests...")
     session.log("Installing template testing dependencies...")
     # Sync deps from template's own pyproject.toml, e.g., 'dev' group that includes 'pytest', 'cookiecutter'
-    session.run("uv", "sync", "--locked", "--group", "dev", "--group", "test", external=True)
+    session.install("-e", ".", "--group", "dev", "--group", "test")
 
     # Create a temporary directory for the generated project
     temp_dir: Path = Path(tempfile.mkdtemp())
@@ -200,7 +200,7 @@ def test(session: Session) -> None:
     session.cd(generated_project_dir)
 
     session.log("Installing generated project dependencies using uv sync...")
-    session.run("uv", "sync", "--locked", external=True)
+    session.install("-e", ".", external=True)
 
     session.log("Running generated project's default checks...")
     session.run("uv", "run", "nox", external=True)
