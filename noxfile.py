@@ -138,10 +138,10 @@ def lint(session: Session):
 
     locations: list[str] = [str(loc) for loc in TEMPLATE_PYTHON_LOCATIONS]
     session.log(f"Running Ruff formatter check on template files with py{session.python}.")
-    session.run("uv", "run", "ruff", "format", *locations, "--check", external=True)
+    session.run("ruff", "format", *locations, "--check")
 
     session.log(f"Running Ruff check on template files with py{session.python}.")
-    session.run("uv", "run", "ruff", "check", *locations, "--verbose", external=True)
+    session.run("ruff", "check", *locations, "--verbose")
 
 
 @nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
