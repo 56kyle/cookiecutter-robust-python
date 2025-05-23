@@ -12,6 +12,7 @@ on:
   push:
     branches:
       - main
+      - master
     paths:
       - crates/**
       - docs/source/src/rust/**
