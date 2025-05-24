@@ -21,11 +21,7 @@
   "venv": ".venv",
   "executionEnvironments": [
     {
-      "root": "src",
-      "extraPaths": []
-    },
-    {
-      "root": "tests",
+      "root": ".",
       "extraPaths": []
     }
   ],
