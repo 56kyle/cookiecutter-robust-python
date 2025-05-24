@@ -70,10 +70,10 @@ jobs:
       # This action requires a standard CHANGELOG.md format.
       - name: Get Release Notes from Changelog
         id: changelog
-        uses: simple-changelog/action@v3 # Action to parse CHANGELOG.md
+        uses: simple-changelog/action@v3
         with:
           path: CHANGELOG.md # Path to your CHANGELOG.md
-          tag: { "${{ github.event_name == 'push' && github.ref_name || github.event.inputs.tag }}" } # Pass the tag name
+          tag: {% raw %}${{ github.event_name == 'push' && github.ref_name || github.event.inputs.tag }}{% endraw %}
 
       # Define outputs from this job that other jobs (like create_github_release) can use.
     outputs:
