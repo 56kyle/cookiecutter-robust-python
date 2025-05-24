@@ -60,6 +60,3 @@ Thumbs.db      # Windows thumbnail cache
 # Development logs/outputs
 debug.log
 nohup.out
-
-# Cookiecutter/Cruft metadata (for template updates)
-.cruft.json
