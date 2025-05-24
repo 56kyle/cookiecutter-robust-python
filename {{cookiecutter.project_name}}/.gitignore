@@ -8,6 +8,8 @@
 /docs/_build/
 /src/*.egg-info/
 *.egg-info/
+target
+/.idea/
 
 # Byte-code files
 *.pyc
