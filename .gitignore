@@ -60,3 +60,5 @@ Thumbs.db      # Windows thumbnail cache
 # Development logs/outputs
 debug.log
 nohup.out
+
+/.idea/
