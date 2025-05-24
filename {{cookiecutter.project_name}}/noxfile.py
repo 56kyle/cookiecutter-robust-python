@@ -1,5 +1,10 @@
 """Noxfile for the {{cookiecutter.project_name}} project."""
+
+import os
+import shlex
+
 from pathlib import Path
+from textwrap import dedent
 from typing import List
 
 import nox
@@ -23,11 +28,87 @@ CRATES_FOLDER: Path = REPO_ROOT / "rust"
 PACKAGE_NAME: str = "{{cookiecutter.package_name}}"
 
 
+def activate_virtualenv_in_precommit_hooks(session: Session) -> None:
+    """Activate virtualenv in hooks installed by pre-commit.
+
+    This function patches git hooks installed by pre-commit to activate the
+    session's virtual environment. This allows pre-commit to locate hooks in
+    that environment when invoked from git.
+
+    Args:
+        session: The Session object.
+    """
+    assert session.bin is not None  # nosec
+
+    # Only patch hooks containing a reference to this session's bindir. Support
+    # quoting rules for Python and bash, but strip the outermost quotes so we
+    # can detect paths within the bindir, like <bindir>/python.
+    bindirs = [
+        bindir[1:-1] if bindir[0] in "'\"" else bindir for bindir in (repr(session.bin), shlex.quote(session.bin))
+    ]
+
+    virtualenv = session.env.get("VIRTUAL_ENV")
+    if virtualenv is None:
+        return
+
+    headers = {
+        # pre-commit < 2.16.0
+        "python": f"""\
+            import os
+            os.environ["VIRTUAL_ENV"] = {virtualenv!r}
+            os.environ["PATH"] = os.pathsep.join((
+                {session.bin!r},
+                os.environ.get("PATH", ""),
+            ))
+            """,
+        # pre-commit >= 2.16.0
+        "bash": f"""\
+            VIRTUAL_ENV={shlex.quote(virtualenv)}
+            PATH={shlex.quote(session.bin)}"{os.pathsep}$PATH"
+            """,
+        # pre-commit >= 2.17.0 on Windows forces sh shebang
+        "/bin/sh": f"""\
+            VIRTUAL_ENV={shlex.quote(virtualenv)}
+            PATH={shlex.quote(session.bin)}"{os.pathsep}$PATH"
+            """,
+    }
+
+    hookdir: Path = Path(".git") / "hooks"
+    if not hookdir.is_dir():
+        return
+
+    for hook in hookdir.iterdir():
+        if hook.name.endswith(".sample") or not hook.is_file():
+            continue
+
+        if not hook.read_bytes().startswith(b"#!"):
+            continue
+
+        text: str = hook.read_text()
+
+        if not any((Path("A") == Path("a") and bindir.lower() in text.lower()) or bindir in text for bindir in bindirs):
+            continue
+
+        lines: list[str] = text.splitlines()
+
+        for executable, header in headers.items():
+            if executable in lines[0].lower():
+                lines.insert(1, dedent(header))
+                hook.write_text("\n".join(lines))
+                break
+
+
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="pre-commit")
-def pre_commit(session: Session) -> None:
-    """Run pre-commit checks."""
+def precommit(session: Session) -> None:
+    """Lint using pre-commit."""
+    args: list[str] = session.posargs or ["run", "--all-files", "--hook-stage=manual", "--show-diff-on-failure"]
+
     session.log("Installing pre-commit dependencies...")
     session.install("-e", ".", "--group", "dev")
+
+    session.run("pre-commit", *args)
+    if args and args[0] == "install":
+        activate_virtualenv_in_precommit_hooks(session)
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="format-python")
