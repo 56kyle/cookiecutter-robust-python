@@ -29,6 +29,9 @@
       "extraPaths": []
     }
   ],
+  "defineConstant": {
+    "DEBUG": true
+  },
   "reportMissingImports": true,
   "reportMissingTypeStubs": true,
 
