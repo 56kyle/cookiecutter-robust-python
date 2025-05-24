@@ -155,10 +155,10 @@ def docs(session: Session):
 
     session.log(f"Cleaning template docs build directory: {docs_build_dir}")
     docs_build_dir.parent.mkdir(parents=True, exist_ok=True)
-    session.run("uv", "run", "sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-E", external=True)
+    session.run("sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-E")
 
     session.log("Building template documentation.")
-    session.run("uv", "run", "sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-W", external=True)
+    session.run("sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-W")
 
     session.log(f"Template documentation built in {docs_build_dir.resolve()}.")
 
@@ -199,7 +199,7 @@ def test(session: Session) -> None:
     session.install("-e", ".", external=True)
 
     session.log("Running generated project's default checks...")
-    session.run("uv", "run", "nox", external=True)
+    session.run("nox")
 
     session.log(f"Cleaning up temporary directory: {temp_dir}")
     shutil.rmtree(temp_dir)
@@ -221,7 +221,7 @@ def release_template(session: Session):
         session.skip("Git not available.")
 
     session.log("Checking Commitizen availability via uvx.")
-    session.run("uvx", "cz", "--version", successcodes=[0], external=True)
+    session.run("cz", "--version", successcodes=[0])
 
     increment = session.posargs[0] if session.posargs else None
     session.log(
