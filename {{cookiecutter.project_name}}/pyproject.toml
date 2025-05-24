@@ -1,7 +1,7 @@
 [project]
-name = "{{cookiecutter.package_name}}"
-version = "0.1.0"
-description = "{{cookiecutter.package_name}}"
+name = "{{cookiecutter.project_name}}"
+version = "{{cookiecutter.version}}"
+description = "{{cookiecutter.project_name}}"
 authors = [
     { name = "{{cookiecutter.author}}", email = "{{cookiecutter.email}}" },
 ]
