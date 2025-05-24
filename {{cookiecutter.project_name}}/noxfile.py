@@ -27,7 +27,7 @@ PACKAGE_NAME: str = "{{cookiecutter.package_name}}"
 def pre_commit(session: Session) -> None:
     """Run pre-commit checks."""
     session.log("Installing pre-commit dependencies...")
-    session.install("-e", ".", "--group", "dev", "--group", "pre-commit")
+    session.install("-e", ".", "--group", "dev")
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="format-python")
