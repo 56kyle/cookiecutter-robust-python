@@ -8,17 +8,14 @@ authors = [
 license = { text = "{{cookiecutter.license}}" }
 readme = "README.md"
 requires-python = ">={{cookiecutter.min_python_version}},<4.0"
-
 keywords = [
     "{{cookiecutter.project_name.replace('_', '-')}}",
 ]
-
 classifiers = [
     "Programming Language :: Python :: {{cookiecutter.min_python_version}}",
     "Programming Language :: Python :: 3 :: Only",
     "License :: OSI Approved :: {{cookiecutter.license}}",
 ]
-
 dependencies = [
     "loguru>=0.7.3",
     "platformdirs>=4.3.8",

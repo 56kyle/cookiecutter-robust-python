@@ -7,16 +7,12 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
-
 from cookiecutter.main import cookiecutter
 from typer.models import OptionInfo
 
+
 FolderOption: partial[OptionInfo] = partial(
-    typer.Option,
-    dir_okay=True,
-    file_okay=False,
-    resolve_path=True,
-    path_type=Path
+    typer.Option, dir_okay=True, file_okay=False, resolve_path=True, path_type=Path
 )
 
 
@@ -47,7 +43,7 @@ cli: typer.Typer = typer.Typer()
 def main(
     repo_folder: Annotated[Path, FolderOption("--repo-folder", "-r")],
     demos_cache_folder: Annotated[Path, FolderOption("--demos-cache-folder", "-c")],
-    demo_name: Annotated[str, typer.Option("--demo-name", "-d")]
+    demo_name: Annotated[str, typer.Option("--demo-name", "-d")],
 ) -> None:
     """Updates the poetry.lock file."""
     try:

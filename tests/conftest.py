@@ -2,7 +2,6 @@
 
 import os
 import subprocess
-
 from pathlib import Path
 from typing import Generator
 
@@ -25,10 +24,7 @@ def robust_python_demo_path(tmp_path_factory: TempPathFactory) -> Path:
         no_input=True,
         overwrite_if_exists=True,
         output_dir=demos_path,
-        extra_context={
-            "project_name": "robust-python-demo",
-            "add_rust_extension": False
-        }
+        extra_context={"project_name": "robust-python-demo", "add_rust_extension": False},
     )
     path: Path = demos_path / "robust-python-demo"
     subprocess.run(["uv", "lock"], cwd=path)
@@ -44,10 +40,7 @@ def robust_maturin_demo_path(tmp_path_factory: TempPathFactory) -> Path:
         no_input=True,
         overwrite_if_exists=True,
         output_dir=demos_path,
-        extra_context={
-            "project_name": "robust-maturin-demo",
-            "add_rust_extension": True
-        }
+        extra_context={"project_name": "robust-maturin-demo", "add_rust_extension": True},
     )
     path: Path = demos_path / "robust-maturin-demo"
     subprocess.run(["uv", "sync"], cwd=path)

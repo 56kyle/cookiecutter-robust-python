@@ -1,7 +1,8 @@
 """Noxfile for the cookiecutter-robust-python template."""
-from pathlib import Path
+
 import shutil
 import tempfile
+from pathlib import Path
 
 import nox
 import platformdirs
@@ -41,11 +42,7 @@ SYNC_UV_WITH_DEMO_OPTIONS: tuple[str, ...] = (
     *("--demo-name", DEFAULT_DEMO_NAME),
 )
 
-TEMPLATE_PYTHON_LOCATIONS: tuple[Path, ...] = (
-    Path("noxfile.py"),
-    Path("scripts"),
-    Path("hooks")
-)
+TEMPLATE_PYTHON_LOCATIONS: tuple[Path, ...] = (Path("noxfile.py"), Path("scripts"), Path("hooks"))
 
 TEMPLATE_CONFIG_AND_DOCS: tuple[Path, ...] = (
     Path("pyproject.toml"),
@@ -59,7 +56,7 @@ TEMPLATE_CONFIG_AND_DOCS: tuple[Path, ...] = (
     Path("LICENSE"),
     Path("CODE_OF_CONDUCT.md"),
     Path("CHANGELOG.md"),
-    Path("docs/")
+    Path("docs/"),
 )
 
 
@@ -83,6 +80,7 @@ def sync_uv_with_demo(session: Session) -> None:
         *SYNC_UV_WITH_DEMO_OPTIONS,
         external=True,
     )
+
 
 @nox.session(name="uv-in-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def uv_in_demo(session: Session) -> None:
@@ -136,12 +134,11 @@ def lint(session: Session):
     session.log("Installing linting dependencies for the template source...")
     session.install("-e", ".", "--group", "dev", "--group", "lint")
 
-    locations: list[str] = [str(loc) for loc in TEMPLATE_PYTHON_LOCATIONS]
     session.log(f"Running Ruff formatter check on template files with py{session.python}.")
-    session.run("ruff", "format", *locations, "--check")
+    session.run("ruff", "format")
 
     session.log(f"Running Ruff check on template files with py{session.python}.")
-    session.run("ruff", "check", *locations, "--verbose")
+    session.run("ruff", "check", "--verbose", "--fix")
 
 
 @nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
@@ -188,11 +185,10 @@ def test(session: Session) -> None:
     # Need to find cookiecutter executable - it's in the template dev env installed by uv sync.
     cookiecutter_command: list[str] = ["uv", "run", "cookiecutter", "--no-input", "--output-dir", str(temp_dir), "."]
 
-
     session.run(*cookiecutter_command, external=True)
 
     # Navigate into the generated project directory
-    generated_project_dir = temp_dir / "test_project" # Use the slug defined in --extra-context
+    generated_project_dir = temp_dir / "test_project"  # Use the slug defined in --extra-context
     if not generated_project_dir.exists():
         session.error(f"Generated project directory not found: {generated_project_dir}")
 
@@ -236,7 +232,7 @@ def release_template(session: Session):
     cz_bump_args = ["uvx", "cz", "bump", "--changelog"]
 
     if increment:
-         cz_bump_args.append(f"--increment={increment}")
+        cz_bump_args.append(f"--increment={increment}")
 
     session.log("Running cz bump with args: %s", cz_bump_args)
     # success_codes=[0, 1] -> Allows code 1 which means 'nothing to bump' if no conventional commits since last release
@@ -244,4 +240,3 @@ def release_template(session: Session):
 
     session.log("Template version bumped and tag created locally via Commitizen/uvx.")
     session.log("IMPORTANT: Push commits and tags to remote (`git push --follow-tags`) to trigger CD for the TEMPLATE.")
-

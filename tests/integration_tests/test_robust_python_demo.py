@@ -1,4 +1,5 @@
 """Tests project generation and template functionality using a Python build backend."""
+
 import subprocess
 from pathlib import Path
 
@@ -24,6 +25,3 @@ def test_demo_project_noxfile(robust_python_demo_path: Path, session: str) -> No
     print(result.stdout)
     print(result.stderr)
     result.check_returncode()
-
-
-

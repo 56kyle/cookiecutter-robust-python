@@ -146,7 +146,6 @@ def main(
     description from the draft release notes. The branch contains a single
     commit which updates the version number in the documentation.
     """
-
     if tag is None:
         today = datetime.date.today()
         tag = f"{today:%Y.%-m.%-d}"

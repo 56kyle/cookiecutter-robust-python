@@ -7,10 +7,9 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
-
+from loguru import logger
 from typer.models import OptionInfo
 
-from loguru import logger
 
 FolderOption: partial[OptionInfo] = partial(
     typer.Option, dir_okay=True, file_okay=False, resolve_path=True, path_type=Path
@@ -22,9 +21,7 @@ def sync_uv_with_demo(template_folder: Path, demos_cache_folder: Path, demo_name
     demo_uv_lock_path: Path = _find_uv_lock_path(demo_root)
     output_uv_lock_path: Path = _find_uv_lock_path(template_folder)
 
-    _copy_uv_lock_from_demo(
-        demo_uv_lock_path=demo_uv_lock_path, output_uv_lock_path=output_uv_lock_path
-    )
+    _copy_uv_lock_from_demo(demo_uv_lock_path=demo_uv_lock_path, output_uv_lock_path=output_uv_lock_path)
     logger.info(f"Copied demo from {demo_uv_lock_path=} to {output_uv_lock_path=}.")
 
 
@@ -49,13 +46,11 @@ cli: typer.Typer = typer.Typer()
 def main(
     template_folder: Annotated[Path, FolderOption("--template-folder", "-t", exists=True)],
     demos_cache_folder: Annotated[Path, FolderOption("--demos-cache-folder", "-c", exists=True)],
-    demo_name: Annotated[str, typer.Option("--demo-name", "-d")]
+    demo_name: Annotated[str, typer.Option("--demo-name", "-d")],
 ) -> None:
     """Updates the uv.lock file."""
     try:
-        sync_uv_with_demo(
-            template_folder=template_folder, demos_cache_folder=demos_cache_folder, demo_name=demo_name
-        )
+        sync_uv_with_demo(template_folder=template_folder, demos_cache_folder=demos_cache_folder, demo_name=demo_name)
     except Exception as error:
         typer.secho(f"error: {error}", fg="red")
         sys.exit(1)

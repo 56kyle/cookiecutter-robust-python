@@ -1,7 +1,9 @@
 """Module containing constants used throughout all tests."""
+
 import json
 from pathlib import Path
 from typing import Any
+
 
 REPO_FOLDER: Path = Path(__file__).parent.parent
 COOKIECUTTER_FOLDER: Path = REPO_FOLDER / "{{cookiecutter.project_name}}"
@@ -36,12 +38,7 @@ GLOBAL_NOX_SESSIONS: list[str] = [
     "tox",
     *CHECK_NOX_SESSIONS,
     *FULL_CHECK_NOX_SESSIONS,
-    "coverage"
+    "coverage",
 ]
 
-RUST_NOX_SESSIONS: list[str] = [
-    "format-rust",
-    "lint-rust",
-    "tests-rust",
-    "publish-rust"
-]
+RUST_NOX_SESSIONS: list[str] = ["format-rust", "lint-rust", "tests-rust", "publish-rust"]
