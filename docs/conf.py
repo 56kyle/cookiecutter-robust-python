@@ -4,6 +4,7 @@
 
 from datetime import date
 
+
 # --- Project information -----------------------------------------------------
 
 # General info about the TEMPLATE documentation itself
@@ -59,8 +60,19 @@ exclude_patterns = [
 
 # MyST-Parser settings (allows using Markdown + Sphinx features)
 myst_enable_extensions = [
-    "amsmath", "colon_fence", "deflist", "dollarmath", "html_admonition", "html_image", "replacements",
-    "smartquotes", "strikethrough", "substitution", "tasklist", "attrs_inline", "attrs_block",
+    "amsmath",
+    "colon_fence",
+    "deflist",
+    "dollarmath",
+    "html_admonition",
+    "html_image",
+    "replacements",
+    "smartquotes",
+    "strikethrough",
+    "substitution",
+    "tasklist",
+    "attrs_inline",
+    "attrs_block",
 ]
 
 # Intersphinx mapping: Link to documentation of standard libraries or tools mentioned
@@ -85,7 +97,6 @@ html_theme_options = {
     "sidebar_hide_name": True,  # Hide project name next to logo if logo contains it
     # "light_logo": "logo-light.png",
     # "dark_logo": "logo-dark.png",
-
     # Footer icons
     "footer_icons": [
         {

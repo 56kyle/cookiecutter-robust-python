@@ -7,6 +7,7 @@
 /dist/
 /docs/_build/
 /src/*.egg-info/
+*.egg-info/
 
 # Byte-code files
 *.pyc
