@@ -7,7 +7,7 @@ repos:
     rev: v4.6.0
     hooks:
       - id: check-added-large-files
-        args: ["--max-size=1000000"]
+        args: ["--maxkb=2000"]
       - id: check-yaml
       - id: check-toml
       - id: end-of-file-fixer
