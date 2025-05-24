@@ -27,7 +27,7 @@ PACKAGE_NAME: str = "{{cookiecutter.package_name}}"
 def pre_commit(session: Session) -> None:
     """Run pre-commit checks."""
     session.log("Installing pre-commit dependencies...")
-    session.run("uv", "sync", "--locked", "--group", "dev", "--group", "pre-commit", external=True)
+    session.install("-e", ".", "--group", "dev", "--group", "pre-commit")
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="format-python")
@@ -160,7 +160,7 @@ def build_container(session: Session) -> None:
 
     current_dir: Path = Path.cwd()
     session.log(f"Ensuring core dependencies are synced in {current_dir.resolve()} for build context...")
-    session.run("uv", "sync", "--locked", external=True)
+    session.run("-e", ".")
 
     session.log(f"Building Docker image using {container_cli}.")
     project_image_name = PACKAGE_NAME.replace("_", "-").lower()
