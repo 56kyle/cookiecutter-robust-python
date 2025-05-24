@@ -73,7 +73,7 @@ jobs:
         uses: simple-changelog/action@v3 # Action to parse CHANGELOG.md
         with:
           path: CHANGELOG.md # Path to your CHANGELOG.md
-          tag: {% raw %}${{ github.event_name == 'push' && github.ref_name || github.event.inputs.tag }}{% endraw %} # Pass the tag name
+          tag: { "${{ github.event_name == 'push' && github.ref_name || github.event.inputs.tag }}" } # Pass the tag name
 
       # Define outputs from this job that other jobs (like create_github_release) can use.
     outputs:
