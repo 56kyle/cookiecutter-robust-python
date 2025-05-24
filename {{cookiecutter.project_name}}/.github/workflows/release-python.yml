@@ -61,7 +61,7 @@ jobs:
         env:
           # TestPyPI credentials stored as secrets in GitHub Settings -> Secrets
           TWINE_USERNAME: __token__ # Standard username when using API tokens
-          TWINE_PASSWORD: {% raw %}${{ secrets.TESTPYPI_API_TOKEN }} {% endraw } # Use GitHub Encrypted Secret
+          TWINE_PASSWORD: {% raw %}${{ secrets.TESTPYPI_API_TOKEN }}{% endraw } # Use GitHub Encrypted Secret
           # Optional: If uv publish requires different config for repository URL, pass TWINE_REPOSITORY or similar
         run: uvx nox -s publish-package -- --repository testpypi # Call the publish-package session, passing repository arg
 
@@ -94,18 +94,18 @@ jobs:
     if: {% raw %}github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'){% endraw %}
 
     steps:
-      - name: Download package artifacts # Get packages built in the previous job
+      - name: Download package artifacts
         uses: actions/download-artifact@v4
         with:
-          name: distribution-packages # Must match the artifact name from build job
-          path: dist/ # Download into the 'dist' directory
+          name: distribution-packages
+          path: dist/
 
-      - name: Set up Python # Needed to run uvx/publish task
+      - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: {% raw %}3.x{% endraw %} # Same version as build job for consistency
+          python-version-file: .python-version
 
-      - name: Set up uv # Install uv for this job
+      - name: Set up uv
         uses: astral-sh/setup-uv@v6
 
       # --- Publish to Production PyPI Step ---
@@ -116,7 +116,7 @@ jobs:
         env:
           # Production PyPI credentials stored as secrets in GitHub Settings -> Secrets
           TWINE_USERNAME: __token__
-          TWINE_PASSWORD: {% raw %}[{% raw %} {{ "${{ secrets.PYPI_API_TOKEN }}" }} {% raw %}]{% endraw %} # Use GitHub Encrypted Secret
+          TWINE_PASSWORD: {% raw %}${{ secrets.PYPI_API_TOKEN }}{% endraw %} # Use GitHub Encrypted Secret
           # Optional: TWINE_REPOSITORY if publishing to a custom production index
         run: uvx nox -s publish-package # Call the publish-package session (defaults to pypi.org)
 
@@ -129,7 +129,7 @@ jobs:
     needs: build_and_testpypi
 
     # Only run this job if triggered by a tag push
-    if: {% raw %}github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'){% endraw %}
+    if: {% raw %}(github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v'){% endraw %}
 
     steps:
       - name: Download package artifacts # Get built artifacts for release assets
