@@ -124,7 +124,7 @@ def build_python(session: Session) -> None:
     """Build sdist and wheel packages (uv build)."""
     session.log("Installing build dependencies...")
     # Sync core & dev deps are needed for accessing project source code.
-    session.run("uv", "sync", "--locked", "--group", "dev", external=True)
+    session.install("-e", ".", "--group", "dev")
 
     session.log(f"Building sdist and wheel packages with py{session.python}.")
     {% if cookiecutter.add_rust_extension == 'y' -%}
@@ -176,7 +176,7 @@ def publish_python(session: Session) -> None:
     Requires packages to be built first (`nox -s build-python` or `nox -s build`).
     Requires TWINE_USERNAME/TWINE_PASSWORD or TWINE_API_KEY environment variables set (usually in CI).
     """
-    session.run("uv", "sync", "--locked", "--group", "dev", external=True)
+    session.install("-e", ".", "--group", "dev")
 
     session.log("Checking built packages with Twine.")
     session.run("twine", "check", "dist/*")
@@ -202,7 +202,7 @@ def release(session: Session) -> None:
     Optionally accepts increment (major, minor, patch) after '--'.
     """
     session.log("Running release process using Commitizen...")
-    session.run("uv", "sync", "--locked", "--group", "dev", external=True)
+    session.install("-e", ".", "--group", "dev")
 
     try:
         session.run("git", "version", success_codes=[0], external=True, silent=True)
@@ -246,7 +246,7 @@ def tox(session: Session) -> None:
     Accepts tox args after '--' (e.g., `nox -s tox -- -e py39`).
     """
     session.log("Running Tox test matrix via uvx...")
-    session.run("uv", "sync", "--locked", "--group", "dev", external=True)
+    session.install("-e", ".", "--group", "dev")
 
     tox_ini_path = Path("tox.ini")
     if not tox_ini_path.exists():
