@@ -149,7 +149,7 @@ def security_python(session: Session) -> None:
     session.install("-e", ".", "--group", "dev", "--group", "security")
 
     session.log(f"Running Bandit static security analysis with py{session.python}.")
-    session.run("bandit", "-r", PACKAGE_NAME, "-c", ".bandit", "-ll")
+    session.run("bandit", "-r", PACKAGE_NAME, "-c", "bandit.yml", "-ll")
 
     session.log(f"Running pip-audit dependency security check with py{session.python}.")
     session.run("pip-audit", "--python", str(Path(session.python)))
