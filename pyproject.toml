@@ -10,12 +10,12 @@ dependencies = [
     "loguru>=0.7.3",
     "platformdirs>=4.3.8",
     "retrocookie>=0.4.3",
-    "typer>=0.15.3",
+    "typer>=0.15.4",
 ]
 
 [dependency-groups]
 dev = [
-    "commitizen>=4.7.0",
+    "commitizen>=4.8.2",
     "nox>=2025.5.1",
     "pre-commit>=4.2.0",
 ]

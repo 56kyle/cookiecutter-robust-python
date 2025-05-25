@@ -1,5 +1,10 @@
 """Noxfile for the {{cookiecutter.project_name}} project."""
+
+import os
+import shlex
+
 from pathlib import Path
+from textwrap import dedent
 from typing import List
 
 import nox
@@ -23,62 +28,138 @@ CRATES_FOLDER: Path = REPO_ROOT / "rust"
 PACKAGE_NAME: str = "{{cookiecutter.package_name}}"
 
 
+def activate_virtualenv_in_precommit_hooks(session: Session) -> None:
+    """Activate virtualenv in hooks installed by pre-commit.
+
+    This function patches git hooks installed by pre-commit to activate the
+    session's virtual environment. This allows pre-commit to locate hooks in
+    that environment when invoked from git.
+
+    Args:
+        session: The Session object.
+    """
+    assert session.bin is not None  # nosec
+
+    # Only patch hooks containing a reference to this session's bindir. Support
+    # quoting rules for Python and bash, but strip the outermost quotes so we
+    # can detect paths within the bindir, like <bindir>/python.
+    bindirs = [
+        bindir[1:-1] if bindir[0] in "'\"" else bindir for bindir in (repr(session.bin), shlex.quote(session.bin))
+    ]
+
+    virtualenv = session.env.get("VIRTUAL_ENV")
+    if virtualenv is None:
+        return
+
+    headers = {
+        # pre-commit < 2.16.0
+        "python": f"""\
+            import os
+            os.environ["VIRTUAL_ENV"] = {virtualenv!r}
+            os.environ["PATH"] = os.pathsep.join((
+                {session.bin!r},
+                os.environ.get("PATH", ""),
+            ))
+            """,
+        # pre-commit >= 2.16.0
+        "bash": f"""\
+            VIRTUAL_ENV={shlex.quote(virtualenv)}
+            PATH={shlex.quote(session.bin)}"{os.pathsep}$PATH"
+            """,
+        # pre-commit >= 2.17.0 on Windows forces sh shebang
+        "/bin/sh": f"""\
+            VIRTUAL_ENV={shlex.quote(virtualenv)}
+            PATH={shlex.quote(session.bin)}"{os.pathsep}$PATH"
+            """,
+    }
+
+    hookdir: Path = Path(".git") / "hooks"
+    if not hookdir.is_dir():
+        return
+
+    for hook in hookdir.iterdir():
+        if hook.name.endswith(".sample") or not hook.is_file():
+            continue
+
+        if not hook.read_bytes().startswith(b"#!"):
+            continue
+
+        text: str = hook.read_text()
+
+        if not any((Path("A") == Path("a") and bindir.lower() in text.lower()) or bindir in text for bindir in bindirs):
+            continue
+
+        lines: list[str] = text.splitlines()
+
+        for executable, header in headers.items():
+            if executable in lines[0].lower():
+                lines.insert(1, dedent(header))
+                hook.write_text("\n".join(lines))
+                break
+
+
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="pre-commit")
-def pre_commit(session: Session) -> None:
-    """Run pre-commit checks."""
+def precommit(session: Session) -> None:
+    """Lint using pre-commit."""
+    args: list[str] = session.posargs or ["run", "--all-files", "--hook-stage=manual", "--show-diff-on-failure"]
+
     session.log("Installing pre-commit dependencies...")
-    session.run("uv", "sync", "--locked", "--group", "dev", "--group", "pre-commit", external=True)
+    session.install("-e", ".", "--group", "dev")
+
+    session.run("pre-commit", *args)
+    if args and args[0] == "install":
+        activate_virtualenv_in_precommit_hooks(session)
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="format-python")
 def format_python(session: Session) -> None:
     """Run Python code formatter (Ruff format)."""
     session.log("Installing formatting dependencies...")
-    session.run("uv", "sync", "--locked", "--group", "dev", "--group", "lint", external=True)
+    session.install("-e", ".", "--group", "dev", "--group", "lint")
 
     session.log(f"Running Ruff formatter check with py{session.python}.")
     # Use --check, not fix. Fixing is done by pre-commit or manual run.
-    session.run("uv", "run", "ruff", "format", *session.posargs, external=True)
+    session.run("ruff", "format", *session.posargs)
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="lint-python")
 def lint_python(session: Session) -> None:
     """Run Python code linters (Ruff check, Pydocstyle rules)."""
     session.log("Installing linting dependencies...")
-    session.run("uv", "sync", "--locked", "--group", "dev", "--group", "lint", external=True)
+    session.install("-e", ".", "--group", "dev", "--group", "lint")
 
     session.log(f"Running Ruff check with py{session.python}.")
-    session.run("uv", "run", "ruff", "check", "--verbose", external=True)
+    session.run("ruff", "check", "--verbose")
 
 
 @nox.session(python=PYTHON_VERSIONS)
 def typecheck(session: Session) -> None:
     """Run static type checking (Pyright) on Python code."""
     session.log("Installing type checking dependencies...")
-    session.run("uv", "sync", "--locked", "--group", "dev", "--group", "typecheck", external=True)
+    session.install("-e", ".", "--group", "dev", "--group", "typecheck")
 
     session.log(f"Running Pyright check with py{session.python}.")
-    session.run("uv", "run", "pyright", external=True)
+    session.run("pyright")
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="security-python")
 def security_python(session: Session) -> None:
     """Run code security checks (Bandit) on Python code."""
     session.log("Installing security dependencies...")
-    session.run("uv", "sync", "--locked", "--group", "dev", "--group", "security", external=True)
+    session.install("-e", ".", "--group", "dev", "--group", "security")
 
     session.log(f"Running Bandit static security analysis with py{session.python}.")
-    session.run("uv", "run", "bandit", "-r", PACKAGE_NAME, "-c", ".bandit", "-ll", "-s", external=True)
+    session.run("bandit", "-r", PACKAGE_NAME, "-c", "bandit.yml", "-ll")
 
     session.log(f"Running pip-audit dependency security check with py{session.python}.")
-    session.run("uv", "run", "pip-audit", "--python", str(Path(session.python)), external=True)
+    session.run("pip-audit")
 
 
 @nox.session(python=PYTHON_VERSIONS, name="tests-python")
 def tests_python(session: Session) -> None:
     """Run the Python test suite (pytest with coverage)."""
     session.log("Installing test dependencies...")
-    session.run("uv", "sync", "--locked", "--group", "dev", "--group", "test", external=True)
+    session.install("-e", ".", "--group", "dev", "--group", "test")
 
     session.log(f"Running test suite with py{session.python}.")
     test_results_dir = Path("test-results")
@@ -107,16 +188,16 @@ def tests_rust(session: Session) -> None:
 def docs_build(session: Session) -> None:
     """Build the project documentation (Sphinx)."""
     session.log("Installing documentation dependencies...")
-    session.run("uv", "sync", "--locked", "--group", "dev", "--group", "docs", external=True)
+    session.install("-e", ".", "--group", "dev", "--group", "docs")
 
     session.log(f"Building documentation with py{session.python}.")
     docs_build_dir = Path("docs") / "_build" / "html"
 
     session.log(f"Cleaning build directory: {docs_build_dir}")
-    session.run("uv", "run", "sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-E", external=True)
+    session.run("sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-E")
 
     session.log("Building documentation.")
-    session.run("uv", "run", "sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-W", external=True)
+    session.run("sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-W")
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="build-python")
@@ -124,13 +205,13 @@ def build_python(session: Session) -> None:
     """Build sdist and wheel packages (uv build)."""
     session.log("Installing build dependencies...")
     # Sync core & dev deps are needed for accessing project source code.
-    session.run("uv", "sync", "--locked", "--group", "dev", external=True)
+    session.install("-e", ".", "--group", "dev")
 
     session.log(f"Building sdist and wheel packages with py{session.python}.")
     {% if cookiecutter.add_rust_extension == 'y' -%}
     session.run("uv", "build", "--sdist", "--wheel", "--outdir", "dist/", external=True)
     {% else -%}
-    session.run("uvx", "maturin", "develop", "--uv", external=True)
+    session.run("maturin", "develop", "--uv")
     {% endif -%}
 
     session.log("Built packages in ./dist directory:")
@@ -160,7 +241,7 @@ def build_container(session: Session) -> None:
 
     current_dir: Path = Path.cwd()
     session.log(f"Ensuring core dependencies are synced in {current_dir.resolve()} for build context...")
-    session.run("uv", "sync", "--locked", external=True)
+    session.run("-e", ".")
 
     session.log(f"Building Docker image using {container_cli}.")
     project_image_name = PACKAGE_NAME.replace("_", "-").lower()
@@ -176,10 +257,10 @@ def publish_python(session: Session) -> None:
     Requires packages to be built first (`nox -s build-python` or `nox -s build`).
     Requires TWINE_USERNAME/TWINE_PASSWORD or TWINE_API_KEY environment variables set (usually in CI).
     """
-    session.run("uv", "sync", "--locked", "--group", "dev", external=True)
+    session.install("-e", ".", "--group", "dev")
 
     session.log("Checking built packages with Twine.")
-    session.run("uvx", "twine", "check", "dist/*", external=True)
+    session.run("twine", "check", "dist/*")
 
     session.log("Publishing packages to PyPI.")
     session.run("uv", "publish", "dist/*", external=True)
@@ -202,7 +283,7 @@ def release(session: Session) -> None:
     Optionally accepts increment (major, minor, patch) after '--'.
     """
     session.log("Running release process using Commitizen...")
-    session.run("uv", "sync", "--locked", "--group", "dev", external=True)
+    session.install("-e", ".", "--group", "dev")
 
     try:
         session.run("git", "version", success_codes=[0], external=True, silent=True)
@@ -211,7 +292,7 @@ def release(session: Session) -> None:
         session.skip("Git not available.")
 
     session.log("Checking Commitizen availability via uvx.")
-    session.run("uvx", "cz", "--version", success_codes=[0], external=True)
+    session.run("cz", "--version", success_codes=[0])
 
     increment = session.posargs[0] if session.posargs else None
     session.log(
@@ -246,7 +327,7 @@ def tox(session: Session) -> None:
     Accepts tox args after '--' (e.g., `nox -s tox -- -e py39`).
     """
     session.log("Running Tox test matrix via uvx...")
-    session.run("uv", "sync", "--locked", "--group", "dev", external=True)
+    session.install("-e", ".", "--group", "dev")
 
     tox_ini_path = Path("tox.ini")
     if not tox_ini_path.exists():
@@ -254,9 +335,9 @@ def tox(session: Session) -> None:
         session.skip("tox.ini not present.")
 
     session.log("Checking Tox availability via uvx.")
-    session.run("uvx", "tox", "--version", success_codes=[0], external=True)
+    session.run("tox", "--version", success_codes=[0])
 
-    session.run("uvx", "tox", *session.posargs, external=True)
+    session.run("tox", *session.posargs)
 
 
 # --- COMBINED/ORCHESTRATION SESSIONS ---
@@ -312,13 +393,13 @@ def coverage(session: Session) -> None:
     session.log("Note: Ensure 'nox -s test-python' was run across all desired Python versions first to generate coverage data.")
 
     session.log("Installing dependencies for coverage report session...")
-    session.run("uv", "sync", "--locked", "--group", "dev", "--group", "test", external=True)
+    session.install("-e", ".", "--group", "dev", "--group", "test")
 
     coverage_combined_file: Path = Path.cwd() / ".coverage"
 
     session.log("Combining coverage data.")
     try:
-        session.run("uv", "run", "coverage", "combine", external=True)
+        session.run("coverage", "combine")
         session.log(f"Combined coverage data into {coverage_combined_file.resolve()}")
     except CommandFailed as e:
         if e.returncode == 1:
@@ -329,9 +410,9 @@ def coverage(session: Session) -> None:
 
     session.log("Generating HTML coverage report.")
     coverage_html_dir = Path("coverage-html")
-    session.run("uv", "run", "coverage", "html", "--directory", str(coverage_html_dir), external=True)
+    session.run("coverage", "html", "--directory", str(coverage_html_dir))
 
     session.log("Running terminal coverage report.")
-    session.run("uv", "run", "coverage", "report", external=True)
+    session.run("coverage", "report")
 
     session.log(f"Coverage reports generated in ./{coverage_html_dir} and terminal.")

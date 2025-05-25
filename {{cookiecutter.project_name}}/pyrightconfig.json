@@ -21,14 +21,13 @@
   "venv": ".venv",
   "executionEnvironments": [
     {
-      "root": "src",
-      "extraPaths": []
-    },
-    {
-      "root": "tests",
+      "root": ".",
       "extraPaths": []
     }
   ],
+  "defineConstant": {
+    "DEBUG": true
+  },
   "reportMissingImports": true,
   "reportMissingTypeStubs": true,
 

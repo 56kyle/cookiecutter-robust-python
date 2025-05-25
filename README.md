@@ -12,10 +12,10 @@ Any and all advice, support, PR's, etc are welcome and would be greatly apprecia
 
 
 # Why does this project exist?
-Unfortunately the [Hypermodern Python Cookiecutter] is no longer maintained nor modern.
+Unfortunately, the [Hypermodern Python Cookiecutter] is no longer maintained nor modern.
 While it will always have a place in my heart, there have been far too many improvements in Python tooling to keep using it as is.
 
-For a whle I maintained [a personal fork](https://github.com/56kyle/cookiecutter-hypermodern-python) that I would update, however when it came time to switch
+For a while I maintained [a personal fork](https://github.com/56kyle/cookiecutter-hypermodern-python) that I would update, however when it came time to switch
 to new tooling such as [ruff], [uv], [maturin], etc, I found the process of updating the existing tooling to be extremly painful.
 
 The [Hypermodern Python Cookiecutter] remains as a fantastic sendoff point for devs interested in building a 2021 style Python Package, but there were
@@ -34,7 +34,7 @@ The [Robust Python Cookiecutter] exists to solve a few main concerns
 One of the main issues I encountered with [my personal fork] of the [Hypermodern Python Cookiecutter] was that any change
 I made to my repos would mean a later conflict if I tried to rerun [cookiecutter] to sync a change from a different project.
 
-Thankfully [cruft] exists specifically to help with this issue. It enables us to periodically create PR's to add in any fixes
+Thankfully, [cruft] exists specifically to help with this issue. It enables us to periodically create PR's to add in any fixes
 the [Robust Python Cookiecutter] may have added.
 
 Additionally, extra care is put in to use tooling specific config files whenever possible to help reduce merge conflicts occurring
@@ -76,12 +76,12 @@ Overall it's rather rare that people debate over tooling for no reason. Most thi
 
 ## CI/CD Vendor Lock
 Now don't get me wrong, I love [github-actions] and do pretty much everything in my power to avoid [bitbucket-pipelines].
-However not all jobs have the luxury of github, and I would love to be able to just use the same template for both my personal and professional projects.
+However, not all jobs have the luxury of github, and I would love to be able to just use the same template for both my personal and professional projects.
 
 The [Robust Python Cookiecutter] focuses on being as modular as possible for areas that connect to the CI/CD pipeline. Additionally, there will always be either alternative
 CI/CD options or at a minimum basic examples of what the translated CI/CD pipeline would look like.
 
-Finally the main reason that this task is even possible is that the [Robust Python Cookiecutter] mirrors all of the CI/CD steps in it's local dev tooling.
+Finally, the main reason that this task is even possible is that the [Robust Python Cookiecutter] mirrors all of the CI/CD steps in it's local dev tooling.
 The local [noxfile] is designed to match up directly with the CI/CD each step of the way.
 
 The [Hypermodern Python Cookiecutter] did this where it could afford to also, however the lack of [uv] meant it would significantly increase CI/CD times if done everywhere.

@@ -11,6 +11,8 @@ write_version_files = [
     "src/{{ cookiecutter.package_name }}/__init__.py:__version__",
 ]
 commit_msg_file = ".git/COMMIT_EDITMSG"
+retry_after_failure = true
+update_changelog_on_bump = true
 
 [tool.commitizen.github]
 release = true

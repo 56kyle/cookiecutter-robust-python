@@ -1,7 +1,7 @@
 [project]
-name = "{{cookiecutter.package_name}}"
-version = "0.1.0"
-description = "{{cookiecutter.package_name}}"
+name = "{{cookiecutter.project_name}}"
+version = "{{cookiecutter.version}}"
+description = "{{cookiecutter.project_name}}"
 authors = [
     { name = "{{cookiecutter.author}}", email = "{{cookiecutter.email}}" },
 ]
@@ -25,8 +25,9 @@ dependencies = [
 [dependency-groups]
 dev = [
     "commitizen>=4.7.0",
-    "nox>={{cookiecutter.copyright_year}}.5.1",
+    "nox>=2025.5.1",
     "pre-commit>=4.2.0",
+    "pre-commit-hooks>=5.0.0",
 ]
 docs = [
     "furo>=2024.8.6",
