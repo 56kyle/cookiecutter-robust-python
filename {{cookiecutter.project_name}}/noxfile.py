@@ -152,7 +152,7 @@ def security_python(session: Session) -> None:
     session.run("bandit", "-r", PACKAGE_NAME, "-c", "bandit.yml", "-ll")
 
     session.log(f"Running pip-audit dependency security check with py{session.python}.")
-    session.run("pip-audit", "--python", str(Path(session.python)))
+    session.run("pip-audit")
 
 
 @nox.session(python=PYTHON_VERSIONS, name="tests-python")
