@@ -28,6 +28,35 @@ CRATES_FOLDER: Path = REPO_ROOT / "rust"
 PACKAGE_NAME: str = "{{cookiecutter.package_name}}"
 
 
+@nox.session(python=DEFAULT_PYTHON_VERSION, name="setup-repo")
+def setup_repo(session: Session) -> None:
+    """Set up the repository for development.
+
+    Really this should only ever be used once upon repo creation. However, it is helpful to use in generating fake repos
+    for use in testing the template itself.
+    """
+    session.log("Installing development dependencies...")
+    session.notify("setup-git")
+    session.notify("setup-branches")
+    session.install("-e", ".", "--group", "dev")
+
+
+@nox.session(python=DEFAULT_PYTHON_VERSION, name="setup-git")
+def setup_git(session: Session) -> None:
+    """Set up the git repo for the current project."""
+    session.run("git", "init")
+    session.run("git", "branch", "-M", "main")
+    session.run("git", "add", ".")
+    session.run("git", "commit", "-m", "feat: initial commit")
+
+
+@nox.session(python=DEFAULT_PYTHON_VERSION, name="setup-branches")
+def setup_branches(session: Session) -> None:
+    """Set up the git repo for the current project."""
+    session.run("git", "checkout", "-b", "develop", "main")
+
+
+
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="pre-commit")
 def precommit(session: Session) -> None:
     """Lint using pre-commit."""
@@ -41,6 +70,15 @@ def precommit(session: Session) -> None:
         activate_virtualenv_in_precommit_hooks(session)
 
 
+@nox.session(python=None, name="format")
+def _format(session: Session) -> None:
+    """Run all formatting checks (Ruff, Pydocstyle)."""
+    session.log("Installing formatting dependencies...")
+    if "format_rust" in dir():
+        session.notify("format-rust")
+    session.notify("format-python")
+
+
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="format-python")
 def format_python(session: Session) -> None:
     """Run Python code formatter (Ruff format)."""
@@ -50,6 +88,26 @@ def format_python(session: Session) -> None:
     session.log(f"Running Ruff formatter check with py{session.python}.")
     # Use --check, not fix. Fixing is done by pre-commit or manual run.
     session.run("ruff", "format", *session.posargs)
+
+
+{% if cookiecutter.add_rust_extension == "y" %}
+@nox.session(python=None, name="format-rust")
+def format_rust(session: Session) -> None:
+    """Run Rust code formatter (cargo fmt)."""
+    session.log("Installing formatting dependencies...")
+    session.run("cargo", "install", "cargo-fmt", external=True)
+    session.run("cargo", "fmt", "--all", "--", "--check", external=True)
+    session.run("cargo", "fmt", "--all", "--", "--write", external=True)
+
+
+{% endif %}
+@nox.session(python=None, name="lint")
+def lint(session: Session) -> None:
+    """Run all linting checks (Ruff, Pydocstyle)."""
+    session.log("Installing linting dependencies...")
+    if "lint_rust" in dir():
+        session.notify("lint-rust")
+    session.notify("lint-python")
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="lint-python")
@@ -62,6 +120,17 @@ def lint_python(session: Session) -> None:
     session.run("ruff", "check", "--verbose")
 
 
+{% if cookiecutter.add_rust_extension == "y" %}
+@nox.session(python=None, name="lint-rust")
+def lint_rust(session: Session) -> None:
+    """Run Rust code linters (cargo clippy)."""
+    session.log("Installing linting dependencies...")
+    session.run("cargo", "install", "cargo-clippy", external=True)
+    session.run("cargo", "clippy", "--all-features", "--", "--check", external=True)
+    session.run("cargo", "clippy", "--all-features", "--", "--write", external=True)
+
+
+{% endif %}
 @nox.session(python=PYTHON_VERSIONS)
 def typecheck(session: Session) -> None:
     """Run static type checking (Pyright) on Python code."""
@@ -70,6 +139,15 @@ def typecheck(session: Session) -> None:
 
     session.log(f"Running Pyright check with py{session.python}.")
     session.run("pyright")
+
+
+@nox.session(python=None, name="security")
+def security(session: Session) -> None:
+    """Run code security checks."""
+    session.log("Installing security dependencies...")
+    if "security_rust" in dir():
+        session.notify("security-rust")
+    session.notify("security-python")
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="security-python")
@@ -83,6 +161,24 @@ def security_python(session: Session) -> None:
 
     session.log(f"Running pip-audit dependency security check with py{session.python}.")
     session.run("pip-audit")
+
+
+{% if cookiecutter.add_rust_extension == 'y' %}
+@nox.session(python=None, name="security-rust")
+def security_rust(session: Session) -> None:
+    """Run code security checks (cargo audit)."""
+    session.log("Installing security dependencies...")
+    session.run("cargo", "install", "cargo-audit", external=True)
+    session.run("cargo", "audit", "--all", external=True)
+
+
+{% endif %}
+@nox.session(python=None, name="tests")
+def tests(session: Session) -> None:
+    """Run all Python and Rust tests."""
+    if "tests_rust" in dir():
+        session.notify("tests-rust")
+    session.notify("tests-python")
 
 
 @nox.session(python=PYTHON_VERSIONS, name="tests-python")
@@ -105,6 +201,7 @@ def tests_python(session: Session) -> None:
     )
 
 
+{% if cookiecutter.add_rust_extension == 'y' %}
 @nox.session(python=None, name="tests-rust")
 def tests_rust(session: Session) -> None:
     """Test the project's rust crates."""
@@ -114,6 +211,8 @@ def tests_rust(session: Session) -> None:
     session.run("cargo", "test", "--all-features", *crate_kwargs, external=True)
 
 
+
+{% endif %}
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="docs-build")
 def docs_build(session: Session) -> None:
     """Build the project documentation (Sphinx)."""
@@ -128,6 +227,14 @@ def docs_build(session: Session) -> None:
 
     session.log("Building documentation.")
     session.run("sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-W")
+
+
+@nox.session(python=None, name="build")
+def build(session: Session) -> None:
+    """Build the project artifacts (Python packages, Rust crates)."""
+    if "build_rust" in dir():
+        session.notify("build-rust")
+    session.notify("build-python")
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="build-python")
@@ -180,6 +287,14 @@ def build_container(session: Session) -> None:
     session.log(f"Container image {project_image_name}:latest built locally.")
 
 
+@nox.session(python=None, name="publish")
+def publish(session: Session) -> None:
+    """Publish the project artifacts (Python packages, Rust crates)."""
+    if "publish_rust" in dir():
+        session.notify("publish-rust")
+    session.notify("publish-python")
+
+
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="publish-python")
 def publish_python(session: Session) -> None:
     """Publish sdist and wheel packages to PyPI via uv publish.
@@ -196,6 +311,7 @@ def publish_python(session: Session) -> None:
     session.run("uv", "publish", "dist/*", external=True)
 
 
+{% if cookiecutter.add_rust_extension == "y" %}
 @nox.session(python=None, name="publish-rust")
 def publish_rust(session: Session) -> None:
     """Publish built crates to crates.io."""
@@ -205,6 +321,7 @@ def publish_rust(session: Session) -> None:
         session.run("cargo", "publish", "-p", crate_folder.name)
 
 
+{% endif %}
 @nox.session(venv_backend="none")
 def release(session: Session) -> None:
     """Run the release process using Commitizen.
@@ -278,28 +395,26 @@ def tox(session: Session) -> None:
 def build(session: Session) -> None:
     """Orchestrates building all project artifacts (Python packages, potentially Rust)."""
     session.log(f"Queueing build sessions for py{session.python} if applicable.")
-    # Build Rust crate first if included
-    {% if cookiecutter.add_rust_extension == 'y' %}
-    session.notify("build_rust") # Build Rust crate first if Rust is enabled
-    {% endif %}
-    # Then build the Python package (uv build)
-    session.notify("build-python") # Build Python sdist/wheel
+    if "build_rust" in dir():
+        session.notify("build-rust")
+    session.notify("build-python")
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION) # Run the orchestrator on the default Python version
 def publish(session: Session) -> None:
     """Orchestrates publishing all project artifacts (Python packages, potentially Rust)."""
     session.log(f"Queueing publish sessions for py{session.python} if applicable.")
-    session.notify("publish-python") # Publish Python sdist/wheel
-    # Note: publish_rust session might be notified here if needed.
+    if "publish_rust" in dir():
+        session.notify("publish-rust")
+    session.notify("publish-python")
 
 
 @nox.session(python=PYTHON_VERSIONS)
 def check(session: Session) -> None:
     """Run primary quality checks (format, lint, typecheck, security)."""
     session.log(f"Queueing core check sessions for py{session.python} if applicable.")
-    session.notify("format-python")
-    session.notify("lint-python")
+    session.notify("format")
+    session.notify("lint")
     session.notify("typecheck")
     session.notify("security-python")
 
