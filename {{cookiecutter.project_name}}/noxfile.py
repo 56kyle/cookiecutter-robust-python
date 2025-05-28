@@ -26,9 +26,10 @@ DEFAULT_PYTHON_VERSION: str = PYTHON_VERSIONS[-1]
 REPO_ROOT: Path = Path(__file__).parent
 CRATES_FOLDER: Path = REPO_ROOT / "rust"
 PACKAGE_NAME: str = "{{cookiecutter.package_name}}"
+GITHUB_USER: str = "{{cookiecutter.github_user}}"
 
 
-@nox.session(python=DEFAULT_PYTHON_VERSION, name="setup-repo")
+@nox.session(python=None, name="setup-repo")
 def setup_repo(session: Session) -> None:
     """Set up the repository for development.
 
@@ -37,23 +38,36 @@ def setup_repo(session: Session) -> None:
     """
     session.log("Installing development dependencies...")
     session.notify("setup-git")
-    session.notify("setup-branches")
-    session.install("-e", ".", "--group", "dev")
+    session.notify("setup-venv")
 
 
-@nox.session(python=DEFAULT_PYTHON_VERSION, name="setup-git")
+@nox.session(python=None, name="setup-git")
 def setup_git(session: Session) -> None:
     """Set up the git repo for the current project."""
     session.run("git", "init")
     session.run("git", "branch", "-M", "main")
+
+    session.run(
+        "git", "remote", "add", "origin", f"https://github.com/{GITHUB_USER}/{PACKAGE_NAME}.git", "||", "true"
+    )
+    session.run("git", "remote", "set-url", "origin", f"https://github.com/{GITHUB_USER}/{PACKAGE_NAME}.git")
+    session.run("git", "fetch", "origin")
+
+    session.run("git", "push", "-u", "origin", "main")
+    session.run("git", "checkout", "-b", "develop", "main")
+    session.run("git", "push", "-u", "origin", "develop")
+
     session.run("git", "add", ".")
     session.run("git", "commit", "-m", "feat: initial commit")
+    session.run("git", "push", "origin", "develop")
 
 
-@nox.session(python=DEFAULT_PYTHON_VERSION, name="setup-branches")
-def setup_branches(session: Session) -> None:
-    """Set up the git repo for the current project."""
-    session.run("git", "checkout", "-b", "develop", "main")
+@nox.session(python=None, name="setup-venv")
+def setup_venv(session: Session) -> None:
+    session.run("uv", "venv", ".venv", external=True)
+    session.run("uv", "python", "install", PYTHON_VERSIONS[0], external=True)
+    session.run("uv", "python", "pin", PYTHON_VERSIONS[0], external=True)
+    session.run("uv", "sync", "--all-groups", external=True)
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="pre-commit")
