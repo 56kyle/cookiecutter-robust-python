@@ -64,6 +64,7 @@ def setup_git(session: Session) -> None:
 
 @nox.session(python=None, name="setup-venv")
 def setup_venv(session: Session) -> None:
+    session.run("uv", "lock", external=True)
     session.run("uv", "venv", ".venv", external=True)
     session.run("uv", "python", "install", PYTHON_VERSIONS[0], external=True)
     session.run("uv", "python", "pin", PYTHON_VERSIONS[0], external=True)
