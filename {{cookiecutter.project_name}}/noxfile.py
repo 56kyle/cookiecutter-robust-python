@@ -56,7 +56,6 @@ def setup_branches(session: Session) -> None:
     session.run("git", "checkout", "-b", "develop", "main")
 
 
-
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="pre-commit")
 def precommit(session: Session) -> None:
     """Lint using pre-commit."""
@@ -90,7 +89,7 @@ def format_python(session: Session) -> None:
     session.run("ruff", "format", *session.posargs)
 
 
-{% if cookiecutter.add_rust_extension == "y" %}
+{% if cookiecutter.add_rust_extension == "y" -%}
 @nox.session(python=None, name="format-rust")
 def format_rust(session: Session) -> None:
     """Run Rust code formatter (cargo fmt)."""
@@ -100,7 +99,7 @@ def format_rust(session: Session) -> None:
     session.run("cargo", "fmt", "--all", "--", "--write", external=True)
 
 
-{% endif %}
+{% endif -%}
 @nox.session(python=None, name="lint")
 def lint(session: Session) -> None:
     """Run all linting checks (Ruff, Pydocstyle)."""
@@ -120,7 +119,7 @@ def lint_python(session: Session) -> None:
     session.run("ruff", "check", "--verbose")
 
 
-{% if cookiecutter.add_rust_extension == "y" %}
+{% if cookiecutter.add_rust_extension == "y" -%}
 @nox.session(python=None, name="lint-rust")
 def lint_rust(session: Session) -> None:
     """Run Rust code linters (cargo clippy)."""
@@ -130,7 +129,7 @@ def lint_rust(session: Session) -> None:
     session.run("cargo", "clippy", "--all-features", "--", "--write", external=True)
 
 
-{% endif %}
+{% endif -%}
 @nox.session(python=PYTHON_VERSIONS)
 def typecheck(session: Session) -> None:
     """Run static type checking (Pyright) on Python code."""
@@ -163,7 +162,7 @@ def security_python(session: Session) -> None:
     session.run("pip-audit")
 
 
-{% if cookiecutter.add_rust_extension == 'y' %}
+{% if cookiecutter.add_rust_extension == 'y' -%}
 @nox.session(python=None, name="security-rust")
 def security_rust(session: Session) -> None:
     """Run code security checks (cargo audit)."""
@@ -172,7 +171,7 @@ def security_rust(session: Session) -> None:
     session.run("cargo", "audit", "--all", external=True)
 
 
-{% endif %}
+{% endif -%}
 @nox.session(python=None, name="tests")
 def tests(session: Session) -> None:
     """Run all Python and Rust tests."""
@@ -201,7 +200,7 @@ def tests_python(session: Session) -> None:
     )
 
 
-{% if cookiecutter.add_rust_extension == 'y' %}
+{% if cookiecutter.add_rust_extension == 'y' -%}
 @nox.session(python=None, name="tests-rust")
 def tests_rust(session: Session) -> None:
     """Test the project's rust crates."""
@@ -211,8 +210,7 @@ def tests_rust(session: Session) -> None:
     session.run("cargo", "test", "--all-features", *crate_kwargs, external=True)
 
 
-
-{% endif %}
+{% endif -%}
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="docs-build")
 def docs_build(session: Session) -> None:
     """Build the project documentation (Sphinx)."""
@@ -311,7 +309,7 @@ def publish_python(session: Session) -> None:
     session.run("uv", "publish", "dist/*", external=True)
 
 
-{% if cookiecutter.add_rust_extension == "y" %}
+{% if cookiecutter.add_rust_extension == "y" -%}
 @nox.session(python=None, name="publish-rust")
 def publish_rust(session: Session) -> None:
     """Publish built crates to crates.io."""
@@ -321,7 +319,7 @@ def publish_rust(session: Session) -> None:
         session.run("cargo", "publish", "-p", crate_folder.name)
 
 
-{% endif %}
+{% endif -%}
 @nox.session(venv_backend="none")
 def release(session: Session) -> None:
     """Run the release process using Commitizen.
