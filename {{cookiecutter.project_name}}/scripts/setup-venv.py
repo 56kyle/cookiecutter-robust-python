@@ -1,4 +1,7 @@
-"""Script responsible for coordinating first time project setup."""
+"""Script responsible for first time setup of the project's venv.
+
+Since this a first time setup script, we intentionally only use builtin Python dependencies.
+"""
 import argparse
 import subprocess
 from pathlib import Path

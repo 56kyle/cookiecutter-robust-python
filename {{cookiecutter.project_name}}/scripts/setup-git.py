@@ -1,4 +1,7 @@
-"""Script responsible for coordinating first time project setup."""
+"""Script responsible for first time setup of the project's git repo.
+
+Since this a first time setup script, we intentionally only use builtin Python dependencies.
+"""
 import argparse
 import subprocess
 from pathlib import Path
@@ -15,7 +18,7 @@ def main() -> None:
 
 
 def setup_git(path: Path, github_user: str, repo_name: str) -> None:
-    """Set up the provided cookiecutter-robust-python project for the first time."""
+    """Set up the provided cookiecutter-robust-python project's git repo."""
     commands: list[list[str]] = [
         ["git", "init"],
         ["git", "branch", "-M", "main"],
