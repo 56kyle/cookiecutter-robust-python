@@ -258,10 +258,10 @@ def build_python(session: Session) -> None:
     session.install("-e", ".", "--group", "dev")
 
     session.log(f"Building sdist and wheel packages with py{session.python}.")
-    {% if cookiecutter.add_rust_extension == 'y' -%}
-    session.run("uv", "build", "--sdist", "--wheel", "--outdir", "dist/", external=True)
-    {% else -%}
+    {% if cookiecutter.add_rust_extension == "y" -%}
     session.run("maturin", "develop", "--uv")
+    {% else -%}
+    session.run("uv", "build", "--sdist", "--wheel", "--outdir", "dist/", external=True)
     {% endif -%}
 
     session.log("Built packages in ./dist directory:")
