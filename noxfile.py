@@ -51,6 +51,7 @@ SYNC_UV_WITH_DEMO_OPTIONS: tuple[str, ...] = (
 
 @nox.session(name="generate-demo-project", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def generate_demo_project(session: Session) -> None:
+    """Generates a project demo using the cookiecutter-robust-python template."""
     session.install("cookiecutter", "platformdirs", "loguru", "typer")
     session.run(
         "python",
@@ -61,6 +62,7 @@ def generate_demo_project(session: Session) -> None:
 
 @nox.session(name="sync-uv-with-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def sync_uv_with_demo(session: Session) -> None:
+    """Syncs the uv environment with the current demo project."""
     session.install("cookiecutter", "platformdirs", "loguru", "typer")
     session.run(
         "python",
@@ -71,6 +73,7 @@ def sync_uv_with_demo(session: Session) -> None:
 
 @nox.session(name="uv-in-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def uv_in_demo(session: Session) -> None:
+    """Runs a uv command in a new project demo project then syncs with it."""
     session.install("cookiecutter", "platformdirs", "loguru", "typer")
     session.run(
         "python",
@@ -90,6 +93,7 @@ def uv_in_demo(session: Session) -> None:
 
 @nox.session(name="in-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def in_demo(session: Session) -> None:
+    """Generates a project demo and run a uv command in it."""
     session.install("cookiecutter", "platformdirs", "loguru", "typer")
     session.run(
         "python",
