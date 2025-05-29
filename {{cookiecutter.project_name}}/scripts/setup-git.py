@@ -22,7 +22,7 @@ def setup_git(path: Path, github_user: str, repo_name: str) -> None:
     commands: list[list[str]] = [
         ["git", "init"],
         ["git", "branch", "-M", "main"],
-        ["git", "remote", "add", "origin", f"https://github.com/{github_user}/{repo_name}.git", "||", "true"],
+        ["git", "remote", "add", "origin", f"https://github.com/{github_user}/{repo_name}.git"],
         ["git", "remote", "set-url", "origin", f"https://github.com/{github_user}/{repo_name}.git"],
         ["git", "fetch", "origin"],
         ["git", "push", "-u", "origin", "main"],
@@ -35,7 +35,7 @@ def setup_git(path: Path, github_user: str, repo_name: str) -> None:
     check_dependencies(path=path, dependencies=["git"])
 
     for command in commands:
-        subprocess.run(command, cwd=path, capture_output=True)
+        subprocess.run(command, cwd=path, stdout=subprocess.STDOUT, stderr=subprocess.STDOUT)
 
 
 def get_parser() -> argparse.ArgumentParser:
