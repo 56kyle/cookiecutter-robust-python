@@ -1,0 +1,54 @@
+"""Script responsible for coordinating first time project setup."""
+import argparse
+import subprocess
+from pathlib import Path
+
+from util import check_dependencies
+from util import existing_dir
+
+
+def main() -> None:
+    """Parses args and passes through to setup_venv."""
+    parser: argparse.ArgumentParser = get_parser()
+    args: argparse.Namespace = parser.parse_args()
+    setup_venv(path=args.path, python_version=args.python_version)
+
+
+def get_parser() -> argparse.ArgumentParser:
+    """Creates the argument parser for setup-venv."""
+    parser: argparse.ArgumentParser = argparse.ArgumentParser(
+        prog="setup-venv",
+        usage="python ./scripts/setup-venv.py . -p '3.9'"
+    )
+    parser.add_argument(
+        "path",
+        type=existing_dir,
+        metavar="PATH",
+        help="Path to the repo's root directory (must already exist).",
+    )
+    parser.add_argument(
+        "-p",
+        "--python",
+        dest="python_version",
+        help="The Python version that will serve as the main working version used by the IDE."
+    )
+    return parser
+
+
+def setup_venv(path: Path, python_version: str) -> None:
+    """Set up the provided cookiecutter-robust-python project's venv."""
+    commands: list[list[str]] = [
+        ["uv", "lock"],
+        ["uv", "venv", ".venv"],
+        ["uv", "python", "install", python_version],
+        ["uv", "python", "pin", python_version],
+        ["uv", "sync", "--all-groups"]
+    ]
+    check_dependencies(path=path, dependencies=["uv"])
+
+    for command in commands:
+        subprocess.run(command, cwd=path, capture_output=True)
+
+
+if __name__ == '__main__':
+    main()

@@ -18,7 +18,7 @@ MAX_PYTHON_SLUG: int = int(COOKIECUTTER_JSON["max_python_version"].lstrip("3."))
 PYTHON_VERSIONS: list[str] = [f"3.{VERSION_SLUG}" for VERSION_SLUG in range(MIN_PYTHON_SLUG, MAX_PYTHON_SLUG + 1)]
 DEFAULT_PYTHON_VERSION: str = PYTHON_VERSIONS[1]
 
-
+FIRST_TIME_SETUP_NOX_SESSIONS: list[str] = ["setup-git", "setup-venv", "setup-repo"]
 TYPE_CHECK_NOX_SESSIONS: list[str] = [f"typecheck-{python_version}" for python_version in PYTHON_VERSIONS]
 TESTS_NOX_SESSIONS: list[str] = [f"tests-{python_version}" for python_version in PYTHON_VERSIONS]
 CHECK_NOX_SESSIONS: list[str] = [f"check-{python_version}" for python_version in PYTHON_VERSIONS]
