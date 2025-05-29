@@ -57,6 +57,7 @@ def generate_demo_project(session: Session) -> None:
         "python",
         GENERATE_DEMO_PROJECT_SCRIPT,
         *GENERATE_DEMO_PROJECT_OPTIONS,
+        *session.posargs
     )
 
 
