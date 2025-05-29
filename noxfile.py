@@ -42,23 +42,6 @@ SYNC_UV_WITH_DEMO_OPTIONS: tuple[str, ...] = (
     *("--demo-name", DEFAULT_DEMO_NAME),
 )
 
-TEMPLATE_PYTHON_LOCATIONS: tuple[Path, ...] = (Path("noxfile.py"), Path("scripts"), Path("hooks"))
-
-TEMPLATE_CONFIG_AND_DOCS: tuple[Path, ...] = (
-    Path("pyproject.toml"),
-    Path(".ruff.toml"),
-    Path(".editorconfig"),
-    Path(".gitignore"),
-    Path(".pre-commit-config.yaml"),
-    Path(".cz.toml"),
-    Path("cookiecutter.json"),
-    Path("README.md"),
-    Path("LICENSE"),
-    Path("CODE_OF_CONDUCT.md"),
-    Path("CHANGELOG.md"),
-    Path("docs/"),
-)
-
 
 @nox.session(name="generate-demo-project", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def generate_demo_project(session: Session) -> None:
@@ -139,6 +122,16 @@ def lint(session: Session):
 
     session.log(f"Running Ruff check on template files with py{session.python}.")
     session.run("ruff", "check", "--verbose", "--fix")
+
+
+@nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+def lint_generated_project(session: Session):
+    """Lint the generated project's Python files and configurations."""
+    session.log("Installing linting dependencies for the generated project...")
+    session.install("-e", ".", "--group", "dev", "--group", "lint")
+    session.notify("in-demo", ["nox", "-s", "pre-commit"])
+    session.notify("in-demo", )
+    session.run("retrocookie")
 
 
 @nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
