@@ -19,7 +19,7 @@ FolderOption: partial[OptionInfo] = partial(
 def generate_demo_project(repo_folder: Path, demos_cache_folder: Path, demo_name: str) -> Path:
     """Generates a demo project and returns its root path."""
     demos_cache_folder.mkdir(exist_ok=True)
-    _remove_any_existing_demo(demos_cache_folder)
+    shutil.rmtree(path=demos_cache_folder / demo_name)
     cookiecutter(
         template=str(repo_folder),
         no_input=True,
@@ -28,12 +28,6 @@ def generate_demo_project(repo_folder: Path, demos_cache_folder: Path, demo_name
         output_dir=str(demos_cache_folder),
     )
     return demos_cache_folder / demo_name
-
-
-def _remove_any_existing_demo(parent_path: Path) -> None:
-    """Removes any existing demos."""
-    for path in parent_path.iterdir():
-        shutil.rmtree(path)
 
 
 cli: typer.Typer = typer.Typer()
