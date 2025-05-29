@@ -52,6 +52,7 @@ def setup_git(session: Session) -> None:
 
 @nox.session(python=None, name="setup-venv")
 def setup_venv(session: Session) -> None:
+    """Set up the virtual environment for the current project."""
     session.run("python", SCRIPTS_FOLDER / "setup-venv.py", REPO_ROOT, "-p", PYTHON_VERSIONS[0], external=True)
 
 
