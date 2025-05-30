@@ -389,7 +389,7 @@ def tox(session: Session) -> None:
 # These sessions provide easy entry points by notifying or calling granular sessions.
 # Their names often align with the intended CI workflow steps (e.g., 'build' orchestrates builds).
 
-@nox.session(python=DEFAULT_PYTHON_VERSION) # Run the orchestrator on the default Python version
+@nox.session(python=None) # Run the orchestrator on the default Python version
 def build(session: Session) -> None:
     """Orchestrates building all project artifacts (Python packages, potentially Rust)."""
     session.log(f"Queueing build sessions for py{session.python} if applicable.")
@@ -398,7 +398,7 @@ def build(session: Session) -> None:
     session.notify("build-python")
 
 
-@nox.session(python=DEFAULT_PYTHON_VERSION) # Run the orchestrator on the default Python version
+@nox.session(python=None) # Run the orchestrator on the default Python version
 def publish(session: Session) -> None:
     """Orchestrates publishing all project artifacts (Python packages, potentially Rust)."""
     session.log(f"Queueing publish sessions for py{session.python} if applicable.")
@@ -407,7 +407,7 @@ def publish(session: Session) -> None:
     session.notify("publish-python")
 
 
-@nox.session(python=PYTHON_VERSIONS)
+@nox.session(python=None)
 def check(session: Session) -> None:
     """Run primary quality checks (format, lint, typecheck, security)."""
     session.log(f"Queueing core check sessions for py{session.python} if applicable.")
@@ -417,7 +417,7 @@ def check(session: Session) -> None:
     session.notify("security-python")
 
 
-@nox.session(python=PYTHON_VERSIONS, name="full-check")
+@nox.session(python=None, name="full-check")
 def full_check(session: Session) -> None:
    """Run all core quality checks and tests."""
    session.log(f"Queueing all check and test sessions for py{session.python} if applicable.")
