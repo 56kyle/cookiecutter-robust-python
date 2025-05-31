@@ -131,11 +131,11 @@ def lint(session: Session):
     session.run("ruff", "check", "--verbose", "--fix")
 
 
-@nox.session(python=None)
+@nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def lint_generated_project(session: Session):
     """Lint the generated project's Python files and configurations."""
     session.log("Installing linting dependencies for the generated project...")
-    session.install("-e", ".", "--group", "dev")
+    session.install("-e", ".", "--group", "dev", "--group", "lint")
     session._runner.posargs = ["nox", "-s", "pre-commit"]
     in_demo(session)
     session._runner.posargs = [""]

@@ -9,6 +9,7 @@ REPO_FOLDER: Path = Path(__file__).parent.parent
 COOKIECUTTER_FOLDER: Path = REPO_FOLDER / "{{cookiecutter.project_name}}"
 HOOKS_FOLDER: Path = REPO_FOLDER / "hooks"
 SCRIPTS_FOLDER: Path = REPO_FOLDER / "scripts"
+GITHUB_ACTIONS_FOLDER: Path = COOKIECUTTER_FOLDER / ".github"
 
 COOKIECUTTER_JSON_PATH: Path = REPO_FOLDER / "cookiecutter.json"
 COOKIECUTTER_JSON: dict[str, Any] = json.loads(COOKIECUTTER_JSON_PATH.read_text())
@@ -25,11 +26,13 @@ CHECK_NOX_SESSIONS: list[str] = [f"check-{python_version}" for python_version in
 FULL_CHECK_NOX_SESSIONS: list[str] = [f"full-check-{python_version}" for python_version in PYTHON_VERSIONS]
 
 
+
 GLOBAL_NOX_SESSIONS: list[str] = [
     "pre-commit",
     "format-python",
     "lint-python",
     *TYPE_CHECK_NOX_SESSIONS,
+    *TESTS_NOX_SESSIONS,
     "docs-build",
     "build-python",
     "build-container",
