@@ -1,7 +1,11 @@
 """Module containing util"""
 import argparse
+import os
+import stat
 import subprocess
 from pathlib import Path
+from typing import Any
+from typing import Callable
 
 
 class MissingDependencyError(Exception):
@@ -32,3 +36,12 @@ def existing_dir(value: str) -> Path:
         raise argparse.ArgumentTypeError(f"{path} is not a directory.")
 
     return path
+
+
+def remove_readonly(func: Callable[[str], Any], path: str, _: Any) -> None:
+    """Clears the readonly bit and attempts to call the provided function.
+
+    This is passed to shutil.rmtree as the onerror kwarg.
+    """
+    os.chmod(path, stat.S_IWRITE)
+    func(path)

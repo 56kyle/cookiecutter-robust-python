@@ -3,11 +3,13 @@
 Since this a first time setup script, we intentionally only use builtin Python dependencies.
 """
 import argparse
+import shutil
 import subprocess
 from pathlib import Path
 
 from util import check_dependencies
 from util import existing_dir
+from util import remove_readonly
 
 
 def main() -> None:
@@ -48,6 +50,10 @@ def setup_venv(path: Path, python_version: str) -> None:
         ["uv", "sync", "--all-groups"]
     ]
     check_dependencies(path=path, dependencies=["uv"])
+
+    venv_path: Path = path / ".venv"
+    if venv_path.exists():
+        shutil.rmtree(venv_path, onerror=remove_readonly)
 
     for command in commands:
         subprocess.run(command, cwd=path, capture_output=True)
