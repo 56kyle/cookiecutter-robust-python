@@ -29,8 +29,6 @@ FULL_CHECK_NOX_SESSIONS: list[str] = [f"full-check-{python_version}" for python_
 
 GLOBAL_NOX_SESSIONS: list[str] = [
     "pre-commit",
-    "format-python",
-    "lint-python",
     *TYPE_CHECK_NOX_SESSIONS,
     *TESTS_NOX_SESSIONS,
     "docs-build",
@@ -44,4 +42,4 @@ GLOBAL_NOX_SESSIONS: list[str] = [
     "coverage",
 ]
 
-RUST_NOX_SESSIONS: list[str] = ["format-rust", "lint-rust", "tests-rust", "publish-rust"]
+RUST_NOX_SESSIONS: list[str] = ["tests-rust", "publish-rust"]
