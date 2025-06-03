@@ -1,5 +1,5 @@
 """Noxfile for the cookiecutter-robust-python template."""
-
+import os
 import shutil
 import tempfile
 from pathlib import Path
@@ -15,6 +15,7 @@ nox.options.default_venv_backend = "uv"
 DEFAULT_TEMPLATE_PYTHON_VERSION = "3.9"
 
 REPO_ROOT: Path = Path(__file__).parent.resolve()
+SCRIPTS_FOLDER: Path = REPO_ROOT / "scripts"
 TEMPLATE_FOLDER: Path = REPO_ROOT / "{{cookiecutter.project_name}}"
 
 
@@ -26,78 +27,66 @@ COOKIECUTTER_ROBUST_PYTHON_CACHE_FOLDER: Path = Path(
     )
 ).resolve()
 
-PROJECT_DEMOS_FOLDER: Path = COOKIECUTTER_ROBUST_PYTHON_CACHE_FOLDER / "project_demos"
-DEFAULT_DEMO_NAME: str = "demo-project"
+DEFAULT_PROJECT_DEMOS_FOLDER = COOKIECUTTER_ROBUST_PYTHON_CACHE_FOLDER / "project_demos"
+PROJECT_DEMOS_FOLDER: Path = Path(os.getenv(
+    "COOKIECUTTER_ROBUST_PYTHON_PROJECT_DEMOS_FOLDER", default=DEFAULT_PROJECT_DEMOS_FOLDER
+)).resolve()
+DEFAULT_DEMO_NAME: str = "robust-python-demo"
 DEMO_ROOT_FOLDER: Path = PROJECT_DEMOS_FOLDER / DEFAULT_DEMO_NAME
 
+GENERATE_DEMO_PROJECT_SCRIPT: Path = SCRIPTS_FOLDER / "generate-demo-project.py"
 GENERATE_DEMO_PROJECT_OPTIONS: tuple[str, ...] = (
     *("--repo-folder", REPO_ROOT),
     *("--demos-cache-folder", PROJECT_DEMOS_FOLDER),
     *("--demo-name", DEFAULT_DEMO_NAME),
 )
 
+SYNC_UV_WITH_DEMO_SCRIPT: Path = SCRIPTS_FOLDER / "sync-uv-with-demo.py"
 SYNC_UV_WITH_DEMO_OPTIONS: tuple[str, ...] = (
     *("--template-folder", TEMPLATE_FOLDER),
     *("--demos-cache-folder", PROJECT_DEMOS_FOLDER),
     *("--demo-name", DEFAULT_DEMO_NAME),
 )
 
-TEMPLATE_PYTHON_LOCATIONS: tuple[Path, ...] = (Path("noxfile.py"), Path("scripts"), Path("hooks"))
-
-TEMPLATE_CONFIG_AND_DOCS: tuple[Path, ...] = (
-    Path("pyproject.toml"),
-    Path(".ruff.toml"),
-    Path(".editorconfig"),
-    Path(".gitignore"),
-    Path(".pre-commit-config.yaml"),
-    Path(".cz.toml"),
-    Path("cookiecutter.json"),
-    Path("README.md"),
-    Path("LICENSE"),
-    Path("CODE_OF_CONDUCT.md"),
-    Path("CHANGELOG.md"),
-    Path("docs/"),
-)
-
 
 @nox.session(name="generate-demo-project", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def generate_demo_project(session: Session) -> None:
+    """Generates a project demo using the cookiecutter-robust-python template."""
     session.install("cookiecutter", "platformdirs", "loguru", "typer")
     session.run(
         "python",
-        "scripts/generate-demo-project.py",
+        GENERATE_DEMO_PROJECT_SCRIPT,
         *GENERATE_DEMO_PROJECT_OPTIONS,
-        external=True,
+        *session.posargs
     )
 
 
 @nox.session(name="sync-uv-with-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def sync_uv_with_demo(session: Session) -> None:
+    """Syncs the uv environment with the current demo project."""
     session.install("cookiecutter", "platformdirs", "loguru", "typer")
     session.run(
         "python",
-        "scripts/sync-uv-with-demo.py",
+        SYNC_UV_WITH_DEMO_SCRIPT,
         *SYNC_UV_WITH_DEMO_OPTIONS,
-        external=True,
     )
 
 
 @nox.session(name="uv-in-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def uv_in_demo(session: Session) -> None:
+    """Runs a uv command in a new project demo project then syncs with it."""
     session.install("cookiecutter", "platformdirs", "loguru", "typer")
     session.run(
         "python",
-        "scripts/generate-demo-project.py",
+        GENERATE_DEMO_PROJECT_SCRIPT,
         *GENERATE_DEMO_PROJECT_OPTIONS,
-        external=True,
     )
     original_dir: Path = Path.cwd()
     session.cd(DEMO_ROOT_FOLDER)
     session.run("uv", *session.posargs)
     session.cd(original_dir)
     session.run(
-        "python",
-        "scripts/sync-uv-with-demo.py",
+        SYNC_UV_WITH_DEMO_SCRIPT,
         *SYNC_UV_WITH_DEMO_OPTIONS,
         external=True,
     )
@@ -105,10 +94,11 @@ def uv_in_demo(session: Session) -> None:
 
 @nox.session(name="in-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def in_demo(session: Session) -> None:
+    """Generates a project demo and run a uv command in it."""
     session.install("cookiecutter", "platformdirs", "loguru", "typer")
     session.run(
         "python",
-        "scripts/generate-demo-project.py",
+        GENERATE_DEMO_PROJECT_SCRIPT,
         *GENERATE_DEMO_PROJECT_OPTIONS,
     )
     original_dir: Path = Path.cwd()
@@ -139,6 +129,17 @@ def lint(session: Session):
 
     session.log(f"Running Ruff check on template files with py{session.python}.")
     session.run("ruff", "check", "--verbose", "--fix")
+
+
+@nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION, name="lint-generated-project", tags=[])
+def lint_generated_project(session: Session):
+    """Lint the generated project's Python files and configurations."""
+    session.log("Installing linting dependencies for the generated project...")
+    session.install("-e", ".", "--group", "dev", "--group", "lint")
+    session._runner.posargs = ["nox", "-s", "pre-commit"]
+    in_demo(session)
+    session._runner.posargs = [""]
+    session.run("retrocookie")
 
 
 @nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
