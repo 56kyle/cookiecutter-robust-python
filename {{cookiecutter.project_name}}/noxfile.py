@@ -314,7 +314,7 @@ def release(session: Session) -> None:
     )
 
 
-@nox.session(venv_backend="none", tags=[MAINTENANCE])
+@nox.session(venv_backend="none")
 def tox(session: Session) -> None:
     """Run the 'tox' test matrix.
 
