@@ -14,10 +14,10 @@ def main() -> None:
     """Parses command line input and passes it through to setup_git."""
     parser: argparse.ArgumentParser = get_parser()
     args: argparse.Namespace = parser.parse_args()
-    setup_git(path=args.path, github_user=args.github_user, repo_name=args.repo_name)
+    setup_git(path=args.path)
 
 
-def setup_git(path: Path, github_user: str, repo_name: str) -> None:
+def setup_git(path: Path) -> None:
     """Set up the provided cookiecutter-robust-python project's git repo."""
     commands: list[list[str]] = [
         ["git", "init"],
@@ -46,8 +46,6 @@ def get_parser() -> argparse.ArgumentParser:
         metavar="PATH",
         help="Path to the repo's root directory (must already exist).",
     )
-    parser.add_argument("-u", "--user", dest="github_user", help="GitHub user name.")
-    parser.add_argument("-n", "--name", dest="repo_name", help="Name of the repo.")
     return parser
 
 
