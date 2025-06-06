@@ -103,7 +103,7 @@ def in_demo(session: Session) -> None:
     )
     original_dir: Path = Path.cwd()
     session.cd(DEMO_ROOT_FOLDER)
-    session.run("python", DEMO_ROOT_FOLDER / "scripts" / "setup-git.py")
+    session.run("python", DEMO_ROOT_FOLDER / "scripts" / "setup-git.py", DEMO_ROOT_FOLDER)
     session.run(*session.posargs)
     session.cd(original_dir)
 
@@ -137,8 +137,13 @@ def lint_generated_project(session: Session):
     """Lint the generated project's Python files and configurations."""
     session.log("Installing linting dependencies for the generated project...")
     session.install("-e", ".", "--group", "dev", "--group", "lint")
-    session._runner.posargs = ["nox", "-s", "pre-commit", "&&", "git", "commit", "-m", "'meta: lint generated project'"]
+    session._runner.posargs = ["nox", "-s", "pre-commit"]
     in_demo(session)
+    original_dir: Path = Path.cwd()
+    session.chdir(DEMO_ROOT_FOLDER)
+    session.run("git", "commit", "-m", "meta: lint-generated-project", "--no-verify")
+    session.chdir(original_dir)
+
     session.run("retrocookie", DEMO_ROOT_FOLDER, "HEAD")
 
 

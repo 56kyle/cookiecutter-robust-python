@@ -51,7 +51,7 @@ RUST: str = "rust"
 def setup_git(session: Session) -> None:
     """Set up the git repo for the current project."""
     session.run(
-        "python", SCRIPTS_FOLDER / "setup-git.py", REPO_ROOT, "-u", GITHUB_USER, "-n", PROJECT_NAME, external=True
+        "python", SCRIPTS_FOLDER / "setup-git.py", REPO_ROOT, external=True
     )
 
 
