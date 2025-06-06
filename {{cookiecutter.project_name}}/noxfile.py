@@ -2,7 +2,6 @@
 
 import os
 import shlex
-
 from pathlib import Path
 from textwrap import dedent
 from typing import List
@@ -50,16 +49,13 @@ RUST: str = "rust"
 @nox.session(python=None, name="setup-git", tags=[ENV])
 def setup_git(session: Session) -> None:
     """Set up the git repo for the current project."""
-    session.run(
-        "python", SCRIPTS_FOLDER / "setup-git.py", REPO_ROOT, external=True
-    )
+    session.run("python", SCRIPTS_FOLDER / "setup-git.py", REPO_ROOT, external=True)
 
 
 @nox.session(python=None, name="setup-venv", tags=[ENV])
 def setup_venv(session: Session) -> None:
     """Set up the virtual environment for the current project."""
     session.run("python", SCRIPTS_FOLDER / "setup-venv.py", REPO_ROOT, "-p", PYTHON_VERSIONS[0], external=True)
-
 
 
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="pre-commit", tags=[CI])
@@ -161,13 +157,7 @@ def tests_python(session: Session) -> None:
     test_results_dir.mkdir(parents=True, exist_ok=True)
     junitxml_file = test_results_dir / f"test-results-py{session.python}.xml"
 
-    session.run(
-        "pytest",
-        "--cov={}".format(PACKAGE_NAME),
-        "--cov-report=xml",
-        f"--junitxml={junitxml_file}",
-        "tests/"
-    )
+    session.run("pytest", "--cov={}".format(PACKAGE_NAME), "--cov-report=xml", f"--junitxml={junitxml_file}", "tests/")
 
 
 {% if cookiecutter.add_rust_extension == 'y' -%}
@@ -242,7 +232,15 @@ def build_container(session: Session) -> None:
 
     session.log(f"Building Docker image using {container_cli}.")
     project_image_name = PACKAGE_NAME.replace("_", "-").lower()
-    session.run(container_cli, "build", str(current_dir), "-t", f"{project_image_name}:latest", "--progress=plain", external=True)
+    session.run(
+        container_cli,
+        "build",
+        str(current_dir),
+        "-t",
+        f"{project_image_name}:latest",
+        "--progress=plain",
+        external=True,
+    )
 
     session.log(f"Container image {project_image_name}:latest built locally.")
 
@@ -302,15 +300,13 @@ def release(session: Session) -> None:
     cz_bump_args = ["uvx", "cz", "bump", "--changelog"]
 
     if increment:
-         cz_bump_args.append(f"--increment={increment}")
+        cz_bump_args.append(f"--increment={increment}")
 
     session.log("Running cz bump with args: %s", cz_bump_args)
     session.run(*cz_bump_args, success_codes=[0, 1], external=True)
 
     session.log("Version bumped and tag created locally via Commitizen/uvx.")
-    session.log(
-        "IMPORTANT: Push commits and tags to remote (`git push --follow-tags`) to trigger CD pipeline."
-    )
+    session.log("IMPORTANT: Push commits and tags to remote (`git push --follow-tags`) to trigger CD pipeline.")
 
 
 @nox.session(venv_backend="none")
@@ -344,7 +340,9 @@ def coverage(session: Session) -> None:
     (e.g., via `nox -s test-python`).
     """
     session.log("Collecting and reporting coverage across all test runs.")
-    session.log("Note: Ensure 'nox -s test-python' was run across all desired Python versions first to generate coverage data.")
+    session.log(
+        "Note: Ensure 'nox -s test-python' was run across all desired Python versions first to generate coverage data."
+    )
 
     session.log("Installing dependencies for coverage report session...")
     session.install("-e", ".", "--group", "dev")
@@ -357,9 +355,9 @@ def coverage(session: Session) -> None:
         session.log(f"Combined coverage data into {coverage_combined_file.resolve()}")
     except CommandFailed as e:
         if e.returncode == 1:
-             session.log("No coverage data found to combine. Run tests first with coverage enabled.")
+            session.log("No coverage data found to combine. Run tests first with coverage enabled.")
         else:
-             session.error(f"Failed to combine coverage data: {e}")
+            session.error(f"Failed to combine coverage data: {e}")
         session.skip("Could not combine coverage data.")
 
     session.log("Generating HTML coverage report.")

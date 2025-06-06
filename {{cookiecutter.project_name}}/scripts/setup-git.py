@@ -2,6 +2,7 @@
 
 Since this is a first time setup script, we intentionally only use builtin Python dependencies.
 """
+
 import argparse
 import subprocess
 from pathlib import Path
@@ -49,5 +50,5 @@ def get_parser() -> argparse.ArgumentParser:
     return parser
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()

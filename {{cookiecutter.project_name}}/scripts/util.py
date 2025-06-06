@@ -1,4 +1,5 @@
 """Module containing util."""
+
 import argparse
 import stat
 import subprocess
@@ -9,12 +10,17 @@ from typing import Callable
 
 class MissingDependencyError(Exception):
     """Exception raised when a depedency is missing from the system running setup-repo."""
+
     def __init__(self, project: Path, dependency: str):
         """Initializes MisssingDependencyError."""
-        super().__init__("\n".join([
-            f"Unable to find {dependency=}.",
-            f"Please ensure that {dependency} is installed before setting up the repo at {project.absolute()}"
-        ]))
+        super().__init__(
+            "\n".join(
+                [
+                    f"Unable to find {dependency=}.",
+                    f"Please ensure that {dependency} is installed before setting up the repo at {project.absolute()}",
+                ]
+            )
+        )
 
 
 def check_dependencies(path: Path, dependencies: list[str]) -> None:

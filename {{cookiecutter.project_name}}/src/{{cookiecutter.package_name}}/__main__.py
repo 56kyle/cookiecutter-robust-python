@@ -5,6 +5,7 @@ import typer
 
 app: typer.Typer = typer.Typer()
 
+
 @app.command(name="{{cookiecutter.project_name}}")
 def main() -> None:
     """{{cookiecutter.friendly_name}}."""
