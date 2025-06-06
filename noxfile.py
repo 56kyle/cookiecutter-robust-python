@@ -104,6 +104,7 @@ def in_demo(session: Session) -> None:
     original_dir: Path = Path.cwd()
     session.cd(DEMO_ROOT_FOLDER)
     session.run("python", DEMO_ROOT_FOLDER / "scripts" / "setup-git.py", DEMO_ROOT_FOLDER)
+    session.run("git", "checkout", ".")
     session.run(*session.posargs)
     session.cd(original_dir)
 
