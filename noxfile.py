@@ -142,7 +142,7 @@ def lint_generated_project(session: Session):
     in_demo(session)
     original_dir: Path = Path.cwd()
     session.chdir(DEMO_ROOT_FOLDER)
-    session.run("git", "commit", "-m", "meta: lint-generated-project", "--no-verify")
+    session.run("git", "commit", "-a", "-m", "meta: lint-generated-project", "--no-verify")
     session.chdir(original_dir)
 
     session.run("retrocookie", DEMO_ROOT_FOLDER, "HEAD")
