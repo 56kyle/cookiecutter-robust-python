@@ -137,7 +137,7 @@ def lint_generated_project(session: Session):
     """Lint the generated project's Python files and configurations."""
     session.log("Installing linting dependencies for the generated project...")
     session.install("-e", ".", "--group", "dev", "--group", "lint")
-    session._runner.posargs = ["nox", "-s", "pre-commit"]
+    session._runner.posargs = ["nox", "-t", "lint", "format"]
     in_demo(session)
     original_dir: Path = Path.cwd()
     session.chdir(DEMO_ROOT_FOLDER)
