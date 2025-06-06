@@ -82,7 +82,6 @@ def format_python(session: Session) -> None:
     session.install("-e", ".", "--group", "dev")
 
     session.log(f"Running Ruff formatter check with py{session.python}.")
-    # Use --check, not fix. Fixing is done by pre-commit or manual run.
     session.run("ruff", "format", *session.posargs)
 
 
@@ -104,7 +103,7 @@ def lint_python(session: Session) -> None:
     session.install("-e", ".", "--group", "dev")
 
     session.log(f"Running Ruff check with py{session.python}.")
-    session.run("ruff", "check", "--verbose")
+    session.run("ruff", "check", "--fix", "--verbose")
 
 
 {% if cookiecutter.add_rust_extension == "y" -%}
