@@ -5,14 +5,10 @@ from pathlib import Path
 from typing import Annotated
 
 import typer
-from typer.models import OptionInfo
 
+from util import FolderOption
 from util import generate_demo_project
 
-
-FolderOption: partial[OptionInfo] = partial(
-    typer.Option, dir_okay=True, file_okay=False, resolve_path=True, path_type=Path
-)
 
 cli: typer.Typer = typer.Typer()
 

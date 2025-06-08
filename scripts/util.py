@@ -15,6 +15,12 @@ import typer
 from cookiecutter.main import cookiecutter
 from cookiecutter.utils import work_in
 from pygments.lexers import q
+from typer.models import OptionInfo
+
+
+FolderOption: partial[OptionInfo] = partial(
+    typer.Option, dir_okay=True, file_okay=False, resolve_path=True, path_type=Path
+)
 
 
 def remove_readonly(func: Callable[[str], Any], path: str, _: Any) -> None:
