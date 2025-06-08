@@ -1,13 +1,12 @@
 import sys
 from pathlib import Path
 from typing import Annotated
-from typing import Any
 
 import pre_commit.main
 import typer
 from retrocookie.core import retrocookie
 
-from scripts.util import FolderOption
+from util import FolderOption
 from util import in_new_demo
 
 
