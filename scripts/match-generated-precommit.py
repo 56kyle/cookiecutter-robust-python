@@ -6,6 +6,7 @@ import pre_commit.main
 import typer
 from retrocookie.core import retrocookie
 
+from util import git
 from util import FolderOption
 from util import in_new_demo
 
@@ -30,6 +31,7 @@ def match_generated_precommit(
         ) as demo_path:
             pre_commit.main.main(["run", "--all-files", "--hook-stage=manual", "--show-diff-on-failure"])
         retrocookie(instance_path=demo_path, commits=["HEAD"])
+        git("checkout", "HEAD", "--", "{{cookiecutter.project_name}}/pyproject.toml")
     except Exception as error:
         typer.secho(f"error: {error}", fg="red")
         sys.exit(1)
