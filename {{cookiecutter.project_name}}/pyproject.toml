@@ -54,4 +54,5 @@ build-backend = {% if cookiecutter.add_rust_extension == 'y' -%} "maturin" {% el
 {% if cookiecutter.add_rust_extension == 'y' -%}
 [tool.maturin]
 rust-src = "rust"
+
 {% endif -%}
