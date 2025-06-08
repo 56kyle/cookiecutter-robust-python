@@ -30,7 +30,8 @@ def robust_python_demo_path(demos_folder: Path) -> Path:
         extra_context={"project_name": "robust-python-demo", "add_rust_extension": False},
     )
     path: Path = demos_folder / "robust-python-demo"
-    subprocess.run(["nox", "-s", "setup-repo"], cwd=path, capture_output=True)
+    subprocess.run(["nox", "-s", "setup-git"], cwd=path, capture_output=True)
+    subprocess.run(["nox", "-s", "setup-venv"], cwd=path, capture_output=True)
     return path
 
 
@@ -47,4 +48,3 @@ def robust_maturin_demo_path(demos_folder: Path) -> Path:
     path: Path = demos_folder / "robust-maturin-demo"
     subprocess.run(["nox", "-s", "setup-repo"], cwd=path, capture_output=True)
     return path
-

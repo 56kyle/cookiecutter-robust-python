@@ -41,72 +41,16 @@ GENERATE_DEMO_PROJECT_OPTIONS: tuple[str, ...] = (
     *("--demo-name", DEFAULT_DEMO_NAME),
 )
 
-SYNC_UV_WITH_DEMO_SCRIPT: Path = SCRIPTS_FOLDER / "sync-uv-with-demo.py"
-SYNC_UV_WITH_DEMO_OPTIONS: tuple[str, ...] = (
-    *("--template-folder", TEMPLATE_FOLDER),
-    *("--demos-cache-folder", PROJECT_DEMOS_FOLDER),
-    *("--demo-name", DEFAULT_DEMO_NAME),
-)
+
+MATCH_GENERATED_PRECOMMIT_SCRIPT: Path = SCRIPTS_FOLDER / "match-generated-precommit.py"
+MATCH_GENERATED_PRECOMMIT_OPTIONS: tuple[str, ...] = GENERATE_DEMO_PROJECT_OPTIONS
 
 
 @nox.session(name="generate-demo-project", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def generate_demo_project(session: Session) -> None:
     """Generates a project demo using the cookiecutter-robust-python template."""
     session.install("cookiecutter", "platformdirs", "loguru", "typer")
-    session.run(
-        "python",
-        GENERATE_DEMO_PROJECT_SCRIPT,
-        *GENERATE_DEMO_PROJECT_OPTIONS,
-        *session.posargs
-    )
-
-
-@nox.session(name="sync-uv-with-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
-def sync_uv_with_demo(session: Session) -> None:
-    """Syncs the uv environment with the current demo project."""
-    session.install("cookiecutter", "platformdirs", "loguru", "typer")
-    session.run(
-        "python",
-        SYNC_UV_WITH_DEMO_SCRIPT,
-        *SYNC_UV_WITH_DEMO_OPTIONS,
-    )
-
-
-@nox.session(name="uv-in-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
-def uv_in_demo(session: Session) -> None:
-    """Runs a uv command in a new project demo project then syncs with it."""
-    session.install("cookiecutter", "platformdirs", "loguru", "typer")
-    session.run(
-        "python",
-        GENERATE_DEMO_PROJECT_SCRIPT,
-        *GENERATE_DEMO_PROJECT_OPTIONS,
-    )
-    original_dir: Path = Path.cwd()
-    session.cd(DEMO_ROOT_FOLDER)
-    session.run("uv", *session.posargs)
-    session.cd(original_dir)
-    session.run(
-        SYNC_UV_WITH_DEMO_SCRIPT,
-        *SYNC_UV_WITH_DEMO_OPTIONS,
-        external=True,
-    )
-
-
-@nox.session(name="in-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
-def in_demo(session: Session) -> None:
-    """Generates a project demo and run a uv command in it."""
-    session.install("cookiecutter", "platformdirs", "loguru", "typer")
-    session.run(
-        "python",
-        GENERATE_DEMO_PROJECT_SCRIPT,
-        *GENERATE_DEMO_PROJECT_OPTIONS,
-    )
-    original_dir: Path = Path.cwd()
-    session.cd(DEMO_ROOT_FOLDER)
-    session.run("python", DEMO_ROOT_FOLDER / "scripts" / "setup-git.py", DEMO_ROOT_FOLDER)
-    session.run("git", "checkout", ".")
-    session.run(*session.posargs)
-    session.cd(original_dir)
+    session.run("python", GENERATE_DEMO_PROJECT_SCRIPT, *GENERATE_DEMO_PROJECT_OPTIONS, *session.posargs)
 
 
 @nox.session(name="clear-cache", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
@@ -133,19 +77,12 @@ def lint(session: Session):
     session.run("ruff", "check", "--verbose", "--fix")
 
 
-@nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION, name="lint-generated-project", tags=[])
-def lint_generated_project(session: Session):
+@nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION, name="match-generated-precommit", tags=[])
+def match_generated_precommit(session: Session):
     """Lint the generated project's Python files and configurations."""
     session.log("Installing linting dependencies for the generated project...")
     session.install("-e", ".", "--group", "dev", "--group", "lint")
-    session._runner.posargs = ["nox", "-t", "lint", "format"]
-    in_demo(session)
-    original_dir: Path = Path.cwd()
-    session.chdir(DEMO_ROOT_FOLDER)
-    session.run("git", "commit", "-a", "-m", "meta: lint-generated-project", "--no-verify")
-    session.chdir(original_dir)
-
-    session.run("retrocookie", DEMO_ROOT_FOLDER, "HEAD")
+    session.run("python", MATCH_GENERATED_PRECOMMIT_SCRIPT, *MATCH_GENERATED_PRECOMMIT_OPTIONS, *session.posargs)
 
 
 @nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
