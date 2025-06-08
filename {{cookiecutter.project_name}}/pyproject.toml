@@ -50,9 +50,8 @@ Repository = "https://github.com/{{ cookiecutter.github_user | lower | replace('
 [build-system]
 requires = [{% if cookiecutter.add_rust_extension == 'y' -%} "maturin>=1.3.0,<2.0" {% else -%} "setuptools>=61.0" {% endif -%}]
 build-backend = {% if cookiecutter.add_rust_extension == 'y' -%} "maturin" {% else -%} "setuptools.build_meta" {% endif -%}
-
 {% if cookiecutter.add_rust_extension == 'y' -%}
+
 [tool.maturin]
 rust-src = "rust"
-
 {% endif -%}
