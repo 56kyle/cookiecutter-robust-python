@@ -6,7 +6,7 @@ import pre_commit.main
 import typer
 from retrocookie.core import retrocookie
 
-from scripts.util import in_new_demo
+from util import in_new_demo
 
 
 cli: typer.Typer = typer.Typer()
