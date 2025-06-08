@@ -13,7 +13,6 @@ from typing import Generator
 
 import typer
 from cookiecutter.main import cookiecutter
-from cookiecutter.utils import rmtree
 from cookiecutter.utils import work_in
 from pygments.lexers import q
 
@@ -49,7 +48,7 @@ def in_new_demo(
     demo_name: str,
     no_cache: bool,
     **kwargs: Any
-) -> Generator[Path]:
+) -> Generator[Path, None, None]:
     """Returns a context manager for working within a new demo."""
     demo_path: Path = generate_demo_project(
         repo_folder=repo_folder,
