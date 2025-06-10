@@ -48,7 +48,7 @@ def robust_demo__path(request: FixtureRequest, demos_folder: Path, robust_demo__
 
 @pytest.fixture(scope="session")
 def robust_demo__name(request: FixtureRequest) -> str:
-    return getattr(request, "param", "robust-demo")
+    return getattr(request, "param", "robust-python-demo-with-setup")
 
 
 @pytest.fixture(scope="session")
