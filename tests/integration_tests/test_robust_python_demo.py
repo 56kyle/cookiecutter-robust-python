@@ -21,8 +21,7 @@ def test_demo_project_nox_session(robust_demo: Path, session: str) -> None:
         capture_output=True,
         text=True
     )
-    if result.check_returncode() != 0:
-        raise SystemExit(result.stdout)
+    result.check_returncode()
 
 
 def test_demo_project_nox_pre_commit(robust_demo: Path) -> None:
