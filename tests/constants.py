@@ -24,6 +24,8 @@ TESTS_NOX_SESSIONS: list[str] = [f"tests-{python_version}" for python_version in
 
 GLOBAL_NOX_SESSIONS: list[str] = [
     "pre-commit",
+    "lint-python",
+    "format-python",
     *TYPE_CHECK_NOX_SESSIONS,
     *TESTS_NOX_SESSIONS,
     "docs-build",
