@@ -21,7 +21,7 @@ def test_demo_project_nox_session(robust_demo: Path, session: str) -> None:
         capture_output=True,
         text=True
     )
-    result.check_returncode()
+    assert result.check_returncode() == 0
 
 
 def test_demo_project_nox_pre_commit(robust_demo: Path) -> None:
