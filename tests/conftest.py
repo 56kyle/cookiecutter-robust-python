@@ -21,43 +21,12 @@ def demos_folder(tmp_path_factory: TempPathFactory) -> Path:
     return tmp_path_factory.mktemp("demos")
 
 
-@pytest.mark.parametrize(argnames="robust_demo__name", argvalues=["robust-python-demo-no-setup"], indirect=True)
-@pytest.mark.parametrize(argnames="robust_demo__add_rust_extension", argvalues=[False], indirect=True)
-@pytest.fixture(scope="session")
-def robust_python_demo_no_setup(request: FixtureRequest, robust_demo: Path) -> Path:
-    return getattr(request, "param", robust_demo)
-
-
-@pytest.mark.parametrize(argnames="robust_demo__name", argvalues=["robust-python-demo-with-setup"], indirect=True)
-@pytest.mark.parametrize(argnames="robust_demo__add_rust_extension", argvalues=[False], indirect=True)
-@pytest.fixture(scope="session")
-def robust_python_demo_with_setup(request: FixtureRequest, robust_demo: Path, robust_demo__name: str) -> Path:
-    subprocess.run(["nox", "-s", "setup-git"], cwd=robust_demo, capture_output=True)
-    subprocess.run(["nox", "-s", "setup-venv"], cwd=robust_demo, capture_output=True)
-    return getattr(request, "param", robust_demo)
-
-
-@pytest.mark.parametrize(argnames="robust_demo__name", argvalues=["robust-maturin-demo-no-setup"], indirect=True)
-@pytest.mark.parametrize(argnames="robust_demo__add_rust_extension", argvalues=[True], indirect=True)
-@pytest.fixture(scope="session")
-def robust_maturin_demo_no_setup(request: FixtureRequest, robust_demo: Path) -> Path:
-    return getattr(request, "param", robust_demo)
-
-
-@pytest.mark.parametrize(argnames="robust_demo__name", argvalues=["robust-maturin-demo-with-setup"], indirect=True)
-@pytest.mark.parametrize(argnames="robust_demo__add_rust_extension", argvalues=[True], indirect=True)
-@pytest.fixture(scope="session")
-def robust_maturin_demo_with_setup(request: FixtureRequest, robust_demo: Path) -> Path:
-    subprocess.run(["nox", "-s", "setup-git"], cwd=robust_demo, capture_output=True)
-    subprocess.run(["nox", "-s", "setup-venv"], cwd=robust_demo, capture_output=True)
-    return getattr(request, "param", robust_demo)
-
-
 @pytest.fixture(scope="session")
 def robust_demo(
     request: FixtureRequest,
     robust_demo__path: Path,
-    robust_demo__extra_context: dict[str, Any]
+    robust_demo__extra_context: dict[str, Any],
+    robust_demo__is_setup: bool
 ) -> Path:
     cookiecutter(
         str(REPO_FOLDER),
@@ -66,6 +35,9 @@ def robust_demo(
         output_dir=robust_demo__path,
         extra_context=robust_demo__extra_context,
     )
+    if robust_demo__is_setup:
+        subprocess.run(["nox", "-s", "setup-git"], cwd=robust_demo__path, capture_output=True)
+        subprocess.run(["nox", "-s", "setup-venv"], cwd=robust_demo__path, capture_output=True)
     return getattr(request, "param", robust_demo__path)
 
 
@@ -94,3 +66,8 @@ def robust_demo__extra_context(
 @pytest.fixture(scope="session")
 def robust_demo__add_rust_extension(request: FixtureRequest) -> bool:
     return getattr(request, "param", False)
+
+
+@pytest.fixture(scope="session")
+def robust_demo__is_setup(request: FixtureRequest) -> bool:
+    return getattr(request, "param", True)
