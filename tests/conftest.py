@@ -24,6 +24,7 @@ def demos_folder(tmp_path_factory: TempPathFactory) -> Path:
 @pytest.fixture(scope="session")
 def robust_demo(
     request: FixtureRequest,
+    demos_folder: Path,
     robust_demo__path: Path,
     robust_demo__extra_context: dict[str, Any],
     robust_demo__is_setup: bool
@@ -32,7 +33,7 @@ def robust_demo(
         str(REPO_FOLDER),
         no_input=True,
         overwrite_if_exists=True,
-        output_dir=robust_demo__path,
+        output_dir=demos_folder,
         extra_context=robust_demo__extra_context,
     )
     if robust_demo__is_setup:
