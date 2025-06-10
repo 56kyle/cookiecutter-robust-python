@@ -2,7 +2,6 @@
 
 import os
 import shlex
-
 from pathlib import Path
 from textwrap import dedent
 from typing import List
@@ -32,7 +31,7 @@ PACKAGE_NAME: str = "{{cookiecutter.package_name}}"
 GITHUB_USER: str = "{{cookiecutter.github_user}}"
 
 ENV: str = "env"
-STYLE: str = "style"
+FORMAT: str = "format"
 LINT: str = "lint"
 TYPE: str = "type"
 TEST: str = "test"
@@ -42,16 +41,15 @@ PERF: str = "perf"
 DOCS: str = "docs"
 BUILD: str = "build"
 RELEASE: str = "release"
-MAINTENANCE: str = "maintenance"
 CI: str = "ci"
+PYTHON: str = "python"
+RUST: str = "rust"
 
 
 @nox.session(python=None, name="setup-git", tags=[ENV])
 def setup_git(session: Session) -> None:
     """Set up the git repo for the current project."""
-    session.run(
-        "python", SCRIPTS_FOLDER / "setup-git.py", REPO_ROOT, "-u", GITHUB_USER, "-n", PROJECT_NAME, external=True
-    )
+    session.run("python", SCRIPTS_FOLDER / "setup-git.py", REPO_ROOT, external=True)
 
 
 @nox.session(python=None, name="setup-venv", tags=[ENV])
@@ -60,7 +58,7 @@ def setup_venv(session: Session) -> None:
     session.run("python", SCRIPTS_FOLDER / "setup-venv.py", REPO_ROOT, "-p", PYTHON_VERSIONS[0], external=True)
 
 
-@nox.session(python=DEFAULT_PYTHON_VERSION, name="pre-commit")
+@nox.session(python=DEFAULT_PYTHON_VERSION, name="pre-commit", tags=[CI])
 def precommit(session: Session) -> None:
     """Lint using pre-commit."""
     args: list[str] = session.posargs or ["run", "--all-files", "--hook-stage=manual", "--show-diff-on-failure"]
@@ -73,21 +71,63 @@ def precommit(session: Session) -> None:
         activate_virtualenv_in_precommit_hooks(session)
 
 
-@nox.session(python=PYTHON_VERSIONS, name="typecheck", tags=[TYPE])
+@nox.session(python=DEFAULT_PYTHON_VERSION, name="format-python", tags=[FORMAT, PYTHON])
+def format_python(session: Session) -> None:
+    """Run Python code formatter (Ruff format)."""
+    session.log("Installing formatting dependencies...")
+    session.install("-e", ".", "--group", "dev")
+
+    session.log(f"Running Ruff formatter check with py{session.python}.")
+    session.run("ruff", "format", *session.posargs)
+
+
+{% if cookiecutter.add_rust_extension == "y" -%}
+@nox.session(python=None, name="format-rust", tags=[FORMAT, RUST])
+def format_rust(session: Session) -> None:
+    """Run Rust code formatter (cargo fmt)."""
+    session.log("Installing formatting dependencies...")
+    session.run("cargo", "install", "cargo-fmt", external=True)
+    session.run("cargo", "fmt", "--all", "--", "--check", external=True)
+    session.run("cargo", "fmt", "--all", "--", "--write", external=True)
+
+
+{% endif -%}
+@nox.session(python=DEFAULT_PYTHON_VERSION, name="lint-python", tags=[LINT, PYTHON])
+def lint_python(session: Session) -> None:
+    """Run Python code linters (Ruff check, Pydocstyle rules)."""
+    session.log("Installing linting dependencies...")
+    session.install("-e", ".", "--group", "dev")
+
+    session.log(f"Running Ruff check with py{session.python}.")
+    session.run("ruff", "check", "--fix", "--verbose")
+
+
+{% if cookiecutter.add_rust_extension == "y" -%}
+@nox.session(python=None, name="lint-rust", tags=[LINT, RUST])
+def lint_rust(session: Session) -> None:
+    """Run Rust code linters (cargo clippy)."""
+    session.log("Installing linting dependencies...")
+    session.run("cargo", "install", "cargo-clippy", external=True)
+    session.run("cargo", "clippy", "--all-features", "--", "--check", external=True)
+    session.run("cargo", "clippy", "--all-features", "--", "--write", external=True)
+
+
+{% endif -%}
+@nox.session(python=PYTHON_VERSIONS, name="typecheck", tags=[TYPE, PYTHON, CI])
 def typecheck(session: Session) -> None:
     """Run static type checking (Pyright) on Python code."""
     session.log("Installing type checking dependencies...")
-    session.install("-e", ".", "--group", "dev", "--group", "typecheck")
+    session.install("-e", ".", "--group", "dev")
 
     session.log(f"Running Pyright check with py{session.python}.")
     session.run("pyright")
 
 
-@nox.session(python=DEFAULT_PYTHON_VERSION, name="security-python", tags=[SECURITY])
+@nox.session(python=DEFAULT_PYTHON_VERSION, name="security-python", tags=[SECURITY, PYTHON, CI])
 def security_python(session: Session) -> None:
     """Run code security checks (Bandit) on Python code."""
     session.log("Installing security dependencies...")
-    session.install("-e", ".", "--group", "dev", "--group", "security")
+    session.install("-e", ".", "--group", "dev")
 
     session.log(f"Running Bandit static security analysis with py{session.python}.")
     session.run("bandit", "-r", PACKAGE_NAME, "-c", "bandit.yml", "-ll")
@@ -97,7 +137,7 @@ def security_python(session: Session) -> None:
 
 
 {% if cookiecutter.add_rust_extension == 'y' -%}
-@nox.session(python=None, name="security-rust", tags=[SECURITY])
+@nox.session(python=None, name="security-rust", tags=[SECURITY, RUST, CI])
 def security_rust(session: Session) -> None:
     """Run code security checks (cargo audit)."""
     session.log("Installing security dependencies...")
@@ -106,28 +146,22 @@ def security_rust(session: Session) -> None:
 
 
 {% endif -%}
-@nox.session(python=PYTHON_VERSIONS, name="tests-python", tags=[TEST])
+@nox.session(python=PYTHON_VERSIONS, name="tests-python", tags=[TEST, PYTHON, CI])
 def tests_python(session: Session) -> None:
     """Run the Python test suite (pytest with coverage)."""
     session.log("Installing test dependencies...")
-    session.install("-e", ".", "--group", "dev", "--group", "test")
+    session.install("-e", ".", "--group", "dev")
 
     session.log(f"Running test suite with py{session.python}.")
     test_results_dir = Path("test-results")
     test_results_dir.mkdir(parents=True, exist_ok=True)
     junitxml_file = test_results_dir / f"test-results-py{session.python}.xml"
 
-    session.run(
-        "pytest",
-        "--cov={}".format(PACKAGE_NAME),
-        "--cov-report=xml",
-        f"--junitxml={junitxml_file}",
-        "tests/"
-    )
+    session.run("pytest", "--cov={}".format(PACKAGE_NAME), "--cov-report=xml", f"--junitxml={junitxml_file}", "tests/")
 
 
 {% if cookiecutter.add_rust_extension == 'y' -%}
-@nox.session(python=None, name="tests-rust", tags=[TEST])
+@nox.session(python=None, name="tests-rust", tags=[TEST, RUST, CI])
 def tests_rust(session: Session) -> None:
     """Test the project's rust crates."""
     crates: list[Path] = [cargo_toml.parent for cargo_toml in CRATES_FOLDER.glob("*/Cargo.toml")]
@@ -141,7 +175,7 @@ def tests_rust(session: Session) -> None:
 def docs_build(session: Session) -> None:
     """Build the project documentation (Sphinx)."""
     session.log("Installing documentation dependencies...")
-    session.install("-e", ".", "--group", "dev", "--group", "docs")
+    session.install("-e", ".", "--group", "dev")
 
     session.log(f"Building documentation with py{session.python}.")
     docs_build_dir = Path("docs") / "_build" / "html"
@@ -153,7 +187,7 @@ def docs_build(session: Session) -> None:
     session.run("sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-W")
 
 
-@nox.session(python=DEFAULT_PYTHON_VERSION, name="build-python", tags=[BUILD])
+@nox.session(python=DEFAULT_PYTHON_VERSION, name="build-python", tags=[BUILD, PYTHON])
 def build_python(session: Session) -> None:
     """Build sdist and wheel packages (uv build)."""
     session.log("Installing build dependencies...")
@@ -198,7 +232,15 @@ def build_container(session: Session) -> None:
 
     session.log(f"Building Docker image using {container_cli}.")
     project_image_name = PACKAGE_NAME.replace("_", "-").lower()
-    session.run(container_cli, "build", str(current_dir), "-t", f"{project_image_name}:latest", "--progress=plain", external=True)
+    session.run(
+        container_cli,
+        "build",
+        str(current_dir),
+        "-t",
+        f"{project_image_name}:latest",
+        "--progress=plain",
+        external=True,
+    )
 
     session.log(f"Container image {project_image_name}:latest built locally.")
 
@@ -258,18 +300,16 @@ def release(session: Session) -> None:
     cz_bump_args = ["uvx", "cz", "bump", "--changelog"]
 
     if increment:
-         cz_bump_args.append(f"--increment={increment}")
+        cz_bump_args.append(f"--increment={increment}")
 
     session.log("Running cz bump with args: %s", cz_bump_args)
     session.run(*cz_bump_args, success_codes=[0, 1], external=True)
 
     session.log("Version bumped and tag created locally via Commitizen/uvx.")
-    session.log(
-        "IMPORTANT: Push commits and tags to remote (`git push --follow-tags`) to trigger CD pipeline."
-    )
+    session.log("IMPORTANT: Push commits and tags to remote (`git push --follow-tags`) to trigger CD pipeline.")
 
 
-@nox.session(venv_backend="none", tags=[MAINTENANCE])
+@nox.session(venv_backend="none")
 def tox(session: Session) -> None:
     """Run the 'tox' test matrix.
 
@@ -300,10 +340,12 @@ def coverage(session: Session) -> None:
     (e.g., via `nox -s test-python`).
     """
     session.log("Collecting and reporting coverage across all test runs.")
-    session.log("Note: Ensure 'nox -s test-python' was run across all desired Python versions first to generate coverage data.")
+    session.log(
+        "Note: Ensure 'nox -s test-python' was run across all desired Python versions first to generate coverage data."
+    )
 
     session.log("Installing dependencies for coverage report session...")
-    session.install("-e", ".", "--group", "dev", "--group", "test")
+    session.install("-e", ".", "--group", "dev")
 
     coverage_combined_file: Path = Path.cwd() / ".coverage"
 
@@ -313,9 +355,9 @@ def coverage(session: Session) -> None:
         session.log(f"Combined coverage data into {coverage_combined_file.resolve()}")
     except CommandFailed as e:
         if e.returncode == 1:
-             session.log("No coverage data found to combine. Run tests first with coverage enabled.")
+            session.log("No coverage data found to combine. Run tests first with coverage enabled.")
         else:
-             session.error(f"Failed to combine coverage data: {e}")
+            session.error(f"Failed to combine coverage data: {e}")
         session.skip("Could not combine coverage data.")
 
     session.log("Generating HTML coverage report.")

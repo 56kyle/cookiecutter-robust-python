@@ -19,8 +19,6 @@ def test_demo_project_nox_session(robust_python_demo_path: Path, session: str) -
         command,
         cwd=robust_python_demo_path,
         capture_output=True,
-        text=True,
-        timeout=20.0
     )
     print(result.stdout)
     print(result.stderr)

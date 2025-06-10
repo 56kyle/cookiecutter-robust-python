@@ -1,6 +1,6 @@
-"""Module containing util"""
+"""Module containing util."""
+
 import argparse
-import os
 import stat
 import subprocess
 from pathlib import Path
@@ -10,11 +10,17 @@ from typing import Callable
 
 class MissingDependencyError(Exception):
     """Exception raised when a depedency is missing from the system running setup-repo."""
+
     def __init__(self, project: Path, dependency: str):
-        super().__init__("\n".join([
-            f"Unable to find {dependency=}.",
-            f"Please ensure that {dependency} is installed before setting up the repo at {project.absolute()}"
-        ]))
+        """Initializes MisssingDependencyError."""
+        super().__init__(
+            "\n".join(
+                [
+                    f"Unable to find {dependency=}.",
+                    f"Please ensure that {dependency} is installed before setting up the repo at {project.absolute()}",
+                ]
+            )
+        )
 
 
 def check_dependencies(path: Path, dependencies: list[str]) -> None:
@@ -22,8 +28,8 @@ def check_dependencies(path: Path, dependencies: list[str]) -> None:
     for dependency in dependencies:
         try:
             subprocess.check_call([dependency, "--version"], cwd=path)
-        except subprocess.CalledProcessError:
-            raise MissingDependencyError(path, dependency)
+        except subprocess.CalledProcessError as e:
+            raise MissingDependencyError(path, dependency) from e
 
 
 def existing_dir(value: str) -> Path:
@@ -43,5 +49,5 @@ def remove_readonly(func: Callable[[str], Any], path: str, _: Any) -> None:
 
     This is passed to shutil.rmtree as the onerror kwarg.
     """
-    os.chmod(path, stat.S_IWRITE)
+    Path(path).chmod(stat.S_IWRITE)
     func(path)

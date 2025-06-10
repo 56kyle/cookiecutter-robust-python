@@ -2,6 +2,7 @@
 
 Since this a first time setup script, we intentionally only use builtin Python dependencies.
 """
+
 import argparse
 import shutil
 import subprocess
@@ -22,8 +23,7 @@ def main() -> None:
 def get_parser() -> argparse.ArgumentParser:
     """Creates the argument parser for setup-venv."""
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
-        prog="setup-venv",
-        usage="python ./scripts/setup-venv.py . -p '3.9'"
+        prog="setup-venv", usage="python ./scripts/setup-venv.py . -p '{{cookiecutter.min_python_version}}'"
     )
     parser.add_argument(
         "path",
@@ -35,7 +35,7 @@ def get_parser() -> argparse.ArgumentParser:
         "-p",
         "--python",
         dest="python_version",
-        help="The Python version that will serve as the main working version used by the IDE."
+        help="The Python version that will serve as the main working version used by the IDE.",
     )
     return parser
 
@@ -47,7 +47,7 @@ def setup_venv(path: Path, python_version: str) -> None:
         ["uv", "venv", ".venv"],
         ["uv", "python", "install", python_version],
         ["uv", "python", "pin", python_version],
-        ["uv", "sync", "--all-groups"]
+        ["uv", "sync", "--all-groups"],
     ]
     check_dependencies(path=path, dependencies=["uv"])
 
@@ -59,5 +59,5 @@ def setup_venv(path: Path, python_version: str) -> None:
         subprocess.run(command, cwd=path, capture_output=True)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
