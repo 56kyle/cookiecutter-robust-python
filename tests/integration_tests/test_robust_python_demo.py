@@ -15,13 +15,13 @@ def test_demo_project_generation(robust_python_demo_with_setup: Path) -> None:
 @pytest.mark.parametrize("session", GLOBAL_NOX_SESSIONS)
 def test_demo_project_nox_session(robust_demo: Path, session: str) -> None:
     command: list[str] = ["nox", "-s", session]
-    result: subprocess.CompletedProcess = subprocess.run(
+    subprocess.run(
         command,
         cwd=robust_demo,
         capture_output=True,
-        text=True
+        text=True,
+        check=True
     )
-    assert result.check_returncode() == 0
 
 
 def test_demo_project_nox_pre_commit(robust_demo: Path) -> None:
