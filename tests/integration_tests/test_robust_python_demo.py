@@ -15,13 +15,21 @@ def test_demo_project_generation(robust_python_demo_with_setup: Path) -> None:
 @pytest.mark.parametrize("session", GLOBAL_NOX_SESSIONS)
 def test_demo_project_nox_session(robust_demo: Path, session: str) -> None:
     command: list[str] = ["nox", "-s", session]
-    subprocess.run(
-        command,
-        cwd=robust_demo,
-        capture_output=True,
-        text=True,
-        check=True
-    )
+    try:
+        subprocess.run(
+            command,
+            cwd=robust_demo,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            check=True
+        )
+    except subprocess.CalledProcessError as e:
+        pytest.fail(
+            f"nox session '{session}' failed with exit code {e.returncode}\n"
+            f"{'-'*20} STDOUT {'-'*20}\n{e.stdout}\n"
+            f"{'-'*20} STDERR {'-'*20}\n{e.stderr}"
+        )
 
 
 def test_demo_project_nox_pre_commit(robust_demo: Path) -> None:
