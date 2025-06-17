@@ -53,7 +53,7 @@ def generate_demo_project(session: Session) -> None:
     session.run("python", GENERATE_DEMO_PROJECT_SCRIPT, *GENERATE_DEMO_PROJECT_OPTIONS, *session.posargs)
 
 
-@nox.session(name="clear-cache", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+@nox.session(name="clear-cache", python=None)
 def clear_cache(session: Session) -> None:
     """Clear the cache of generated project demos.
 
@@ -68,7 +68,7 @@ def clear_cache(session: Session) -> None:
 def lint(session: Session):
     """Lint the template's own Python files and configurations."""
     session.log("Installing linting dependencies for the template source...")
-    session.install("-e", ".", "--group", "dev", "--group", "lint")
+    session.install("-e", ".", "--group", "lint")
 
     session.log(f"Running Ruff formatter check on template files with py{session.python}.")
     session.run("ruff", "format")
@@ -89,7 +89,7 @@ def match_generated_precommit(session: Session):
 def docs(session: Session):
     """Build the template documentation website."""
     session.log("Installing documentation dependencies for the template docs...")
-    session.install("-e", ".", "--group", "dev", "--group", "docs")
+    session.install("-e", ".", "--group", "docs")
 
     session.log(f"Building template documentation with py{session.python}.")
     # Set path to allow Sphinx to import from template root if needed (e.g., __version__.py)
