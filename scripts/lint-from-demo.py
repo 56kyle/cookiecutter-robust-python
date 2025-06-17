@@ -15,7 +15,7 @@ cli: typer.Typer = typer.Typer()
 
 
 @cli.callback(invoke_without_command=True)
-def match_generated_precommit(
+def lint_from_demo(
     repo_folder: Annotated[Path, FolderOption("--repo-folder", "-r")],
     demos_cache_folder: Annotated[Path, FolderOption("--demos-cache-folder", "-c")],
     demo_name: Annotated[str, typer.Option("--demo-name", "-d")],

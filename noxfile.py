@@ -42,8 +42,8 @@ GENERATE_DEMO_PROJECT_OPTIONS: tuple[str, ...] = (
 )
 
 
-MATCH_GENERATED_PRECOMMIT_SCRIPT: Path = SCRIPTS_FOLDER / "match-generated-precommit.py"
-MATCH_GENERATED_PRECOMMIT_OPTIONS: tuple[str, ...] = GENERATE_DEMO_PROJECT_OPTIONS
+LINT_FROM_DEMO_SCRIPT: Path = SCRIPTS_FOLDER / "lint-from-demo.py"
+LINT_FROM_DEMO_OPTIONS: tuple[str, ...] = GENERATE_DEMO_PROJECT_OPTIONS
 
 
 @nox.session(name="generate-demo-project", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
@@ -77,12 +77,12 @@ def lint(session: Session):
     session.run("ruff", "check", "--verbose", "--fix")
 
 
-@nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION, name="match-generated-precommit", tags=[])
-def match_generated_precommit(session: Session):
+@nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION, name="lint-from-demo", tags=[])
+def lint_from_demo(session: Session):
     """Lint the generated project's Python files and configurations."""
     session.log("Installing linting dependencies for the generated project...")
     session.install("-e", ".", "--group", "dev", "--group", "lint")
-    session.run("python", MATCH_GENERATED_PRECOMMIT_SCRIPT, *MATCH_GENERATED_PRECOMMIT_OPTIONS, *session.posargs)
+    session.run("python", LINT_FROM_DEMO_SCRIPT, *LINT_FROM_DEMO_OPTIONS, *session.posargs)
 
 
 @nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
