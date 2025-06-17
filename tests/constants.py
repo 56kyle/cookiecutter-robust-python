@@ -20,7 +20,7 @@ PYTHON_VERSIONS: list[str] = [f"3.{VERSION_SLUG}" for VERSION_SLUG in range(MIN_
 DEFAULT_PYTHON_VERSION: str = PYTHON_VERSIONS[1]
 
 TYPE_CHECK_NOX_SESSIONS: list[str] = [f"typecheck-{python_version}" for python_version in PYTHON_VERSIONS]
-TESTS_NOX_SESSIONS: list[str] = [f"tests-{python_version}" for python_version in PYTHON_VERSIONS]
+TESTS_NOX_SESSIONS: list[str] = [f"tests-python-{python_version}" for python_version in PYTHON_VERSIONS]
 
 GLOBAL_NOX_SESSIONS: list[str] = [
     "pre-commit",

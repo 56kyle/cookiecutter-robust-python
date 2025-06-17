@@ -8,28 +8,35 @@ import pytest
 from tests.constants import GLOBAL_NOX_SESSIONS
 
 
-def test_demo_project_generation(robust_python_demo_path: Path) -> None:
-    assert robust_python_demo_path.exists()
+def test_demo_project_generation(robust_python_demo_with_setup: Path) -> None:
+    assert robust_python_demo_with_setup.exists()
 
 
 @pytest.mark.parametrize("session", GLOBAL_NOX_SESSIONS)
-def test_demo_project_nox_session(robust_python_demo_path: Path, session: str) -> None:
+def test_demo_project_nox_session(robust_demo: Path, session: str) -> None:
     command: list[str] = ["nox", "-s", session]
-    result: subprocess.CompletedProcess = subprocess.run(
-        command,
-        cwd=robust_python_demo_path,
-        capture_output=True,
-    )
-    print(result.stdout)
-    print(result.stderr)
-    result.check_returncode()
+    try:
+        subprocess.run(
+            command,
+            cwd=robust_demo,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            check=True
+        )
+    except subprocess.CalledProcessError as e:
+        pytest.fail(
+            f"nox session '{session}' failed with exit code {e.returncode}\n"
+            f"{'-'*20} STDOUT {'-'*20}\n{e.stdout}\n"
+            f"{'-'*20} STDERR {'-'*20}\n{e.stderr}"
+        )
 
 
-def test_demo_project_nox_pre_commit(robust_python_demo_path: Path) -> None:
+def test_demo_project_nox_pre_commit(robust_demo: Path) -> None:
     command: list[str] = ["nox", "-s", "pre-commit"]
     result: subprocess.CompletedProcess = subprocess.run(
         command,
-        cwd=robust_python_demo_path,
+        cwd=robust_demo,
         capture_output=True,
         text=True,
         timeout=20.0
@@ -37,14 +44,14 @@ def test_demo_project_nox_pre_commit(robust_python_demo_path: Path) -> None:
     assert result.returncode == 0
 
 
-def test_demo_project_nox_pre_commit_with_install(robust_python_demo_path: Path) -> None:
+def test_demo_project_nox_pre_commit_with_install(robust_demo: Path) -> None:
     command: list[str] = ["nox", "-s", "pre-commit", "--", "install"]
-    pre_commit_hook_path: Path = robust_python_demo_path / ".git" / "hooks" / "pre-commit"
+    pre_commit_hook_path: Path = robust_demo / ".git" / "hooks" / "pre-commit"
     assert not pre_commit_hook_path.exists()
 
     result: subprocess.CompletedProcess = subprocess.run(
         command,
-        cwd=robust_python_demo_path,
+        cwd=robust_demo,
         capture_output=True,
         text=True,
         timeout=20.0

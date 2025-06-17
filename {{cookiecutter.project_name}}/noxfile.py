@@ -157,7 +157,14 @@ def tests_python(session: Session) -> None:
     test_results_dir.mkdir(parents=True, exist_ok=True)
     junitxml_file = test_results_dir / f"test-results-py{session.python}.xml"
 
-    session.run("pytest", "--cov={}".format(PACKAGE_NAME), "--cov-report=xml", f"--junitxml={junitxml_file}", "tests/")
+    session.run(
+        "pytest",
+        "--cov={}".format(PACKAGE_NAME),
+        "--cov-report=term",
+        "--cov-report=xml",
+        f"--junitxml={junitxml_file}",
+        "tests/"
+    )
 
 
 {% if cookiecutter.add_rust_extension == 'y' -%}
@@ -190,10 +197,6 @@ def docs_build(session: Session) -> None:
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="build-python", tags=[BUILD, PYTHON])
 def build_python(session: Session) -> None:
     """Build sdist and wheel packages (uv build)."""
-    session.log("Installing build dependencies...")
-    # Sync core & dev deps are needed for accessing project source code.
-    session.install("-e", ".", "--group", "dev")
-
     session.log(f"Building sdist and wheel packages with py{session.python}.")
     {% if cookiecutter.add_rust_extension == "y" -%}
     session.run("maturin", "develop", "--uv")
@@ -252,7 +255,7 @@ def publish_python(session: Session) -> None:
     Requires packages to be built first (`nox -s build-python` or `nox -s build`).
     Requires TWINE_USERNAME/TWINE_PASSWORD or TWINE_API_KEY environment variables set (usually in CI).
     """
-    session.install("-e", ".", "--group", "dev")
+    session.install("twine")
 
     session.log("Checking built packages with Twine.")
     session.run("twine", "check", "dist/*")
@@ -280,8 +283,6 @@ def release(session: Session) -> None:
     Optionally accepts increment (major, minor, patch) after '--'.
     """
     session.log("Running release process using Commitizen...")
-    session.install("-e", ".", "--group", "dev")
-
     try:
         session.run("git", "version", success_codes=[0], external=True, silent=True)
     except CommandFailed:
