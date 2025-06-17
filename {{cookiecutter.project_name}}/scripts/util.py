@@ -13,14 +13,12 @@ class MissingDependencyError(Exception):
 
     def __init__(self, project: Path, dependency: str):
         """Initializes MisssingDependencyError."""
-        super().__init__(
-            "\n".join(
-                [
-                    f"Unable to find {dependency=}.",
-                    f"Please ensure that {dependency} is installed before setting up the repo at {project.absolute()}",
-                ]
-            )
-        )
+        message_lines: list[str] = [
+            f"Unable to find {dependency=}.",
+            f"Please ensure that {dependency} is installed before setting up the repo at {project.absolute()}",
+        ]
+        message: str = "\n".join(message_lines)
+        super().__init__(message)
 
 
 def check_dependencies(path: Path, dependencies: list[str]) -> None:
