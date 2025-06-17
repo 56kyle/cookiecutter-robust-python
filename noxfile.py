@@ -120,33 +120,8 @@ def test(session: Session) -> None:
     session.log("Installing template testing dependencies...")
     # Sync deps from template's own pyproject.toml, e.g., 'dev' group that includes 'pytest', 'cookiecutter'
     session.install("-e", ".", "--group", "dev", "--group", "test")
+    session.run("pytest", "tests")
 
-    # Create a temporary directory for the generated project
-    temp_dir: Path = Path(tempfile.mkdtemp())
-    session.log(f"Rendering template into temporary directory: {temp_dir}")
-
-    # Run cookiecutter to generate a project
-    # Need to find cookiecutter executable - it's in the template dev env installed by uv sync.
-    cookiecutter_command: list[str] = ["uv", "run", "cookiecutter", "--no-input", "--output-dir", str(temp_dir), "."]
-
-    session.run(*cookiecutter_command, external=True)
-
-    # Navigate into the generated project directory
-    generated_project_dir = temp_dir / "test_project"  # Use the slug defined in --extra-context
-    if not generated_project_dir.exists():
-        session.error(f"Generated project directory not found: {generated_project_dir}")
-
-    session.log(f"Changing to generated project directory: {generated_project_dir}")
-    session.cd(generated_project_dir)
-
-    session.log("Installing generated project dependencies using uv sync...")
-    session.install("-e", ".", external=True)
-
-    session.log("Running generated project's default checks...")
-    session.run("nox")
-
-    session.log(f"Cleaning up temporary directory: {temp_dir}")
-    shutil.rmtree(temp_dir)
 
 
 @nox.session(venv_backend="none")
