@@ -75,7 +75,7 @@ def precommit(session: Session) -> None:
 def format_python(session: Session) -> None:
     """Run Python code formatter (Ruff format)."""
     session.log("Installing formatting dependencies...")
-    session.install("-e", ".", "--group", "dev")
+    session.install("ruff")
 
     session.log(f"Running Ruff formatter check with py{session.python}.")
     session.run("ruff", "format", *session.posargs)
@@ -96,7 +96,7 @@ def format_rust(session: Session) -> None:
 def lint_python(session: Session) -> None:
     """Run Python code linters (Ruff check, Pydocstyle rules)."""
     session.log("Installing linting dependencies...")
-    session.install("-e", ".", "--group", "dev")
+    session.install("ruff")
 
     session.log(f"Running Ruff check with py{session.python}.")
     session.run("ruff", "check", "--fix", "--verbose")
@@ -117,7 +117,7 @@ def lint_rust(session: Session) -> None:
 def typecheck(session: Session) -> None:
     """Run static type checking (Pyright) on Python code."""
     session.log("Installing type checking dependencies...")
-    session.install("-e", ".", "--group", "dev")
+    session.install("pyright")
 
     session.log(f"Running Pyright check with py{session.python}.")
     session.run("pyright")
@@ -127,7 +127,7 @@ def typecheck(session: Session) -> None:
 def security_python(session: Session) -> None:
     """Run code security checks (Bandit) on Python code."""
     session.log("Installing security dependencies...")
-    session.install("-e", ".", "--group", "dev")
+    session.install("bandit", "pip-audit")
 
     session.log(f"Running Bandit static security analysis with py{session.python}.")
     session.run("bandit", "-r", PACKAGE_NAME, "-c", "bandit.yml", "-ll")
