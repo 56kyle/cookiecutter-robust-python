@@ -15,7 +15,7 @@ cli: typer.Typer = typer.Typer()
 
 
 @cli.callback(invoke_without_command=True)
-def match_generated_precommit(
+def lint_from_demo(
     repo_folder: Annotated[Path, FolderOption("--repo-folder", "-r")],
     demos_cache_folder: Annotated[Path, FolderOption("--demos-cache-folder", "-c")],
     demo_name: Annotated[str, typer.Option("--demo-name", "-d")],
@@ -30,8 +30,10 @@ def match_generated_precommit(
             no_cache=no_cache
         ) as demo_path:
             pre_commit.main.main(["run", "--all-files", "--hook-stage=manual", "--show-diff-on-failure"])
-        retrocookie(instance_path=demo_path, commits=["HEAD"])
-        git("checkout", "HEAD", "--", "{{cookiecutter.project_name}}/pyproject.toml")
+        try:
+            retrocookie(instance_path=demo_path, commits=["HEAD"])
+        finally:
+            git("checkout", "HEAD", "--", "{{cookiecutter.project_name}}/pyproject.toml")
     except Exception as error:
         typer.secho(f"error: {error}", fg="red")
         sys.exit(1)

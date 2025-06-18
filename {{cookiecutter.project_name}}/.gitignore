@@ -36,6 +36,7 @@ build/         # Build artifacts from setuptools/build backends
 .pytest_cache/ # Pytest cache directory
 htmlcov/       # Coverage HTML reports (default output dir)
 .coverage*     # Coverage data files (default name pattern)
+coverage.*
 test-results/  # Directory for JUnit/Coverage XML reports (as configured in noxfile)
 
 # Editor/IDE specific files

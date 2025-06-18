@@ -42,8 +42,8 @@ GENERATE_DEMO_PROJECT_OPTIONS: tuple[str, ...] = (
 )
 
 
-MATCH_GENERATED_PRECOMMIT_SCRIPT: Path = SCRIPTS_FOLDER / "match-generated-precommit.py"
-MATCH_GENERATED_PRECOMMIT_OPTIONS: tuple[str, ...] = GENERATE_DEMO_PROJECT_OPTIONS
+LINT_FROM_DEMO_SCRIPT: Path = SCRIPTS_FOLDER / "lint-from-demo.py"
+LINT_FROM_DEMO_OPTIONS: tuple[str, ...] = GENERATE_DEMO_PROJECT_OPTIONS
 
 
 @nox.session(name="generate-demo-project", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
@@ -53,7 +53,7 @@ def generate_demo_project(session: Session) -> None:
     session.run("python", GENERATE_DEMO_PROJECT_SCRIPT, *GENERATE_DEMO_PROJECT_OPTIONS, *session.posargs)
 
 
-@nox.session(name="clear-cache", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+@nox.session(name="clear-cache", python=None)
 def clear_cache(session: Session) -> None:
     """Clear the cache of generated project demos.
 
@@ -68,7 +68,7 @@ def clear_cache(session: Session) -> None:
 def lint(session: Session):
     """Lint the template's own Python files and configurations."""
     session.log("Installing linting dependencies for the template source...")
-    session.install("-e", ".", "--group", "dev", "--group", "lint")
+    session.install("-e", ".", "--group", "lint")
 
     session.log(f"Running Ruff formatter check on template files with py{session.python}.")
     session.run("ruff", "format")
@@ -77,19 +77,19 @@ def lint(session: Session):
     session.run("ruff", "check", "--verbose", "--fix")
 
 
-@nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION, name="match-generated-precommit", tags=[])
-def match_generated_precommit(session: Session):
+@nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION, name="lint-from-demo", tags=[])
+def lint_from_demo(session: Session):
     """Lint the generated project's Python files and configurations."""
     session.log("Installing linting dependencies for the generated project...")
     session.install("-e", ".", "--group", "dev", "--group", "lint")
-    session.run("python", MATCH_GENERATED_PRECOMMIT_SCRIPT, *MATCH_GENERATED_PRECOMMIT_OPTIONS, *session.posargs)
+    session.run("python", LINT_FROM_DEMO_SCRIPT, *LINT_FROM_DEMO_OPTIONS, *session.posargs)
 
 
 @nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def docs(session: Session):
     """Build the template documentation website."""
     session.log("Installing documentation dependencies for the template docs...")
-    session.install("-e", ".", "--group", "dev", "--group", "docs")
+    session.install("-e", ".", "--group", "docs")
 
     session.log(f"Building template documentation with py{session.python}.")
     # Set path to allow Sphinx to import from template root if needed (e.g., __version__.py)
@@ -120,33 +120,8 @@ def test(session: Session) -> None:
     session.log("Installing template testing dependencies...")
     # Sync deps from template's own pyproject.toml, e.g., 'dev' group that includes 'pytest', 'cookiecutter'
     session.install("-e", ".", "--group", "dev", "--group", "test")
+    session.run("pytest", "tests")
 
-    # Create a temporary directory for the generated project
-    temp_dir: Path = Path(tempfile.mkdtemp())
-    session.log(f"Rendering template into temporary directory: {temp_dir}")
-
-    # Run cookiecutter to generate a project
-    # Need to find cookiecutter executable - it's in the template dev env installed by uv sync.
-    cookiecutter_command: list[str] = ["uv", "run", "cookiecutter", "--no-input", "--output-dir", str(temp_dir), "."]
-
-    session.run(*cookiecutter_command, external=True)
-
-    # Navigate into the generated project directory
-    generated_project_dir = temp_dir / "test_project"  # Use the slug defined in --extra-context
-    if not generated_project_dir.exists():
-        session.error(f"Generated project directory not found: {generated_project_dir}")
-
-    session.log(f"Changing to generated project directory: {generated_project_dir}")
-    session.cd(generated_project_dir)
-
-    session.log("Installing generated project dependencies using uv sync...")
-    session.install("-e", ".", external=True)
-
-    session.log("Running generated project's default checks...")
-    session.run("nox")
-
-    session.log(f"Cleaning up temporary directory: {temp_dir}")
-    shutil.rmtree(temp_dir)
 
 
 @nox.session(venv_backend="none")
