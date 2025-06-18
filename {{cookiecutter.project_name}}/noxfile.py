@@ -201,7 +201,7 @@ def build_python(session: Session) -> None:
     {% if cookiecutter.add_rust_extension == "y" -%}
     session.run("maturin", "develop", "--uv")
     {% else -%}
-    session.run("uv", "build", "--sdist", "--wheel", "--outdir", "dist/", external=True)
+    session.run("uv", "build", "--sdist", "--wheel", "--out-dir", "dist/", external=True)
     {% endif -%}
 
     session.log("Built packages in ./dist directory:")
