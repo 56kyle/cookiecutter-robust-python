@@ -155,11 +155,12 @@ def tests_python(session: Session) -> None:
     session.log(f"Running test suite with py{session.python}.")
     test_results_dir = Path("test-results")
     test_results_dir.mkdir(parents=True, exist_ok=True)
-    junitxml_file = test_results_dir / f"test-results-py{session.python}.xml"
+    junitxml_file = test_results_dir / f"test-results-py{session.python.replace('.', '')}.xml"
 
     session.run(
         "pytest",
         "--cov={}".format(PACKAGE_NAME),
+        "--cov-append",
         "--cov-report=term",
         "--cov-report=xml",
         f"--junitxml={junitxml_file}",
