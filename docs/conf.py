@@ -6,9 +6,8 @@ from datetime import date
 
 
 project = "cookiecutter-robust-python Template Documentation"
-copyright = f"{date.today().year}, Kyle Oliver"
+copyright = f"{date.today().year}, Kyle Oliver"  # noqa
 
-# Author name
 author = "Kyle Oliver"
 
 release = "2025.04.28"
