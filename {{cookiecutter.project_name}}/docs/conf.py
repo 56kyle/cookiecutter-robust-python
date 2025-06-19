@@ -10,6 +10,7 @@ version = ".".join("{{cookiecutter.version}}".split(".")[:2])
 extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
+    "sphinxcontrib.typer",
     "myst_parser",
     "sphinx_autodoc_typehints",
     "sphinx_copybutton",
