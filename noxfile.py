@@ -123,7 +123,6 @@ def test(session: Session) -> None:
     session.run("pytest", "tests")
 
 
-
 @nox.session(venv_backend="none")
 def release_template(session: Session):
     """Run the release process for the TEMPLATE using Commitizen.
