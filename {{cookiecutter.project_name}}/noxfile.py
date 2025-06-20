@@ -23,6 +23,7 @@ PYTHON_VERSIONS: List[str] = [
 DEFAULT_PYTHON_VERSION: str = PYTHON_VERSIONS[-1]
 
 REPO_ROOT: Path = Path(__file__).parent.resolve()
+TESTS_FOLDER: Path = REPO_ROOT / "tests"
 SCRIPTS_FOLDER: Path = REPO_ROOT / "scripts"
 CRATES_FOLDER: Path = REPO_ROOT / "rust"
 
@@ -144,7 +145,7 @@ def tests_python(session: Session) -> None:
     session.install("-e", ".", "--group", "dev")
 
     session.log(f"Running test suite with py{session.python}.")
-    test_results_dir = Path("test-results")
+    test_results_dir = TESTS_FOLDER / "results"
     test_results_dir.mkdir(parents=True, exist_ok=True)
     junitxml_file = test_results_dir / f"test-results-py{session.python.replace('.', '')}.xml"
 

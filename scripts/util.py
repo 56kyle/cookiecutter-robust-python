@@ -56,7 +56,7 @@ def in_new_demo(
     **kwargs: Any
 ) -> Generator[Path, None, None]:
     """Returns a context manager for working within a new demo."""
-    demo_path: Path = generate_demo_project(
+    demo_path: Path = generate_demo(
         repo_folder=repo_folder,
         demos_cache_folder=demos_cache_folder,
         demo_name=demo_name,
@@ -67,7 +67,7 @@ def in_new_demo(
         yield demo_path
 
 
-def generate_demo_project(
+def generate_demo(
     repo_folder: Path,
     demos_cache_folder: Path,
     demo_name: str,
