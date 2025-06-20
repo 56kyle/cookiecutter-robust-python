@@ -20,7 +20,7 @@ repos:
         args: [--config=.ruff.toml]
 
       - id: ruff-check
-        args: [--fix, --exit-non-zero-on-fix, --config=.ruff.toml]
+        args: [--fix, --diff, --exit-non-zero-on-fix, --config=.ruff.toml]
 
   - repo: https://github.com/doublify/pre-commit-rust
     rev: master
