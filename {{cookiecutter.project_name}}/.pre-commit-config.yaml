@@ -3,15 +3,53 @@
 default_stages: [pre-commit]
 
 repos:
-  - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v5.0.0
+  - repo: local
     hooks:
       - id: check-added-large-files
-        args: ["--maxkb=2000"]
-      - id: check-yaml
+        name: Check for added large files
+        entry: check-added-large-files
+        language: system
       - id: check-toml
+        name: Check Toml
+        entry: check-toml
+        language: system
+        types: [toml]
+      - id: check-yaml
+        name: Check Yaml
+        entry: check-yaml
+        language: system
+        types: [yaml]
+      - id: darglint
+        name: darglint
+        entry: darglint
+        language: system
+        types: [python]
+        stages: [manual]
       - id: end-of-file-fixer
+        name: Fix End of Files
+        entry: end-of-file-fixer
+        language: system
+        types: [text]
+        stages: [commit, push, manual]
+      - id: ruff-lint
+        name: Ruff Lint
+        entry: ruff check
+        language: system
+        types: [python]
+        require_serial: true
+        args: [--fix]
+      - id: ruff-format
+        name: Ruff Format
+        entry: ruff format
+        language: system
+        types: [python]
+        require_serial: true
       - id: trailing-whitespace
+        name: Trim Trailing Whitespace
+        entry: trailing-whitespace-fixer
+        language: system
+        types: [text]
+        stages: [commit, push, manual]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.11.11
