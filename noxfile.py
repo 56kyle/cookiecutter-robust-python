@@ -34,8 +34,8 @@ PROJECT_DEMOS_FOLDER: Path = Path(os.getenv(
 DEFAULT_DEMO_NAME: str = "robust-python-demo"
 DEMO_ROOT_FOLDER: Path = PROJECT_DEMOS_FOLDER / DEFAULT_DEMO_NAME
 
-GENERATE_DEMO_PROJECT_SCRIPT: Path = SCRIPTS_FOLDER / "generate-demo-project.py"
-GENERATE_DEMO_PROJECT_OPTIONS: tuple[str, ...] = (
+GENERATE_DEMO_SCRIPT: Path = SCRIPTS_FOLDER / "generate-demo.py"
+GENERATE_DEMO_OPTIONS: tuple[str, ...] = (
     *("--repo-folder", REPO_ROOT),
     *("--demos-cache-folder", PROJECT_DEMOS_FOLDER),
     *("--demo-name", DEFAULT_DEMO_NAME),
@@ -43,14 +43,14 @@ GENERATE_DEMO_PROJECT_OPTIONS: tuple[str, ...] = (
 
 
 LINT_FROM_DEMO_SCRIPT: Path = SCRIPTS_FOLDER / "lint-from-demo.py"
-LINT_FROM_DEMO_OPTIONS: tuple[str, ...] = GENERATE_DEMO_PROJECT_OPTIONS
+LINT_FROM_DEMO_OPTIONS: tuple[str, ...] = GENERATE_DEMO_OPTIONS
 
 
-@nox.session(name="generate-demo-project", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
-def generate_demo_project(session: Session) -> None:
+@nox.session(name="generate-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+def generate_demo(session: Session) -> None:
     """Generates a project demo using the cookiecutter-robust-python template."""
     session.install("cookiecutter", "platformdirs", "loguru", "typer")
-    session.run("python", GENERATE_DEMO_PROJECT_SCRIPT, *GENERATE_DEMO_PROJECT_OPTIONS, *session.posargs)
+    session.run("python", GENERATE_DEMO_SCRIPT, *GENERATE_DEMO_OPTIONS, *session.posargs)
 
 
 @nox.session(name="clear-cache", python=None)

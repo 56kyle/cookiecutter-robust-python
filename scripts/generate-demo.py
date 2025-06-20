@@ -7,7 +7,7 @@ from typing import Annotated
 import typer
 
 from util import FolderOption
-from util import generate_demo_project
+from util import generate_demo
 
 
 cli: typer.Typer = typer.Typer()
@@ -22,7 +22,7 @@ def main(
 ) -> None:
     """Updates the poetry.lock file."""
     try:
-        generate_demo_project(
+        generate_demo(
             repo_folder=repo_folder,
             demos_cache_folder=demos_cache_folder,
             demo_name=demo_name,
