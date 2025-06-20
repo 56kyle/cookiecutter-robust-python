@@ -5,7 +5,7 @@ author = "{{cookiecutter.author}}"
 copyright = "{{cookiecutter.copyright_year}}, {{cookiecutter.author}}"  # noqa
 
 release = "{{cookiecutter.version}}"
-version = ".".join("{{cookiecutter.version}}".split(".")[:2])
+version = ".".join(release.split(".")[:2])
 
 extensions = [
     "sphinx.ext.intersphinx",
