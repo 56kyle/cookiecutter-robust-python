@@ -30,7 +30,7 @@ repos:
         entry: end-of-file-fixer
         language: system
         types: [text]
-        stages: [commit, push, manual]
+        stages: [pre-commit, pre-push, manual]
       - id: ruff-lint
         name: Ruff Lint
         entry: ruff check
@@ -49,7 +49,7 @@ repos:
         entry: trailing-whitespace-fixer
         language: system
         types: [text]
-        stages: [commit, push, manual]
+        stages: [pre-commit, pre-push, manual]
 
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.11.11
