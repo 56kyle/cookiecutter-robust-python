@@ -63,3 +63,6 @@ Thumbs.db      # Windows thumbnail cache
 # Development logs/outputs
 debug.log
 nohup.out
+
+# Prettier dependencies
+node_modules/
