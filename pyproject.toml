@@ -19,6 +19,7 @@ dev = [
     "commitizen>=4.8.2",
     "nox>=2025.5.1",
     "pre-commit>=4.2.0",
+    "pre-commit-hooks>=5.0.0",
 ]
 docs = [
     "furo>=2024.8.6",
