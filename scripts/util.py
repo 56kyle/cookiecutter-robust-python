@@ -11,6 +11,7 @@ from typing import Any
 from typing import Callable
 from typing import Generator
 
+import cruft
 import typer
 from cookiecutter.main import cookiecutter
 from cookiecutter.utils import work_in
@@ -78,12 +79,12 @@ def generate_demo(
     demos_cache_folder.mkdir(exist_ok=True)
     if no_cache:
         _remove_existing_demo(demo_path=demos_cache_folder / demo_name)
-    cookiecutter(
-        template=str(repo_folder),
-        no_input=True,
+    cruft.create(
+        template_git_url=str(repo_folder),
+        output_dir=demos_cache_folder,
         extra_context={"project_name": demo_name, **kwargs},
-        overwrite_if_exists=True,
-        output_dir=str(demos_cache_folder),
+        no_input=True,
+        overwrite_if_exists=True
     )
     return demos_cache_folder / demo_name
 

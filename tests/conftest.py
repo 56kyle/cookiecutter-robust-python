@@ -5,6 +5,8 @@ from pathlib import Path
 from typing import Any
 
 import pytest
+import toml
+import yaml
 from _pytest.fixtures import FixtureRequest
 from _pytest.tmpdir import TempPathFactory
 from cookiecutter.main import cookiecutter
@@ -19,6 +21,32 @@ pytest_plugins: list[str] = ["pytester"]
 def demos_folder(tmp_path_factory: TempPathFactory) -> Path:
     """Temp Folder used for storing demos while testing."""
     return tmp_path_factory.mktemp("demos")
+
+
+@pytest.fixture(scope="session")
+def robust_yaml(request: FixtureRequest, robust_file: str) -> dict[str, Any]:
+    return getattr(request, "param", yaml.safe_load(robust_file))
+
+
+@pytest.fixture(scope="session")
+def robust_toml(request: FixtureRequest, robust_file: str) -> dict[str, Any]:
+    return getattr(request, "param", toml.load(robust_file))
+
+
+@pytest.fixture(scope="session")
+def robust_file(request: FixtureRequest, robust_file__path: Path) -> str:
+    text: str = robust_file__path.read_text()
+    return getattr(request, "param", text)
+
+
+@pytest.fixture(scope="session")
+def robust_file__path(request: FixtureRequest, robust_demo: Path, robust_file__path__relative: str) -> Path:
+    return getattr(request, "param", robust_demo / robust_file__path__relative)
+
+
+@pytest.fixture(scope="session")
+def robust_file__path__relative(request: FixtureRequest) -> str:
+    return getattr(request, "param", "./pyproject.toml")
 
 
 @pytest.fixture(scope="session")
