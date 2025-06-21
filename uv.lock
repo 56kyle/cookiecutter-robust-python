@@ -393,6 +393,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "cookiecutter" },
     { name = "cruft" },
+    { name = "gitpython" },
     { name = "loguru" },
     { name = "platformdirs" },
     { name = "retrocookie" },
@@ -438,6 +439,7 @@ typecheck = [
 requires-dist = [
     { name = "cookiecutter", specifier = ">=2.6.0" },
     { name = "cruft", specifier = ">=2.16.0" },
+    { name = "gitpython", specifier = ">=3.1.44" },
     { name = "loguru", specifier = ">=0.7.3" },
     { name = "platformdirs", specifier = ">=4.3.8" },
     { name = "retrocookie", specifier = ">=0.4.3" },
