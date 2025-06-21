@@ -19,12 +19,6 @@ repos:
         entry: check-yaml
         language: system
         types: [yaml]
-      - id: darglint
-        name: darglint
-        entry: darglint
-        language: system
-        types: [python]
-        stages: [manual]
       - id: end-of-file-fixer
         name: Fix End of Files
         entry: end-of-file-fixer
@@ -43,26 +37,34 @@ repos:
     hooks:
       - id: ruff-format
         args: [--config=.ruff.toml]
+        name: Ruff Format
 
       - id: ruff-check
         args: [--fix, --diff, --exit-non-zero-on-fix, --config=.ruff.toml]
+        name: Ruff Check
 
   - repo: https://github.com/doublify/pre-commit-rust
     rev: master
     hooks:
       - id: fmt
+        name: Rust Format
       - id: clippy
         args: ["--all-features", "--", "--write"]
+        name: Clippy
       - id: cargo-check
+        name: Cargo Check
 
   - repo: https://github.com/pre-commit/mirrors-prettier
     rev: v2.6.0
     hooks:
       - id: prettier
+        name: Prettier
 
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v4.8.2
     hooks:
       - id: commitizen
+        name: Commitizen
       - id: commitizen-branch
+        name: Commitizen Branch
         stages: [ commit-msg ]

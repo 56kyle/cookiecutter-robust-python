@@ -62,7 +62,7 @@ def setup_venv(session: Session) -> None:
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="pre-commit", tags=[CI])
 def precommit(session: Session) -> None:
     """Lint using pre-commit."""
-    args: list[str] = session.posargs or ["run", "--all-files", "--hook-stage=manual", "--show-diff-on-failure"]
+    args: list[str] = session.posargs or ["run", "--all-files", "--show-diff-on-failure"]
 
     session.log("Installing pre-commit dependencies...")
     session.install("-e", ".", "--group", "dev")
