@@ -17,7 +17,7 @@ ij_wrap_on_typing = false
 indent_style = space
 indent_size = 4
 
-[*.yml,yaml,json]
+[{*.yml,*.yaml,*.json}]
 indent_style = space
 indent_size = 2
 
