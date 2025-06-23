@@ -6,25 +6,25 @@ name: Build Documentation
 on:
   pull_request:
     paths:
-      - 'docs/**' # Documentation source files
-      - 'src/**/*.py' # Code changes might impact API docs
-      - 'noxfile.py'
-      - 'pyproject.toml'
-      - '.github/workflows/docs-build.yml'
+      - "docs/**" # Documentation source files
+      - "src/**/*.py" # Code changes might impact API docs
+      - "noxfile.py"
+      - "pyproject.toml"
+      - ".github/workflows/docs-build.yml"
       # Include relevant config files that affect docs build
-      - '.ruff.toml' # Affects docstrings via linting
-      - 'pyrightconfig.json' # Affects type hints in docs
+      - ".ruff.toml" # Affects docstrings via linting
+      - "pyrightconfig.json" # Affects type hints in docs
 
   push:
     branches:
       - main
       - master
     paths:
-      - 'docs/**'
-      - 'src/**/*.py'
-      - 'noxfile.py'
-      - 'pyproject.toml'
-      - '.github/workflows/docs-build.yml'
+      - "docs/**"
+      - "src/**/*.py"
+      - "noxfile.py"
+      - "pyproject.toml"
+      - ".github/workflows/docs-build.yml"
 
   workflow_dispatch:
 

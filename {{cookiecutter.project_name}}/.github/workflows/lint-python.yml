@@ -6,25 +6,25 @@ name: Lint Python Code
 on:
   pull_request:
     paths:
-      - 'src/**/*.py'
-      - 'tests/**/*.py'
-      - 'noxfile.py'
-      - 'pyproject.toml'
-      - '.ruff.toml'
-      - '.pydocstyle'
-      - '.github/workflows/lint-python.yml'
+      - "src/**/*.py"
+      - "tests/**/*.py"
+      - "noxfile.py"
+      - "pyproject.toml"
+      - ".ruff.toml"
+      - ".pydocstyle"
+      - ".github/workflows/lint-python.yml"
   push:
     branches:
       - main
       - master
     paths:
-      - 'src/**/*.py'
-      - 'tests/**/*.py'
-      - 'noxfile.py'
-      - 'pyproject.toml'
-      - '.ruff.toml'
-      - '.pydocstyle'
-      - '.github/workflows/lint-python.yml'
+      - "src/**/*.py"
+      - "tests/**/*.py"
+      - "noxfile.py"
+      - "pyproject.toml"
+      - ".ruff.toml"
+      - ".pydocstyle"
+      - ".github/workflows/lint-python.yml"
 
   workflow_dispatch:
 

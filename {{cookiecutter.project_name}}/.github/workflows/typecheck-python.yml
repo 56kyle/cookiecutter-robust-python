@@ -6,25 +6,25 @@ name: Type Check Python Code
 on:
   pull_request:
     paths:
-      - 'src/**/*.py'
-      - 'tests/**/*.py'
-      - 'noxfile.py'
-      - 'pyproject.toml'
-      - 'pyrightconfig.json'
-      - '.github/workflows/typecheck-python.yml'
-      - '**/*.pyi' # Include explicit type stub files
+      - "src/**/*.py"
+      - "tests/**/*.py"
+      - "noxfile.py"
+      - "pyproject.toml"
+      - "pyrightconfig.json"
+      - ".github/workflows/typecheck-python.yml"
+      - "**/*.pyi" # Include explicit type stub files
   push:
     branches:
       - main
       - master
     paths:
-      - 'src/**/*.py'
-      - 'tests/**/*.py'
-      - 'noxfile.py'
-      - 'pyproject.toml'
-      - 'pyrightconfig.json'
-      - '.github/workflows/typecheck-python.yml'
-      - '**/*.pyi'
+      - "src/**/*.py"
+      - "tests/**/*.py"
+      - "noxfile.py"
+      - "pyproject.toml"
+      - "pyrightconfig.json"
+      - ".github/workflows/typecheck-python.yml"
+      - "**/*.pyi"
 
   workflow_dispatch:
 

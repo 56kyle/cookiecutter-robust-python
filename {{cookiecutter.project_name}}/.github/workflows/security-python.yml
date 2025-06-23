@@ -6,13 +6,13 @@ name: Check Python Code Security
 on:
   pull_request:
     paths:
-      - 'src/**/*.py'
-      - 'tests/**/*.py'
-      - 'noxfile.py'
-      - 'pyproject.toml'
-      - '.bandit'
-      - '.ruff.toml'
-      - '.github/workflows/security-python.yml'
+      - "src/**/*.py"
+      - "tests/**/*.py"
+      - "noxfile.py"
+      - "pyproject.toml"
+      - ".bandit"
+      - ".ruff.toml"
+      - ".github/workflows/security-python.yml"
   push:
     branches:
       - main

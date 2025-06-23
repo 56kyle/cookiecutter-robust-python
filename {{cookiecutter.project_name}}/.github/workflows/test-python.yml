@@ -6,23 +6,23 @@ name: Test Python Code
 on:
   pull_request:
     paths:
-      - 'src/**/*.py'
-      - 'tests/**/*.py'
-      - 'noxfile.py'
-      - 'pyproject.toml'
-      - '.coveragerc'
-      - '.github/workflows/test-python.yml'
+      - "src/**/*.py"
+      - "tests/**/*.py"
+      - "noxfile.py"
+      - "pyproject.toml"
+      - ".coveragerc"
+      - ".github/workflows/test-python.yml"
   push:
     branches:
       - main
       - master
     paths:
-      - 'src/**/*.py'
-      - 'tests/**/*.py'
-      - 'noxfile.py'
-      - 'pyproject.toml'
-      - '.coveragerc'
-      - '.github/workflows/test-python.yml'
+      - "src/**/*.py"
+      - "tests/**/*.py"
+      - "noxfile.py"
+      - "pyproject.toml"
+      - ".coveragerc"
+      - ".github/workflows/test-python.yml"
 
   workflow_dispatch:
 
@@ -32,8 +32,8 @@ jobs:
     runs-on: {{"${{ matrix.os }}"}}
     strategy:
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: [ "3.9", "3.10", "3.11", "3.12", "3.13" ]
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
 
     steps:
       - name: Checkout code
