@@ -60,6 +60,3 @@ def test_demo_project_nox_pre_commit_with_install(robust_demo: Path) -> None:
     assert pre_commit_hook_path.is_file()
 
     assert result.returncode == 0
-
-
-

@@ -104,7 +104,3 @@ def _remove_existing_demo(demo_path: Path) -> None:
 
         typer.secho(f"Removing existing demo project at {demo_path=}.", fg="yellow")
         shutil.rmtree(demo_path, onerror=remove_readonly)
-
-
-
-
