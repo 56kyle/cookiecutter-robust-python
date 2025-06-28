@@ -8,7 +8,6 @@
 
     // Git + pre-commit workflow
     "ryanluker.vscode-pre-commit",
-    "eamodio.gitlens",
 
     // Rust
     "rust-lang.rust-analyzer",
