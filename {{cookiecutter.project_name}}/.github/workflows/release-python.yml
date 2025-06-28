@@ -6,23 +6,18 @@ name: Release Python Package
 on:
   push:
     tags:
-      # Trigger on SemVer tags. Commitizen configured in pyproject.toml (Area 12)
-      # uses PEP 440 which is SemVer compatible.
       - "v[0-9]+.[0-9]+.[0-9]+"
       - "v[0-9]+.[0-9]+.[0-9]+-*" # Include pre-release tags
 
-  # Allow workflow to be run manually from the Actions tab for a specific tag
   workflow_dispatch:
     inputs:
       tag:
         description: 'Git tag to build and release (e.g., v1.2.3). Must already exist.'
-        required: true # User must provide a tag when manually dispatching
+        required: true
 
 jobs:
-  # Job 1: Build the package and publish to TestPyPI
   build_and_testpypi:
     name: Build & Publish to TestPyPI
-    # Run on a consistent, standard build environment
     runs-on: ubuntu-latest
 
     steps:
@@ -40,42 +35,31 @@ jobs:
           python-version-file: .python-version
 
       - name: Upload built package artifacts
-        # Upload packages so the publish job can access them.
         uses: actions/upload-artifact@v4
         with:
-          name: distribution-packages # Name the artifact
-          path: dist/ # Path to the built sdist/wheel files
-          retention-days: 7 # Keep built artifacts for 7 days
+          name: distribution-packages
+          path: dist/
+          retention-days: 7
 
       - name: Download built package artifacts
         uses: actions/download-artifact@v4
         with:
-          name: distribution-packages-{{"{{ github.event.inputs.tag }}"}}
+          name: distribution-packages-{{"${{ github.event.inputs.tag }}"}}
           path: dist/
 
-      # --- Publish to TestPyPI Step ---
-      # This step runs within the same job after build.
       - name: Publish to TestPyPI
-        # Execute the Task Automation publish session for TestPyPI.
-        # This calls uv publish dist/* with TestPyPI credentials/config (Topic 10).
         env:
-          # TestPyPI credentials stored as secrets in GitHub Settings -> Secrets
-          TWINE_USERNAME: __token__ # Standard username when using API tokens
-          TWINE_PASSWORD: {{"${{ secrets.TESTPYPI_API_TOKEN }}"}} # Use GitHub Encrypted Secret
-          # Optional: If uv publish requires different config for repository URL, pass TWINE_REPOSITORY or similar
-        run: uvx nox -s publish-package -- --repository testpypi # Call the publish-package session, passing repository arg
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: {{"${{ secrets.TESTPYPI_API_TOKEN }}"}}
+        run: uvx nox -s publish-package -- --repository testpypi
 
-      # --- Get Changelog Content for Release Notes ---
-      # Use a standard action to extract changelog content.
-      # This action requires a standard CHANGELOG.md format.
       - name: Get Release Notes from Changelog
         id: changelog
-        uses: simple-changelog/action@v3 # Action to parse CHANGELOG.md
+        uses: simple-changelog/action@v3
         with:
-          path: CHANGELOG.md # Path to your CHANGELOG.md
-          tag: {{"${{ github.event_name == 'push' && github.ref_name || github.event.inputs.tag }}"}} # Pass the tag name
+          path: CHANGELOG.md
+          tag: {{"${{ github.event_name == 'push' && github.ref_name || github.event.inputs.tag }}"}}
 
-      # Define outputs from this job that other jobs (like create_github_release) can use.
     outputs:
       changelog_body:
         description: "Release notes body extracted from CHANGELOG.md"
