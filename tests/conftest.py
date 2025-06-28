@@ -51,7 +51,6 @@ def robust_file__path__relative(request: FixtureRequest) -> str:
 
 @pytest.fixture(scope="session")
 def robust_demo(
-    request: FixtureRequest,
     demos_folder: Path,
     robust_demo__path: Path,
     robust_demo__extra_context: dict[str, Any],
@@ -67,29 +66,29 @@ def robust_demo(
     if robust_demo__is_setup:
         subprocess.run(["nox", "-s", "setup-git"], cwd=robust_demo__path, capture_output=True)
         subprocess.run(["nox", "-s", "setup-venv"], cwd=robust_demo__path, capture_output=True)
-    return getattr(request, "param", robust_demo__path)
+    return robust_demo__path
 
 
 @pytest.fixture(scope="session")
-def robust_demo__path(request: FixtureRequest, demos_folder: Path, robust_demo__name: str) -> Path:
-    return getattr(request, "param", demos_folder / robust_demo__name)
+def robust_demo__path(demos_folder: Path, robust_demo__name: str) -> Path:
+    return demos_folder / robust_demo__name
 
 
 @pytest.fixture(scope="session")
-def robust_demo__name(request: FixtureRequest) -> str:
-    return getattr(request, "param", "robust-python-demo-with-setup")
+def robust_demo__name(robust_demo__add_rust_extension: str, robust_demo__is_setup: bool) -> str:
+    build: str = "maturin" if robust_demo__add_rust_extension else "python"
+    name_parts: list[str] = ["robust", "python", "demo", build]
+    if robust_demo__is_setup:
+        name_parts.append("setup")
+    return "-".join(name_parts)
 
 
 @pytest.fixture(scope="session")
-def robust_demo__extra_context(
-    request: FixtureRequest,
-    robust_demo__name: str,
-    robust_demo__add_rust_extension: bool
-) -> dict[str, Any]:
-    return getattr(request, "param", {
+def robust_demo__extra_context(robust_demo__name: str, robust_demo__add_rust_extension: bool) -> dict[str, Any]:
+    return {
         "project_name": robust_demo__name,
         "add_rust_extension": robust_demo__add_rust_extension
-    })
+    }
 
 
 @pytest.fixture(scope="session")
