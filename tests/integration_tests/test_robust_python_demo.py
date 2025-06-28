@@ -4,12 +4,9 @@ import subprocess
 from pathlib import Path
 
 import pytest
+from pbr.options import TRUE_VALUES
 
 from tests.constants import GLOBAL_NOX_SESSIONS
-
-
-def test_demo_project_generation(robust_python_demo_with_setup: Path) -> None:
-    assert robust_python_demo_with_setup.exists()
 
 
 @pytest.mark.parametrize("session", GLOBAL_NOX_SESSIONS)
@@ -44,6 +41,8 @@ def test_demo_project_nox_pre_commit(robust_demo: Path) -> None:
     assert result.returncode == 0
 
 
+@pytest.mark.parametrize(argnames="robust_demo__add_rust_extension", argvalues=[True, False], indirect=True)
+@pytest.mark.parametrize(argnames="robust_demo__is_setup", argvalues=[False], indirect=True)
 def test_demo_project_nox_pre_commit_with_install(robust_demo: Path) -> None:
     command: list[str] = ["nox", "-s", "pre-commit", "--", "install"]
     pre_commit_hook_path: Path = robust_demo / ".git" / "hooks" / "pre-commit"
