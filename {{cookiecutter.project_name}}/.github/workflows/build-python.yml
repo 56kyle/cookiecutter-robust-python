@@ -6,32 +6,32 @@ name: Build Python Package
 on:
   pull_request:
     paths:
-      - 'src/**/*.py'
-      - 'tests/**/*.py' # Test files shouldn't trigger *build* unless needed? Consider paths carefully.
-      - 'noxfile.py' # Build task config
-      - 'pyproject.toml' # Packaging config (metadata, deps, build system)
-      - '.github/workflows/build-package-python.yml' # This workflow file
-      - 'rust/**/*.rs'
+      - "src/**/*.py"
+      - "tests/**/*.py" # Test files shouldn't trigger *build* unless needed? Consider paths carefully.
+      - "noxfile.py" # Build task config
+      - "pyproject.toml" # Packaging config (metadata, deps, build system)
+      - ".github/workflows/build-package-python.yml" # This workflow file
+      - "rust/**/*.rs"
       # Add paths to other relevant build-related files (e.g., manifest files)
   push:
     branches:
       - main
       - master
     paths:
-      - 'src/**/*.py'
-      - 'tests/**/*.py'
-      - 'noxfile.py'
-      - 'pyproject.toml'
-      - '.github/workflows/build-package-python.yml'
+      - "src/**/*.py"
+      - "tests/**/*.py"
+      - "noxfile.py"
+      - "pyproject.toml"
+      - ".github/workflows/build-package-python.yml"
 
   # This workflow is also triggered explicitly as part of the CD workflow.
   # workflow_dispatch: # Remove if only triggered by push/PR or other workflows
 
 jobs:
   build-package-python:
-    name: Run Python Package Build Check on {% raw %}${{ matrix.os }}{% endraw %}
+    name: Run Python Package Build Check on {{ "${{ matrix.os }}" }}
     # Building pure Python packages should work reliably across OSs.
-    runs-on: {% raw %}${{ matrix.os }}{% endraw %}
+    runs-on: {{ "${{ matrix.os }}" }}
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -55,6 +55,6 @@ jobs:
       - name: Upload built packages artifact
         uses: actions/upload-artifact@v4
         with:
-          name: distribution-packages-{% raw %}{{ github.event.inputs.tag }}{% endraw %}
+          name: distribution-packages-{{ "${{ github.event.inputs.tag }}" }}
           path: dist/
           retention-days: 7

@@ -7,6 +7,7 @@ requires-python = ">=3.9,<4.0"
 dependencies = [
     "cookiecutter>=2.6.0",
     "cruft>=2.16.0",
+    "gitpython>=3.1.44",
     "loguru>=0.7.3",
     "platformdirs>=4.3.8",
     "retrocookie>=0.4.3",
@@ -18,6 +19,7 @@ dev = [
     "commitizen>=4.8.2",
     "nox>=2025.5.1",
     "pre-commit>=4.2.0",
+    "pre-commit-hooks>=5.0.0",
 ]
 docs = [
     "furo>=2024.8.6",

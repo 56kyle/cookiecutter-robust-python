@@ -6,31 +6,31 @@ name: Lint Global Configuration
 on:
   pull_request:
     paths:
-      - '**.yaml'
-      - '**.toml'
-      - '.editorconfig'
-      - '.gitignore'
-      - '.pre-commit-config.yaml'
-      - 'Dockerfile'
-      - 'compose.yaml'
-      - '.github/workflows/lint-global.yml'
-      - 'docs/**.md'
-      - 'docs/**.rst'
-      - 'docs/**/*.py'
+      - "**.yaml"
+      - "**.toml"
+      - ".editorconfig"
+      - ".gitignore"
+      - ".pre-commit-config.yaml"
+      - "Dockerfile"
+      - "compose.yaml"
+      - ".github/workflows/lint-global.yml"
+      - "docs/**.md"
+      - "docs/**.rst"
+      - "docs/**/*.py"
   push:
     branches:
       - main
       - master
     paths:
-      - '**.yaml'
-      - '**.toml'
-      - '.editorconfig'
-      - '.gitignore'
-      - '.pre-commit-config.yaml'
-      - 'Dockerfile'
-      - 'compose.yaml'
-      - '.github/workflows/lint-global.yml'
-      - 'docs/**'
+      - "**.yaml"
+      - "**.toml"
+      - ".editorconfig"
+      - ".gitignore"
+      - ".pre-commit-config.yaml"
+      - "Dockerfile"
+      - "compose.yaml"
+      - ".github/workflows/lint-global.yml"
+      - "docs/**"
 
   workflow_dispatch:
 

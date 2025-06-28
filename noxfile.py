@@ -49,7 +49,7 @@ LINT_FROM_DEMO_OPTIONS: tuple[str, ...] = GENERATE_DEMO_OPTIONS
 @nox.session(name="generate-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def generate_demo(session: Session) -> None:
     """Generates a project demo using the cookiecutter-robust-python template."""
-    session.install("cookiecutter", "platformdirs", "loguru", "typer")
+    session.install("cookiecutter", "cruft", "platformdirs", "loguru", "typer")
     session.run("python", GENERATE_DEMO_SCRIPT, *GENERATE_DEMO_OPTIONS, *session.posargs)
 
 

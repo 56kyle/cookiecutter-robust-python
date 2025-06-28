@@ -4,25 +4,25 @@ This section evaluates tools and approaches for generating project documentation
 
 ## Goals Addressed
 
-*   Make it easy to write project documentation, combining code-generated API references with narrative content.
-*   Reliably generate API documentation from docstrings (following PEP 257) and type hints.
-*   Support authoring narrative documentation using standard, easy-to-use formats (e.g., Markdown).
-*   Provide a simple and scriptable process to build the documentation into a static website (e.g., HTML).
-*   Ensure the documentation build process is OS-interoperable.
-*   Produce documentation output that is functional, navigable, and maintainable.
+- Make it easy to write project documentation, combining code-generated API references with narrative content.
+- Reliably generate API documentation from docstrings (following PEP 257) and type hints.
+- Support authoring narrative documentation using standard, easy-to-use formats (e.g., Markdown).
+- Provide a simple and scriptable process to build the documentation into a static website (e.g., HTML).
+- Ensure the documentation build process is OS-interoperable.
+- Produce documentation output that is functional, navigable, and maintainable.
 
 ## Evaluation Criteria
 
-*   **API Generation (Docstrings & Hints):** How well does it extract documentation from Python docstrings (especially PEP 257) and type hints?
-*   **Narrative Authoring:** What formats are supported for writing narrative content (reST, Markdown)? How easy is it to write and organize content?
-*   **Content Combination:** How well does it integrate API reference generated from code with narrative pages?
-*   **Build Process:** Simplicity, speed, and scriptability of the process to build the documentation website.
-*   **OS Interoperability (Build):** Does the build process work reliably across Linux, macOS, and Windows?
-*   **Output Quality:** Functionality (search, navigation), appearance, navigability, and standard format of the generated website.
-*   **Extensibility:** Can features be added via plugins or extensions?
-*   **Maturity & Stability:** How stable and battle-tested is the tool?
-*   **Community & Documentation:** Active development, support, and comprehensive documentation.
-*   **Best Tool for the Job:** Considering all criteria, which tool provides the strongest overall fit for creating comprehensive, maintainable, and well-integrated project documentation.
+- **API Generation (Docstrings & Hints):** How well does it extract documentation from Python docstrings (especially PEP 257) and type hints?
+- **Narrative Authoring:** What formats are supported for writing narrative content (reST, Markdown)? How easy is it to write and organize content?
+- **Content Combination:** How well does it integrate API reference generated from code with narrative pages?
+- **Build Process:** Simplicity, speed, and scriptability of the process to build the documentation website.
+- **OS Interoperability (Build):** Does the build process work reliably across Linux, macOS, and Windows?
+- **Output Quality:** Functionality (search, navigation), appearance, navigability, and standard format of the generated website.
+- **Extensibility:** Can features be added via plugins or extensions?
+- **Maturity & Stability:** How stable and battle-tested is the tool?
+- **Community & Documentation:** Active development, support, and comprehensive documentation.
+- **Best Tool for the Job:** Considering all criteria, which tool provides the strongest overall fit for creating comprehensive, maintainable, and well-integrated project documentation.
 
 ## Tools and Approaches Evaluated
 
@@ -30,43 +30,45 @@ We evaluated the leading tools for generating documentation in the Python ecosys
 
 ### Option 1: [:term:`Sphinx`](sphinx-documentation) (+ Extensions)
 
-*   **Description:** The de-facto standard documentation generator for Python projects. Highly powerful and extensible. Primarily uses reStructuredText (reST) as its source format but supports Markdown via extensions like [:term:`MyST-Parser`](myst-parser-documentation). Excels at integrating with code via `autodoc`.
-*   **Evaluation:**
-    *   **API Generation (Docstrings & Hints):** Excellent. The `sphinx.ext.autodoc` extension is robust, mature, and widely used for extracting documentation from code based on docstrings (supporting **PEP 257**) and type hints. It integrates seamlessly with extensions like [:term:`sphinx-autodoc-typehints`](sphinxautodoctypehints-documentation) and [:term:`sphinx.ext.napoleon`](python:sphinx.ext.napoleon) (for Google/NumPy style).
-    *   **Narrative Authoring:** Moderate (reST). Native reStructuredText is powerful but has a steeper learning curve than Markdown for many developers. Excellent (Markdown via MyST). Using the [:term:`MyST-Parser`](myst-parser-documentation) allows writing narrative content in more familiar Markdown while retaining Sphinx's advanced features.
-    *   **Content Combination:** Excellent. [:term:`Sphinx`](sphinx-documentation) is designed from the ground up to combine narrative content and API references with powerful cross-referencing, indexing, and navigation features.
-    *   **Build Process:** High. Building is done via the standard `sphinx-build` command, which is highly scriptable (`sphinx-build -b html docs docs/_build/html`). Configuration is in a Python file (`conf.py`), offering flexibility but requiring Python knowledge. Initial setup can involve some steps (running quickstart, configuring extensions).
-    *   **OS Interoperability (Build):** Excellent. The `sphinx-build` command and core [:term:`Sphinx`](sphinx-documentation) are pure Python and highly reliable across Linux, macOS, and Windows.
-    *   **Output Quality:** Excellent. Produces professional, highly navigable websites with advanced search and indexing capabilities. Supports various themes.
-    *   **Extensibility:** Excellent. Has a vast and mature ecosystem of extensions (`autodoc`, `intersphinx`, themes, plugins for various directives/roles).
-    *   **Maturity & Stability:** Very High. Extremely mature, stable, and widely used, including for Python's official documentation.
-    *   **Community & Documentation:** Very High. Large, active community, extensive documentation and resources.
+- **Description:** The de-facto standard documentation generator for Python projects. Highly powerful and extensible. Primarily uses reStructuredText (reST) as its source format but supports Markdown via extensions like [:term:`MyST-Parser`](myst-parser-documentation). Excels at integrating with code via `autodoc`.
+- **Evaluation:**
 
-*   **Conclusion:** The most powerful and flexible option, particularly strong for deep API documentation and complex content structures. Its primary barrier (reST) is mitigated by MyST Markdown.
+  - **API Generation (Docstrings & Hints):** Excellent. The `sphinx.ext.autodoc` extension is robust, mature, and widely used for extracting documentation from code based on docstrings (supporting **PEP 257**) and type hints. It integrates seamlessly with extensions like [:term:`sphinx-autodoc-typehints`](sphinxautodoctypehints-documentation) and [:term:`sphinx.ext.napoleon`](python:sphinx.ext.napoleon) (for Google/NumPy style).
+  - **Narrative Authoring:** Moderate (reST). Native reStructuredText is powerful but has a steeper learning curve than Markdown for many developers. Excellent (Markdown via MyST). Using the [:term:`MyST-Parser`](myst-parser-documentation) allows writing narrative content in more familiar Markdown while retaining Sphinx's advanced features.
+  - **Content Combination:** Excellent. [:term:`Sphinx`](sphinx-documentation) is designed from the ground up to combine narrative content and API references with powerful cross-referencing, indexing, and navigation features.
+  - **Build Process:** High. Building is done via the standard `sphinx-build` command, which is highly scriptable (`sphinx-build -b html docs docs/_build/html`). Configuration is in a Python file (`conf.py`), offering flexibility but requiring Python knowledge. Initial setup can involve some steps (running quickstart, configuring extensions).
+  - **OS Interoperability (Build):** Excellent. The `sphinx-build` command and core [:term:`Sphinx`](sphinx-documentation) are pure Python and highly reliable across Linux, macOS, and Windows.
+  - **Output Quality:** Excellent. Produces professional, highly navigable websites with advanced search and indexing capabilities. Supports various themes.
+  - **Extensibility:** Excellent. Has a vast and mature ecosystem of extensions (`autodoc`, `intersphinx`, themes, plugins for various directives/roles).
+  - **Maturity & Stability:** Very High. Extremely mature, stable, and widely used, including for Python's official documentation.
+  - **Community & Documentation:** Very High. Large, active community, extensive documentation and resources.
+
+- **Conclusion:** The most powerful and flexible option, particularly strong for deep API documentation and complex content structures. Its primary barrier (reST) is mitigated by MyST Markdown.
 
 ### Option 2: [:term:`MkDocs`](mkdocs-documentation) (+ Plugins)
 
-*   **Description:** A simpler, faster documentation generator focused on using Markdown as the source format. Relies heavily on plugins for features like API documentation generation.
-*   **Evaluation:**
-    *   **API Generation (Docstrings & Hints):** Moderate. Not built-in. Requires plugins (like `mkdocstrings` + handler plugins for Python) which need to be installed and configured separately. The robustness and feature set of API generation depend entirely on the plugin ecosystem, which is generally less mature and unified than [:term:`Sphinx`](sphinx-documentation)'s `autodoc`.
-    *   **Narrative Authoring:** Excellent (Markdown). Designed for writing narrative content in familiar Markdown, making it easy to get started.
-    *   **Content Combination:** Good (via plugins/structure). Combines narrative Markdown files, with API content often injected via specific plugin directives or generated files linked from the narrative. Less seamless deep linking compared to [:term:`Sphinx`](sphinx-documentation).
-    *   **Build Process:** Excellent. Very simple (`mkdocs build`) and fast. Configuration is in a YAML file (`mkdocs.yml`), generally simpler than [:term:`Sphinx`](sphinx-documentation)'s Python `conf.py`. Highly scriptable.
-    *   **OS Interoperability (Build):** Excellent. Pure Python, standard CLI and file operations, highly reliable across OSs.
-    *   **Output Quality:** High. Produces clean, modern, functional websites, especially with popular themes like Material for [:term:`MkDocs`](mkdocs-documentation). Good search and basic navigation.
-    *   **Extensibility:** High. Has a growing plugin ecosystem for various features, including API docs.
-    *   **Maturity & Stability:** High. Mature and stable project.
-    *   **Community & Documentation:** High. Active community, good documentation.
+- **Description:** A simpler, faster documentation generator focused on using Markdown as the source format. Relies heavily on plugins for features like API documentation generation.
+- **Evaluation:**
 
-*   **Conclusion:** Simpler and faster build process, excellent for Markdown native narrative docs. Less ideal when comprehensive, robust, and deeply integrated API documentation from code is a primary focus, as this requires adding and relying on external plugins.
+  - **API Generation (Docstrings & Hints):** Moderate. Not built-in. Requires plugins (like `mkdocstrings` + handler plugins for Python) which need to be installed and configured separately. The robustness and feature set of API generation depend entirely on the plugin ecosystem, which is generally less mature and unified than [:term:`Sphinx`](sphinx-documentation)'s `autodoc`.
+  - **Narrative Authoring:** Excellent (Markdown). Designed for writing narrative content in familiar Markdown, making it easy to get started.
+  - **Content Combination:** Good (via plugins/structure). Combines narrative Markdown files, with API content often injected via specific plugin directives or generated files linked from the narrative. Less seamless deep linking compared to [:term:`Sphinx`](sphinx-documentation).
+  - **Build Process:** Excellent. Very simple (`mkdocs build`) and fast. Configuration is in a YAML file (`mkdocs.yml`), generally simpler than [:term:`Sphinx`](sphinx-documentation)'s Python `conf.py`. Highly scriptable.
+  - **OS Interoperability (Build):** Excellent. Pure Python, standard CLI and file operations, highly reliable across OSs.
+  - **Output Quality:** High. Produces clean, modern, functional websites, especially with popular themes like Material for [:term:`MkDocs`](mkdocs-documentation). Good search and basic navigation.
+  - **Extensibility:** High. Has a growing plugin ecosystem for various features, including API docs.
+  - **Maturity & Stability:** High. Mature and stable project.
+  - **Community & Documentation:** High. Active community, good documentation.
+
+- **Conclusion:** Simpler and faster build process, excellent for Markdown native narrative docs. Less ideal when comprehensive, robust, and deeply integrated API documentation from code is a primary focus, as this requires adding and relying on external plugins.
 
 ## Chosen Tool(s)
 
-*   Primary Documentation Generator: **[:term:`Sphinx`](sphinx-documentation)**.
-*   Source Format: **MyST Markdown** (via [:term:`MyST-Parser`](myst-parser-documentation)).
-*   API Integration: **`sphinx.ext.autodoc`**.
-*   Docstring/Hint Parsing: **[:term:`sphinx.ext.napoleon`](python:sphinx.ext.napoleon)** (Google style), **[:term:`sphinx-autodoc-typehints`](sphinxautodoctypehints-documentation)**.
-*   Docstring Linter Helper: **[:term:`pydocstyle`](pydocstyle-documentation)** (Checks rules used by generator).
+- Primary Documentation Generator: **[:term:`Sphinx`](sphinx-documentation)**.
+- Source Format: **MyST Markdown** (via [:term:`MyST-Parser`](myst-parser-documentation)).
+- API Integration: **`sphinx.ext.autodoc`**.
+- Docstring/Hint Parsing: **[:term:`sphinx.ext.napoleon`](python:sphinx.ext.napoleon)** (Google style), **[:term:`sphinx-autodoc-typehints`](sphinxautodoctypehints-documentation)**.
+- Docstring Linter Helper: **[:term:`pydocstyle`](pydocstyle-documentation)** (Checks rules used by generator).
 
 ## Justification for the Choice
 
@@ -82,8 +84,8 @@ We evaluated the leading tools for generating documentation in the Python ecosys
 
 ## Interactions with Other Topics
 
-*   **pyproject.toml (01):** Documentation dependencies (Sphinx, theme, MyST-Parser, etc.) are managed via [:term:`uv`](uv-documentation) in a dedicated optional dependency group (Area 02), specified in `pyproject.toml`.
-*   **Code Linting (04):** [:term:`pydocstyle`](pydocstyle-documentation) rules (within [:term:`Ruff`](ruff-documentation)) ensure docstrings are in the correct format (PEP 257) for extraction by [:term:`Sphinx`](sphinx-documentation).
-*   **Task Automation (12):** [:term:`Nox`](nox-documentation) sessions are defined to build the documentation website (`uv run sphinx-build`).
-*   **CI Orchestration (13):** Documentation builds are run as part of the automated CI pipeline, triggered by [:term:`Nox`](nox-documentation), to check for build errors or warnings.
-*   **CD Orchestration (14):** Built documentation (from Area 13) can be automatically published (e.g., to GitHub Pages or Read the Docs) via CD pipelines, triggering based on tags or merges to the main branch.
+- **pyproject.toml (01):** Documentation dependencies (Sphinx, theme, MyST-Parser, etc.) are managed via [:term:`uv`](uv-documentation) in a dedicated optional dependency group (Area 02), specified in `pyproject.toml`.
+- **Code Linting (04):** [:term:`pydocstyle`](pydocstyle-documentation) rules (within [:term:`Ruff`](ruff-documentation)) ensure docstrings are in the correct format (PEP 257) for extraction by [:term:`Sphinx`](sphinx-documentation).
+- **Task Automation (12):** [:term:`Nox`](nox-documentation) sessions are defined to build the documentation website (`uv run sphinx-build`).
+- **CI Orchestration (13):** Documentation builds are run as part of the automated CI pipeline, triggered by [:term:`Nox`](nox-documentation), to check for build errors or warnings.
+- **CD Orchestration (14):** Built documentation (from Area 13) can be automatically published (e.g., to GitHub Pages or Read the Docs) via CD pipelines, triggering based on tags or merges to the main branch.

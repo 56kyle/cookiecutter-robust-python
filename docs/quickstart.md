@@ -10,10 +10,10 @@ For detailed explanations of the tools and the philosophy, see the full document
 
 Make sure you have these installed:
 
-*   **Python 3.9+** (or your chosen template version).
-*   **Git**.
-*   **uv**: Our chosen dependency manager. Install it [officially](https://docs.astral.sh/uv/installation/).
-*   **Docker or Podman**: If you plan to work with containers (most web apps will need this). Install [Docker](https://docs.docker.com/engine/install/) or [Podman](https://podman.io/docs/installation/).
+- **Python 3.9+** (or your chosen template version).
+- **Git**.
+- **uv**: Our chosen dependency manager. Install it [officially](https://docs.astral.sh/uv/installation/).
+- **Docker or Podman**: If you plan to work with containers (most web apps will need this). Install [Docker](https://docs.docker.com/engine/install/) or [Podman](https://podman.io/docs/installation/).
 
 ## 2. Create Your Project
 
@@ -30,7 +30,6 @@ uvx cookiecutter gh:56kyle/cookiecutter-robust-python
 ```
 
 Follow the prompts to customize your project.
-
 
 ## 3. Initial Project Setup
 
@@ -82,9 +81,9 @@ This builds the project documentation website into the `docs/_build/html` direct
 
 ## Next Steps
 
-*   Start writing your code in the `src/` directory!
-*   Add and remove dependencies using `uv add <package>` and `uv remove <package>`.
-*   If building a web application, explore the `Dockerfile` and `compose.yaml` ([Application Container Building](topics/11_container-build.md), [Container Orchestration](topics/15_compose-local.md)).
-*   Set up [CI](topics/13_ci-orchestration.md)/[CD](topics/14_cd-orchestration.md) using the example workflow files (e.g., in `.github/workflows/`).
+- Start writing your code in the `src/` directory!
+- Add and remove dependencies using `uv add <package>` and `uv remove <package>`.
+- If building a web application, explore the `Dockerfile` and `compose.yaml` ([Application Container Building](topics/11_container-build.md), [Container Orchestration](topics/15_compose-local.md)).
+- Set up [CI](topics/13_ci-orchestration.md)/[CD](topics/14_cd-orchestration.md) using the example workflow files (e.g., in `.github/workflows/`).
 
 For detailed information on any of these tools or workflows, navigate through the template's full documentation.

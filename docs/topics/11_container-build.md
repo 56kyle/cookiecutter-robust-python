@@ -4,55 +4,56 @@ This section evaluates the process and tools for building application container 
 
 ## Goals Addressed
 
-*   Define and build lightweight, secure, and runnable application container images.
-*   Implement container build best practices (multistage builds, minimal base images, non-root users, efficient caching).
-*   Bundle the application code and its dependencies effectively within the image.
-*   Produce standard container images compatible with tools like [:term:`Docker`](docker-documentation), [:term:`Podman`](podman-documentation), [:term:`docker-compose`](docker-documentation), and orchestration platforms (Kubernetes, ECS, etc.).
-*   Integrate the build process into automated workflows (Task Automation, CI/CD).
+- Define and build lightweight, secure, and runnable application container images.
+- Implement container build best practices (multistage builds, minimal base images, non-root users, efficient caching).
+- Bundle the application code and its dependencies effectively within the image.
+- Produce standard container images compatible with tools like [:term:`Docker`](docker-documentation), [:term:`Podman`](podman-documentation), [:term:`docker-compose`](docker-documentation), and orchestration platforms (Kubernetes, ECS, etc.).
+- Integrate the build process into automated workflows (Task Automation, CI/CD).
 
 ## Evaluation Criteria
 
-*   **Standardization (Format):** Does the definition use a widely accepted standard format (e.g., `Dockerfile`)?
-*   **Best Practice Support:** Does the format and tool explicitly support implementing containerization best practices for security, size, and efficiency (multistage builds, USER instruction, small base images, layer caching)?
-*   **Packaging Integration:** How well does it integrate with the project's standard Python packaging (Area 09) and dependency management (Area 02)?
-*   **Reproducibility:** How reproducible is the image build process given the same inputs?
-*   **OS Interoperability (Tool):** Does the tool used to execute the build process work reliably across major OSs (Linux, macOS, Windows)? (Note: The definition format is inherently cross-platform).
-*   **CLI Usability:** Is the command-line interface for triggering the build straightforward?
-*   **Integration:** How well does it integrate into Task Automation runners, CI/CD pipelines, and related container tools (e.g., [:term:`docker-compose`](docker-compose-documentation))?
-*   **Maturity & Stability:** How stable and battle-tested is the tool/format?
-*   **Community & Documentation:** Active development, support, and comprehensive documentation.
-*   **Best Tool for the Job:** Considering all criteria, which tool/format provides the strongest overall fit for building standard, production-ready container images based on Python projects.
+- **Standardization (Format):** Does the definition use a widely accepted standard format (e.g., `Dockerfile`)?
+- **Best Practice Support:** Does the format and tool explicitly support implementing containerization best practices for security, size, and efficiency (multistage builds, USER instruction, small base images, layer caching)?
+- **Packaging Integration:** How well does it integrate with the project's standard Python packaging (Area 09) and dependency management (Area 02)?
+- **Reproducibility:** How reproducible is the image build process given the same inputs?
+- **OS Interoperability (Tool):** Does the tool used to execute the build process work reliably across major OSs (Linux, macOS, Windows)? (Note: The definition format is inherently cross-platform).
+- **CLI Usability:** Is the command-line interface for triggering the build straightforward?
+- **Integration:** How well does it integrate into Task Automation runners, CI/CD pipelines, and related container tools (e.g., [:term:`docker-compose`](docker-compose-documentation))?
+- **Maturity & Stability:** How stable and battle-tested is the tool/format?
+- **Community & Documentation:** Active development, support, and comprehensive documentation.
+- **Best Tool for the Job:** Considering all criteria, which tool/format provides the strongest overall fit for building standard, production-ready container images based on Python projects.
 
 ## Tools and Approaches Evaluated
 
 ### Option 1: `Dockerfile` + [:term:`Docker`](docker-documentation) / [:term:`Podman`](podman-documentation) CLI
 
-*   **Description:** Using the standard `Dockerfile` format to define image layers and steps, executed by the command-line interface of container runtimes like [:term:`Docker`](docker-documentation) or [:term:`Podman`](podman-documentation).
-*   **Evaluation:**
-    *   **Standardization (Format):** Excellent. `Dockerfile` is the **industry standard** text-based format for defining container images, widely understood and universally compatible across container runtimes.
-    *   **Best Practice Support:** Excellent. The `Dockerfile` syntax explicitly supports crucial best practices like **multistage builds** (`FROM ... AS <name>`), using the `USER` instruction for non-root users, selecting minimal base images (e.g., `python:3.x-slim`, Alpine, Distroless), managing dependency caching layers effectively via step ordering, copying standard artifacts (like built wheels from Area 09) instead of source. The tool (`docker build`/`podman build`) implements these features.
-    *   **Packaging Integration:** Excellent. A standard `Dockerfile` workflow involves **copying the project's built wheel** (Area 09) into the image and installing it with [:py:mod:`pip`](pip-documentation) or the project's chosen manager ([`uv`](uv-documentation)). Alternatively, it can copy source/lock files and install dependencies with the manager directly *inside* the build. This directly leverages the output of packaging and dependency management steps.
-    *   **Reproducibility:** High (Process). Given the same `Dockerfile`, build context files, and base image, the `docker build`/`podman build` process is highly reproducible layer-by-layer. Reliability of layer caching aids consistent builds.
-    *   **OS Interoperability (Tool):** Moderate (Runtime Dependency), Excellent (CLI). The `docker build` or `podman build` command-line tools are **OS-interoperable**. However, they require the [:term:`Docker`](docker-documentation) or [:term:`Podman`](podman-documentation) daemon/runtime to be installed and running on the host machine, which is an external dependency.
-    *   **CLI Usability:** Excellent. Simple command (`docker build . -t <image_name>`) is intuitive and standard.
-    *   **Integration:** Excellent. The `docker build`/`podman build` command is a standard external process easily called by Task Automation runners ([:term:`Nox`](nox-documentation) - Area 12) and integrated into CI/CD pipelines (Area 13, 14). Images produced are compatible with [:term:`docker-compose`](docker-compose-documentation) (Area 15) and production orchestrators (Area 16).
-    *   **Maturity & Stability:** Excellent. `Dockerfile` format and [:term:`Docker`](docker-documentation) are the established industry standard for containerization, extremely mature with massive adoption. [:term:`Podman`](podman-documentation) is a mature, highly compatible alternative.
-    *   **Community & Documentation:** Excellent. Vast community, extensive documentation for `Dockerfile` best practices and the tools.
+- **Description:** Using the standard `Dockerfile` format to define image layers and steps, executed by the command-line interface of container runtimes like [:term:`Docker`](docker-documentation) or [:term:`Podman`](podman-documentation).
+- **Evaluation:**
 
-*   **Conclusion:** The standard, robust, and flexible approach for building container images, providing full support for essential best practices and widely compatible output. Requires an external runtime.
+  - **Standardization (Format):** Excellent. `Dockerfile` is the **industry standard** text-based format for defining container images, widely understood and universally compatible across container runtimes.
+  - **Best Practice Support:** Excellent. The `Dockerfile` syntax explicitly supports crucial best practices like **multistage builds** (`FROM ... AS <name>`), using the `USER` instruction for non-root users, selecting minimal base images (e.g., `python:3.x-slim`, Alpine, Distroless), managing dependency caching layers effectively via step ordering, copying standard artifacts (like built wheels from Area 09) instead of source. The tool (`docker build`/`podman build`) implements these features.
+  - **Packaging Integration:** Excellent. A standard `Dockerfile` workflow involves **copying the project's built wheel** (Area 09) into the image and installing it with [:py:mod:`pip`](pip-documentation) or the project's chosen manager ([`uv`](uv-documentation)). Alternatively, it can copy source/lock files and install dependencies with the manager directly _inside_ the build. This directly leverages the output of packaging and dependency management steps.
+  - **Reproducibility:** High (Process). Given the same `Dockerfile`, build context files, and base image, the `docker build`/`podman build` process is highly reproducible layer-by-layer. Reliability of layer caching aids consistent builds.
+  - **OS Interoperability (Tool):** Moderate (Runtime Dependency), Excellent (CLI). The `docker build` or `podman build` command-line tools are **OS-interoperable**. However, they require the [:term:`Docker`](docker-documentation) or [:term:`Podman`](podman-documentation) daemon/runtime to be installed and running on the host machine, which is an external dependency.
+  - **CLI Usability:** Excellent. Simple command (`docker build . -t <image_name>`) is intuitive and standard.
+  - **Integration:** Excellent. The `docker build`/`podman build` command is a standard external process easily called by Task Automation runners ([:term:`Nox`](nox-documentation) - Area 12) and integrated into CI/CD pipelines (Area 13, 14). Images produced are compatible with [:term:`docker-compose`](docker-compose-documentation) (Area 15) and production orchestrators (Area 16).
+  - **Maturity & Stability:** Excellent. `Dockerfile` format and [:term:`Docker`](docker-documentation) are the established industry standard for containerization, extremely mature with massive adoption. [:term:`Podman`](podman-documentation) is a mature, highly compatible alternative.
+  - **Community & Documentation:** Excellent. Vast community, extensive documentation for `Dockerfile` best practices and the tools.
+
+- **Conclusion:** The standard, robust, and flexible approach for building container images, providing full support for essential best practices and widely compatible output. Requires an external runtime.
 
 ### Option 2: Building Directly with Build Backends (Less Common)
 
-*   **Description:** Some build backends or tools might offer experimental capabilities to output container images directly (e.g., buildctl backend). This is not a common pattern for application images derived from Python projects compared to standard Dockerfiles.
-*   **Evaluation:** This is not a widely adopted or standardized approach within the Python ecosystem compared to defining image contents via a `Dockerfile`. Best practices for security (USER, minimal bases) and layers are often less explicit or configurable. Less compatible with the standard tooling surrounding Dockerfiles.
+- **Description:** Some build backends or tools might offer experimental capabilities to output container images directly (e.g., buildctl backend). This is not a common pattern for application images derived from Python projects compared to standard Dockerfiles.
+- **Evaluation:** This is not a widely adopted or standardized approach within the Python ecosystem compared to defining image contents via a `Dockerfile`. Best practices for security (USER, minimal bases) and layers are often less explicit or configurable. Less compatible with the standard tooling surrounding Dockerfiles.
 
-*   **Conclusion:** Not suitable as the primary recommended approach due to lack of standardization and broad tool support compared to `Dockerfile` + `docker build`.
+- **Conclusion:** Not suitable as the primary recommended approach due to lack of standardization and broad tool support compared to `Dockerfile` + `docker build`.
 
 ## Chosen Approach
 
-*   Container Definition Format: **`Dockerfile`** (written following best practices).
-*   Build Execution Tool: **[:term:`Docker`](docker-documentation)** or **[:term:`Podman`](podman-documentation)** CLI.
-*   Dependency Installation inside Dockerfile: **[:term:`uv`](uv-documentation)** (`RUN uv sync` or `RUN uv add` depending on stage/pattern).
+- Container Definition Format: **`Dockerfile`** (written following best practices).
+- Build Execution Tool: **[:term:`Docker`](docker-documentation)** or **[:term:`Podman`](podman-documentation)** CLI.
+- Dependency Installation inside Dockerfile: **[:term:`uv`](uv-documentation)** (`RUN uv sync` or `RUN uv add` depending on stage/pattern).
 
 ## Justification for the Choice
 
@@ -69,10 +70,10 @@ By choosing this approach, the template provides a standard, flexible, robust, a
 
 ## Interactions with Other Topics
 
-*   **Packaging Build (09):** The output of the build process (built wheel file in `dist/`) is often copied *into* the Docker image in a later stage of a multistage build.
-*   **Dependency Management (02):** [:term:`uv`](uv-documentation) is the recommended tool for managing and installing dependencies *inside* the Docker image.
-*   **Task Automation (12):** [:term:`Nox`](nox-documentation) sessions call the `docker build` or `podman build` command via `uv run` (or `session.run` directly for the `docker`/`podman` command itself, as it's external) to build the image.
-*   **CI Orchestration (13) & CD Orchestration (14):** Container image builds are often triggered in CI/CD pipelines via Task Automation. CD pipelines handle pushing the built images to container registries.
-*   **Container Orchestration (Local) (15):** The image built in this area is the base for defining multi-container setups locally using [:term:`docker-compose`](docker-documentation).
-*   **Deployment to Production Orchestrators (16):** The image built here is the primary artifact deployed to production environments managed by tools like Kubernetes/[:term:`Helm`](helm-documentation)/[:term:`Argo CD`](argocd-documentation).
-*   **Dev Containers (17):** The Dev Container often uses a similar or shared base image (or even the same `Dockerfile`) as the production image, leveraging common layers and consistency.
+- **Packaging Build (09):** The output of the build process (built wheel file in `dist/`) is often copied _into_ the Docker image in a later stage of a multistage build.
+- **Dependency Management (02):** [:term:`uv`](uv-documentation) is the recommended tool for managing and installing dependencies _inside_ the Docker image.
+- **Task Automation (12):** [:term:`Nox`](nox-documentation) sessions call the `docker build` or `podman build` command via `uv run` (or `session.run` directly for the `docker`/`podman` command itself, as it's external) to build the image.
+- **CI Orchestration (13) & CD Orchestration (14):** Container image builds are often triggered in CI/CD pipelines via Task Automation. CD pipelines handle pushing the built images to container registries.
+- **Container Orchestration (Local) (15):** The image built in this area is the base for defining multi-container setups locally using [:term:`docker-compose`](docker-documentation).
+- **Deployment to Production Orchestrators (16):** The image built here is the primary artifact deployed to production environments managed by tools like Kubernetes/[:term:`Helm`](helm-documentation)/[:term:`Argo CD`](argocd-documentation).
+- **Dev Containers (17):** The Dev Container often uses a similar or shared base image (or even the same `Dockerfile`) as the production image, leveraging common layers and consistency.

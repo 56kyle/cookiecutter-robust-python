@@ -12,7 +12,7 @@ The `cookiecutter-robust-python` template repository is itself a project with de
 
 The template's `pyproject.toml` file at the **template repository root** lists these dependencies.
 
-To set up your environment for working *on the template*, clone the repository and install its dependencies:
+To set up your environment for working _on the template_, clone the repository and install its dependencies:
 
 ```bash
 git clone https://github.com/56kyle/cookiecutter-robust-python.git # **UPDATE WITH TEMPLATE REPO URL**
@@ -27,12 +27,14 @@ Refer to the [Getting Started: Contributing to the Template](getting-started-tem
 The template repository uses its own `noxfile.py` at the **template repository root** (separate from the `noxfile.py` generated in projects) to automate common template maintenance tasks. These tasks run within the template's development environment.
 
 1.  **List Available Template Tasks:**
+
     ```bash
     uvx nox -l # See tasks defined in the template's noxfile.py
     ```
 
 2.  **Run Core Template Checks:**
-    This runs checks and tests *on the template's source code and functionality* itself (e.g., linting the template's Python scripts, ensuring it renders correctly).
+    This runs checks and tests _on the template's source code and functionality_ itself (e.g., linting the template's Python scripts, ensuring it renders correctly).
+
     ```bash
     uvx nox # Runs the default sessions for template maintenance
     # Often equivalent to: uvx nox -s check -s test
@@ -53,14 +55,14 @@ As the tools recommended by the template ([:term:`uv`](uv-documentation), [:term
 3.  **Test Template:** Run the template's own checks and tests (`uvx nox`) to ensure the template still functions correctly and generates projects with working workflows using the new tool versions. This is crucial! Consider adding tests that render a project and run its default checks/tests within the template's own CI.
 4.  **Update Pre-commit Hook `rev`s:** For tools used as [:term:`pre-commit`](pre-commit-documentation) hooks, update the `rev` (version hash/tag) for those hooks in the template's **`.pre-commit-config.yaml` at the template root** to match tested, compatible versions of the hook repositories. You can use `uvx nox -s pre-commit -- autoupdate` in the template repository to update these `rev`s interactively.
 5.  **Update CI/CD Example Configs:** Ensure the versions referenced in example CI/CD workflow files (`.github/workflows/`, `bitbucket-pipelines.yml`, etc.) are current and consistent with the tested tool versions (e.g., Python versions tested against, commands to install uv/Nox if pinned).
-6.  **Update Documentation:** **CRITICAL.** If tool updates change behavior, configuration, workflow steps, or even render previous justifications less valid, **update the documentation** (specifically the `docs/topics/` files) to reflect the current state and rationale. This ensures the documentation remains accurate and the justifications for tool choices are based on the *current* versions and understanding.
+6.  **Update Documentation:** **CRITICAL.** If tool updates change behavior, configuration, workflow steps, or even render previous justifications less valid, **update the documentation** (specifically the `docs/topics/` files) to reflect the current state and rationale. This ensures the documentation remains accurate and the justifications for tool choices are based on the _current_ versions and understanding.
 
 ## Keeping Generated Projects Updated
 
-A project generated from this template is a copy at a point in time. Template updates do **not** automatically apply to existing generated projects. We recommend using **[:term:`cruft`](cruft-documentation)** to help manage updates in projects *after* they've been generated:
+A project generated from this template is a copy at a point in time. Template updates do **not** automatically apply to existing generated projects. We recommend using **[:term:`cruft`](cruft-documentation)** to help manage updates in projects _after_ they've been generated:
 
 1.  **Ensure `cruft` is Used:** During template generation, the `{{cookiecutter.project_slug}}` should have a `.cruft.json` file created (handled automatically by [:term:`cruft`](cruft-documentation) if the template is run via `cruft create`, or added as a post-gen hook). This file tracks the template version used.
-2.  **Instruct Users on `cruft`:** The documentation *within the generated project's* `docs/` (e.g., the Getting Started guide) should clearly explain how to use `cruft` (`cruft check`, `cruft update`) to bring in changes from template updates. You can mention running `uvx nox -s cruft-check` (if you add a Nox session for this) or integrating `cruft check --exit-code` into the generated project's CI workflow to alert users of template updates.
+2.  **Instruct Users on `cruft`:** The documentation _within the generated project's_ `docs/` (e.g., the Getting Started guide) should clearly explain how to use `cruft` (`cruft check`, `cruft update`) to bring in changes from template updates. You can mention running `uvx nox -s cruft-check` (if you add a Nox session for this) or integrating `cruft check --exit-code` into the generated project's CI workflow to alert users of template updates.
 
 ## Releasing a New Template Version
 
@@ -72,12 +74,12 @@ Releasing a new version of the template itself follows a standard process, often
     ```bash
     uvx cz bump # Run in template repo root; follow prompts. Updates version, tags, changelog.
     ```
-    *Note: Ensure your `.cz.toml` in the template root is configured for Calendar Versioning and updates the correct file(s).*
+    _Note: Ensure your `.cz.toml` in the template root is configured for Calendar Versioning and updates the correct file(s)._
 4.  **Push Release Tag:** Push the new commit(s) (if Commitizen makes any, like changelog updates) and the release tag to the remote template repository:
     ```bash
     git push origin main --tags # Or the branch the tag was created on
     ```
-5.  **Trigger Template CD:** Pushing the tag triggers any configured CD pipelines *for the template repository itself*. This typically includes building and deploying the template documentation website based on the new version, and potentially building/uploading template artifacts if you distribute them that way.
+5.  **Trigger Template CD:** Pushing the tag triggers any configured CD pipelines _for the template repository itself_. This typically includes building and deploying the template documentation website based on the new version, and potentially building/uploading template artifacts if you distribute them that way.
 
 ## Documenting Template Changes
 

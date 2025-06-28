@@ -4,23 +4,23 @@ This section evaluates different tools and approaches for managing project depen
 
 ## Goals Addressed
 
-*   Provide a reliable and reproducible way to declare, install, and manage project dependencies (including development, testing, documentation, etc.).
-*   Manage separate dependency groups.
-*   Generate a locked list of exact dependency versions for reproducible installs.
-*   Handle virtual environments consistently across operating systems.
+- Provide a reliable and reproducible way to declare, install, and manage project dependencies (including development, testing, documentation, etc.).
+- Manage separate dependency groups.
+- Generate a locked list of exact dependency versions for reproducible installs.
+- Handle virtual environments consistently across operating systems.
 
 ## Evaluation Criteria
 
-*   **PEP Compliance (Declaration & Locking):** Adherence to relevant PEPs like PEP 621 for declaring dependencies in `pyproject.toml` (`[project]`, `[project.optional-dependencies]`). Support for lock file standards (e.g., PEP 665 or a robust format ensuring reproducibility).
-*   **Reproducibility:** Reliability in generating and using a lock file to ensure exact dependency versions and hashes across environments.
-*   **OS Interoperability:** Does the tool itself install and run reliably across Linux, macOS, and Windows? Does its environment management work seamlessly across OSs?
-*   **Performance:** Speed of dependency resolution, installation, and updates, especially on complex dependency graphs.
-*   **Developer Experience (DX):** Is the command-line interface intuitive? Is it easy to add, remove, and update dependencies? Is environment management straightforward?
-*   **Dependency Group Management:** Clear support for defining and managing distinct groups (prod, dev, test, etc.) via `pyproject.toml`.
-*   **Integration:** Compatibility with standard packaging tools, Task Automation layers, CI/CD, Dev Containers, Pre-commit.
-*   **Maturity & Stability:** How stable and battle-tested is the tool? What is the risk level of breaking changes for a foundation tool in a long-term template? (Considering *technical stability* and *pace of change*).
-*   **Community & Documentation:** Active development, support, and comprehensive documentation.
-*   **Best Tool for the Job:** Considering all criteria, which tool offers the strongest overall fit, prioritizing standards, performance, OS interop, and maintainability based on the template's philosophy.
+- **PEP Compliance (Declaration & Locking):** Adherence to relevant PEPs like PEP 621 for declaring dependencies in `pyproject.toml` (`[project]`, `[project.optional-dependencies]`). Support for lock file standards (e.g., PEP 665 or a robust format ensuring reproducibility).
+- **Reproducibility:** Reliability in generating and using a lock file to ensure exact dependency versions and hashes across environments.
+- **OS Interoperability:** Does the tool itself install and run reliably across Linux, macOS, and Windows? Does its environment management work seamlessly across OSs?
+- **Performance:** Speed of dependency resolution, installation, and updates, especially on complex dependency graphs.
+- **Developer Experience (DX):** Is the command-line interface intuitive? Is it easy to add, remove, and update dependencies? Is environment management straightforward?
+- **Dependency Group Management:** Clear support for defining and managing distinct groups (prod, dev, test, etc.) via `pyproject.toml`.
+- **Integration:** Compatibility with standard packaging tools, Task Automation layers, CI/CD, Dev Containers, Pre-commit.
+- **Maturity & Stability:** How stable and battle-tested is the tool? What is the risk level of breaking changes for a foundation tool in a long-term template? (Considering _technical stability_ and _pace of change_).
+- **Community & Documentation:** Active development, support, and comprehensive documentation.
+- **Best Tool for the Job:** Considering all criteria, which tool offers the strongest overall fit, prioritizing standards, performance, OS interop, and maintainability based on the template's philosophy.
 
 ## Tools and Approaches Evaluated
 
@@ -28,97 +28,97 @@ We evaluated the most prominent options for managing Python project dependencies
 
 ### Option 1: [pip](pip-documentation) + [:term:`venv`](python:venv-tutorial) / [:term:`virtualenv`](virtualenv-documentation) (+ [:term:`pip-tools`](pip-tools-documentation))
 
-*   **Description:** The traditional standard using `pip` for installation within isolated virtual environments created by `venv` (stdlib) or `virtualenv`. `pip-tools` (`pip-compile`, `pip-sync`) is often added to manage dependencies via `requirements.in` and generate reproducible `requirements.txt` lock files.
-*   **Evaluation:**
-    *   **PEP Compliance:** Moderate. [pip](pip-documentation) understands PEP 621 for installing from `pyproject.toml`. [:term:`pip-tools`](pip-tools-documentation) can read from `pyproject.toml`. No native support for standard lock file formats (PEP 665), relies on generated `requirements.txt` which is a common convention but lacks richer metadata.
-    *   **Reproducibility:** High *with `pip-tools`*. `requirements.txt` generated by `pip-tools` provides strong pinning. Pure `pip` relies on `pip freeze` which is less deterministic.
-    *   **OS Interoperability:** Excellent. Core tools are foundational Python utilities robust across OSs. [:term:`pip-tools`](pip-tools-documentation) is pure Python and cross-platform.
-    *   **Performance:** Moderate. [pip](pip-documentation)'s dependency resolver can be slow for large/complex graphs. `pip-compile` adds time. [:term:`venv`](python:venv-tutorial)/[:term:`virtualenv`](virtualenv-documentation) creation/activation faster than some, slower than others (like uv).
-    *   **Developer Experience (DX):** Moderate. Requires multi-step workflow: create env, activate, manually edit requirement files, run `pip-compile`, run `pip-sync`/`pip install -r`. No single command for `add` or `remove`.
-    *   **Dependency Group Management:** Achieved by manually managing multiple `.in` / `.txt` files or leveraging `[project.optional-dependencies]` via `pip-tools`, less integrated than other tools.
-    *   **Integration:** Excellent. As the standard, most ecosystem tools inherently understand [:term:`venv`](python:venv-tutorial)s, `pip install`, and `requirements.txt`. Highest compatibility score.
-    *   **Maturity & Stability:** Very High. Extremely mature, battle-tested for years. Stable APIs.
-    *   **Community & Documentation:** Very High. Widely adopted, vast documentation, large community.
-*   **Conclusion:** A very stable, compatible baseline. Strong reproducibility *when augmented with pip-tools*. However, its multi-step workflow and moderate performance make it less ideal compared to modern integrated tools for a template prioritizing streamlined developer experience and automation speed.
+- **Description:** The traditional standard using `pip` for installation within isolated virtual environments created by `venv` (stdlib) or `virtualenv`. `pip-tools` (`pip-compile`, `pip-sync`) is often added to manage dependencies via `requirements.in` and generate reproducible `requirements.txt` lock files.
+- **Evaluation:**
+  - **PEP Compliance:** Moderate. [pip](pip-documentation) understands PEP 621 for installing from `pyproject.toml`. [:term:`pip-tools`](pip-tools-documentation) can read from `pyproject.toml`. No native support for standard lock file formats (PEP 665), relies on generated `requirements.txt` which is a common convention but lacks richer metadata.
+  - **Reproducibility:** High _with `pip-tools`_. `requirements.txt` generated by `pip-tools` provides strong pinning. Pure `pip` relies on `pip freeze` which is less deterministic.
+  - **OS Interoperability:** Excellent. Core tools are foundational Python utilities robust across OSs. [:term:`pip-tools`](pip-tools-documentation) is pure Python and cross-platform.
+  - **Performance:** Moderate. [pip](pip-documentation)'s dependency resolver can be slow for large/complex graphs. `pip-compile` adds time. [:term:`venv`](python:venv-tutorial)/[:term:`virtualenv`](virtualenv-documentation) creation/activation faster than some, slower than others (like uv).
+  - **Developer Experience (DX):** Moderate. Requires multi-step workflow: create env, activate, manually edit requirement files, run `pip-compile`, run `pip-sync`/`pip install -r`. No single command for `add` or `remove`.
+  - **Dependency Group Management:** Achieved by manually managing multiple `.in` / `.txt` files or leveraging `[project.optional-dependencies]` via `pip-tools`, less integrated than other tools.
+  - **Integration:** Excellent. As the standard, most ecosystem tools inherently understand [:term:`venv`](python:venv-tutorial)s, `pip install`, and `requirements.txt`. Highest compatibility score.
+  - **Maturity & Stability:** Very High. Extremely mature, battle-tested for years. Stable APIs.
+  - **Community & Documentation:** Very High. Widely adopted, vast documentation, large community.
+- **Conclusion:** A very stable, compatible baseline. Strong reproducibility _when augmented with pip-tools_. However, its multi-step workflow and moderate performance make it less ideal compared to modern integrated tools for a template prioritizing streamlined developer experience and automation speed.
 
 ### Option 2: [:term:`Poetry`](poetry-documentation)
 
-*   **Description:** An all-in-one tool providing dependency management, environment management, packaging, and publishing via a single CLI. Uses its own `[tool.poetry]` syntax in `pyproject.toml`.
-*   **Evaluation:**
-    *   **PEP Compliance:** Moderate (Deps Decl). Does *not* use standard `[project]` or `[project.optional-dependencies]` for dependency declaration, opting for custom `[tool.poetry.dependencies]`/`[tool.poetry.group]` (pre-PEP 621 finalization). PEP 517 backend implementation is compliant. Custom lock file format (`poetry.lock`). This is a significant deviation from standard config format goals.
-    *   **Reproducibility:** Very High. `poetry.lock` provides robust, hash-based pinning.
-    *   **OS Interoperability:** Very High. Python-based tool, well-tested across OSs, environment management works cross-platform.
-    *   **Performance:** High (Generally), but can be Poor in edge cases. Resolver is generally robust, but *can* be very slow on complex graphs with many releases (like nightly PyTorch builds), becoming a practical bottleneck for frequent updates/CI.
-    *   **Developer Experience (DX):** Excellent. Intuitive unified CLI (`poetry add`, `poetry remove`, `poetry update`, `poetry install`, `poetry run`). First-class dependency group management.
-    *   **Dependency Group Management:** Excellent. Well-integrated via `[tool.poetry.group]`.
-    *   **Integration:** High. Very popular, many tools/IDEs/CI platforms have explicit [:term:`Poetry`](poetry-documentation) support or are designed to work via `poetry run`. Compatibility is strong despite custom formats.
-    *   **Maturity & Stability:** Very High. Mature, widely adopted, stable.
-    *   **Community & Documentation:** Very High. Very large, active community, excellent documentation.
-*   **Conclusion:** Offers excellent DX and maturity, and is widely adopted. However, its failure to adhere to **PEP 621** for dependency declaration in `pyproject.toml` (a non-negotiable standard for this template) and occasional performance issues on complex dependency graphs make it unsuitable as the *primary* recommended manager.
+- **Description:** An all-in-one tool providing dependency management, environment management, packaging, and publishing via a single CLI. Uses its own `[tool.poetry]` syntax in `pyproject.toml`.
+- **Evaluation:**
+  - **PEP Compliance:** Moderate (Deps Decl). Does _not_ use standard `[project]` or `[project.optional-dependencies]` for dependency declaration, opting for custom `[tool.poetry.dependencies]`/`[tool.poetry.group]` (pre-PEP 621 finalization). PEP 517 backend implementation is compliant. Custom lock file format (`poetry.lock`). This is a significant deviation from standard config format goals.
+  - **Reproducibility:** Very High. `poetry.lock` provides robust, hash-based pinning.
+  - **OS Interoperability:** Very High. Python-based tool, well-tested across OSs, environment management works cross-platform.
+  - **Performance:** High (Generally), but can be Poor in edge cases. Resolver is generally robust, but _can_ be very slow on complex graphs with many releases (like nightly PyTorch builds), becoming a practical bottleneck for frequent updates/CI.
+  - **Developer Experience (DX):** Excellent. Intuitive unified CLI (`poetry add`, `poetry remove`, `poetry update`, `poetry install`, `poetry run`). First-class dependency group management.
+  - **Dependency Group Management:** Excellent. Well-integrated via `[tool.poetry.group]`.
+  - **Integration:** High. Very popular, many tools/IDEs/CI platforms have explicit [:term:`Poetry`](poetry-documentation) support or are designed to work via `poetry run`. Compatibility is strong despite custom formats.
+  - **Maturity & Stability:** Very High. Mature, widely adopted, stable.
+  - **Community & Documentation:** Very High. Very large, active community, excellent documentation.
+- **Conclusion:** Offers excellent DX and maturity, and is widely adopted. However, its failure to adhere to **PEP 621** for dependency declaration in `pyproject.toml` (a non-negotiable standard for this template) and occasional performance issues on complex dependency graphs make it unsuitable as the _primary_ recommended manager.
 
 ### Option 3: [:term:`PDM`](pdm-documentation)
 
-*   **Description:** A modern, PEP-first dependency manager and project tool. Uses standard `[project]` and `[project.optional-dependencies]` in `pyproject.toml` (PEP 621). Supports lock files (aiming for PEP 665) and manages virtual environments (can use standard venv).
-*   **Evaluation:**
-    *   **PEP Compliance:** Excellent (Deps Decl & Locking). **Strictly adheres to PEP 621** for dependency declaration. Aims for PEP 665 for lock file. PEP 517 backend compatible. Meets this non-negotiable standard where applicable for format.
-    *   **Reproducibility:** Very High. `pdm.lock` provides robust pinning.
-    *   **OS Interoperability:** Very High. Python-based tool, works across OSs. Excellent support for standard virtual environments.
-    *   **Performance:** High. Resolver is robust and performs well on complex graphs (generally better in practice than Poetry on specific problematic cases reported by users), though not consistently at `uv`'s speed.
-    *   **Developer Experience (DX):** Excellent. Intuitive unified CLI (`pdm add`, `pdm remove`, `pdm update`, `pdm install`, `pdm run`, `pdm build`, `pdm publish`). Excellent dependency group management.
-    *   **Integration:** High. Growing support due to PEP adherence. Works well with tools via standard [:term:`venv`](python:venv-tutorial) and `pdm run`.
-    *   **Maturity & Stability:** High. Mature, stable, active community. Less legacy than setuptools/pip, slightly younger adoption scale than [:term:`Poetry`](poetry-documentation) but rapidly growing.
-    *   **Community & Documentation:** High. Active development and community, good documentation.
-*   **Conclusion:** A strong contender that excels at adhering to **PEP 621** while offering excellent DX and robust performance. A very solid, mature choice. However, its performance is not the absolute peak achievable, leading us to evaluate the faster alternatives.
+- **Description:** A modern, PEP-first dependency manager and project tool. Uses standard `[project]` and `[project.optional-dependencies]` in `pyproject.toml` (PEP 621). Supports lock files (aiming for PEP 665) and manages virtual environments (can use standard venv).
+- **Evaluation:**
+  - **PEP Compliance:** Excellent (Deps Decl & Locking). **Strictly adheres to PEP 621** for dependency declaration. Aims for PEP 665 for lock file. PEP 517 backend compatible. Meets this non-negotiable standard where applicable for format.
+  - **Reproducibility:** Very High. `pdm.lock` provides robust pinning.
+  - **OS Interoperability:** Very High. Python-based tool, works across OSs. Excellent support for standard virtual environments.
+  - **Performance:** High. Resolver is robust and performs well on complex graphs (generally better in practice than Poetry on specific problematic cases reported by users), though not consistently at `uv`'s speed.
+  - **Developer Experience (DX):** Excellent. Intuitive unified CLI (`pdm add`, `pdm remove`, `pdm update`, `pdm install`, `pdm run`, `pdm build`, `pdm publish`). Excellent dependency group management.
+  - **Integration:** High. Growing support due to PEP adherence. Works well with tools via standard [:term:`venv`](python:venv-tutorial) and `pdm run`.
+  - **Maturity & Stability:** High. Mature, stable, active community. Less legacy than setuptools/pip, slightly younger adoption scale than [:term:`Poetry`](poetry-documentation) but rapidly growing.
+  - **Community & Documentation:** High. Active development and community, good documentation.
+- **Conclusion:** A strong contender that excels at adhering to **PEP 621** while offering excellent DX and robust performance. A very solid, mature choice. However, its performance is not the absolute peak achievable, leading us to evaluate the faster alternatives.
 
 ### Option 4: [:term:`Hatch`](hatch-documentation)
 
-*   **Description:** Comprehensive project manager with dependency, environment (environment-centric), packaging, and scripting/task execution capabilities. Configurable via `[tool.hatch]` in `pyproject.toml`. Adheres to PEP 621 for metadata.
-*   **Evaluation:**
-    *   **PEP Compliance:** Excellent (Metadata). Adheres to PEP 621 for metadata (`[project]`, `[project.optional-dependencies]`). Custom `[tool.hatch]` for environment/script configuration. Does not manage a single root lock file explicitly across environments, a deviation from common practice.
-    *   **Reproducibility:** High (Environment-level). Ensures dependency reproducibility *per environment*, but lacks a single lock file representing the entire project's resolved dependency closure.
-    *   **OS Interoperability:** Very High. Python-based, strong cross-platform support. Environment management handles OSs well.
-    *   **Performance:** High (Environment Mgmt). Environment creation/switching is performant. Resolver speed depends on configured installer (often delegates).
-    *   **Developer Experience (DX):** High (Tasks), Moderate (Deps). Excellent DX for running tasks (`hatch run <env> <cmd>`). Dependency modification (add/remove) less streamlined (requires editing `pyproject.toml` sections and resyncing/recreating environments). Environment-centric workflow requires understanding.
-    *   **Dependency Group Management:** Different model, links dependency sets to *named environments* rather than managing them as first-class, globally addressable groups managed by simple `add`/`remove`.
-    *   **Integration:** Excellent (Tasks). Its environment-centric design with `hatch run` is an excellent fit for the Task Automation layer, designed for external tool execution within defined environments. Also integrates packaging.
-    *   **Maturity & Stability:** High. Mature, robust, actively developed.
-    *   **Community & Documentation:** High. Strong community, good documentation.
-*   **Conclusion:** Excellent as a comprehensive project and task manager with strong PEP metadata adherence. Its environment-centric dependency model and lack of a single root lock file are a notable difference that makes it less aligned with the traditional "dependency manager" concept compared to the others, despite its strengths in other areas.
+- **Description:** Comprehensive project manager with dependency, environment (environment-centric), packaging, and scripting/task execution capabilities. Configurable via `[tool.hatch]` in `pyproject.toml`. Adheres to PEP 621 for metadata.
+- **Evaluation:**
+  - **PEP Compliance:** Excellent (Metadata). Adheres to PEP 621 for metadata (`[project]`, `[project.optional-dependencies]`). Custom `[tool.hatch]` for environment/script configuration. Does not manage a single root lock file explicitly across environments, a deviation from common practice.
+  - **Reproducibility:** High (Environment-level). Ensures dependency reproducibility _per environment_, but lacks a single lock file representing the entire project's resolved dependency closure.
+  - **OS Interoperability:** Very High. Python-based, strong cross-platform support. Environment management handles OSs well.
+  - **Performance:** High (Environment Mgmt). Environment creation/switching is performant. Resolver speed depends on configured installer (often delegates).
+  - **Developer Experience (DX):** High (Tasks), Moderate (Deps). Excellent DX for running tasks (`hatch run <env> <cmd>`). Dependency modification (add/remove) less streamlined (requires editing `pyproject.toml` sections and resyncing/recreating environments). Environment-centric workflow requires understanding.
+  - **Dependency Group Management:** Different model, links dependency sets to _named environments_ rather than managing them as first-class, globally addressable groups managed by simple `add`/`remove`.
+  - **Integration:** Excellent (Tasks). Its environment-centric design with `hatch run` is an excellent fit for the Task Automation layer, designed for external tool execution within defined environments. Also integrates packaging.
+  - **Maturity & Stability:** High. Mature, robust, actively developed.
+  - **Community & Documentation:** High. Strong community, good documentation.
+- **Conclusion:** Excellent as a comprehensive project and task manager with strong PEP metadata adherence. Its environment-centric dependency model and lack of a single root lock file are a notable difference that makes it less aligned with the traditional "dependency manager" concept compared to the others, despite its strengths in other areas.
 
 ### Option 5: [:term:`uv`](uv-documentation)
 
-*   **Description:** A very fast package installer, resolver, environment manager, and project tool implemented in Rust. Aims to be a performant replacement for pip, pip-tools, venv, virtualenv, Poetry, PDM, Hatch components. Supports `pyproject.toml` (`[project]`, `[project.optional-dependencies]`).
-*   **Evaluation:**
-    *   **PEP Compliance:** Excellent (Deps Decl). Supports PEP 621 declaration in `pyproject.toml`. PEP 517 compatible (via `uv build`). Custom lock file (`uv.lock`). Meets this critical standard for format.
-    *   **Reproducibility:** Very High. Generates and adheres to `uv.lock` for robust, hash-based pinning.
-    *   **OS Interoperability:** Excellent. Rust binary provides native OS performance and robustness across platforms.
-    *   **Performance:** Excellent. **Significantly faster** than all Python-based dependency managers and installers for resolution and installation. This is a major differentiating factor and aligns strongly with automating quickly.
-    *   **Developer Experience (DX):** Excellent. Provides intuitive integrated CLI commands (`uv add`, `uv remove`, `uv update`, `uv run`, `uv build`, `uv publish`, `uv venv`). Comparable DX to PDM/Poetry for standard tasks.
-    *   **Dependency Group Management:** Excellent. Supports standard `[project.optional-dependencies]` for defining groups and managing them via CLI.
-    *   **Integration:** High (Growing Rapidly). Explicitly designed to replace/interoperate with standards ([:term:`venv`](python:venv-tutorial), [pip](pip-documentation)), works well with standard build processes. Integrations are rapidly being built due to its popularity.
-    *   **Maturity & Stability:** Moderate (Rapidly Developing). V0.x, fast-moving development. While technically robust and backed by solid engineering, it's not as historically battle-tested across *all* complex edge cases as 1.0+ tools. Carries some risk of minor behavioral changes or discovering new edge cases in v0.x.
-    *   **Community & Documentation:** High (Exploding). Very active development, rapidly growing user base, excellent and quickly improving documentation.
-*   **Conclusion:** Delivers outstanding performance and a strong modern DX, now with PEP 621 editing capabilities. Its primary practical trade-off compared to more mature tools is its v0.x status, which implies a faster pace of change and less historical battle-testing across edge cases. However, its technical merits strongly align with the template's philosophy prioritizing speed and thoughtful design.
+- **Description:** A very fast package installer, resolver, environment manager, and project tool implemented in Rust. Aims to be a performant replacement for pip, pip-tools, venv, virtualenv, Poetry, PDM, Hatch components. Supports `pyproject.toml` (`[project]`, `[project.optional-dependencies]`).
+- **Evaluation:**
+  - **PEP Compliance:** Excellent (Deps Decl). Supports PEP 621 declaration in `pyproject.toml`. PEP 517 compatible (via `uv build`). Custom lock file (`uv.lock`). Meets this critical standard for format.
+  - **Reproducibility:** Very High. Generates and adheres to `uv.lock` for robust, hash-based pinning.
+  - **OS Interoperability:** Excellent. Rust binary provides native OS performance and robustness across platforms.
+  - **Performance:** Excellent. **Significantly faster** than all Python-based dependency managers and installers for resolution and installation. This is a major differentiating factor and aligns strongly with automating quickly.
+  - **Developer Experience (DX):** Excellent. Provides intuitive integrated CLI commands (`uv add`, `uv remove`, `uv update`, `uv run`, `uv build`, `uv publish`, `uv venv`). Comparable DX to PDM/Poetry for standard tasks.
+  - **Dependency Group Management:** Excellent. Supports standard `[project.optional-dependencies]` for defining groups and managing them via CLI.
+  - **Integration:** High (Growing Rapidly). Explicitly designed to replace/interoperate with standards ([:term:`venv`](python:venv-tutorial), [pip](pip-documentation)), works well with standard build processes. Integrations are rapidly being built due to its popularity.
+  - **Maturity & Stability:** Moderate (Rapidly Developing). V0.x, fast-moving development. While technically robust and backed by solid engineering, it's not as historically battle-tested across _all_ complex edge cases as 1.0+ tools. Carries some risk of minor behavioral changes or discovering new edge cases in v0.x.
+  - **Community & Documentation:** High (Exploding). Very active development, rapidly growing user base, excellent and quickly improving documentation.
+- **Conclusion:** Delivers outstanding performance and a strong modern DX, now with PEP 621 editing capabilities. Its primary practical trade-off compared to more mature tools is its v0.x status, which implies a faster pace of change and less historical battle-testing across edge cases. However, its technical merits strongly align with the template's philosophy prioritizing speed and thoughtful design.
 
 ### Option 6: [:term:`Rye`](uv-documentation)
 
-*   **Description:** An experimental, unified workflow tool in Rust. Manages Python runtimes, project structure, dependencies, build, and publish, often using `uv` internally for speed. Configurable via `pyproject.toml`.
-*   **Evaluation:**
-    *   **PEP Compliance:** High (Metadata). Uses PEP 621 for metadata/declaration tables. Custom lock file format (`requirements.lock`). Provides its own opinionated workflow/abstractions that wrap standard interactions.
-    *   **Reproducibility:** Very High. Manages its own lock file and environments.
-    *   **OS Interoperability:** Excellent. Rust binary provides native performance and robustness across platforms. Handles Python runtime installation as well.
-    *   **Performance:** Excellent. Inherits `uv`'s speed for core dependency operations.
-    *   **Developer Experience (DX):** Very High. Provides a very clean, unified CLI (`rye init`, `rye add`, `rye run`, `rye build`, `rye publish`). Opinionated but can simplify workflow buy-in.
-    *   **Dependency Group Management:** Excellent. Supports standard `[project.optional-dependencies]`.
-    *   **Integration:** Moderate (Growing). As an all-in-one, tools need to interact with `rye run` or be compatible with its env structure. Less explicit support yet than for [:term:`PDM`](pdm-documentation)/[:term:`Poetry`](poetry-documentation)/[pip](pip-documentation)+[:term:`venv`](python:venv-tutorial).
-    *   **Maturity & Stability:** Low (Experimental). **Explicitly labeled experimental**. Subject to breaking changes and design evolution. This is the most significant factor for a foundation template.
-    *   **Community & Documentation:** High (Active, niche). Very active development due to creator profile. Rapid adoption among early adopters.
-*   **Conclusion:** Highly promising unified workflow tool built on [:term:`uv`](uv-documentation)'s performance. However, its **experimental status** makes it too high-risk for a template aiming to provide a *robust* foundation based on current, albeit rapidly developing, *stable* tooling. A tool marked "experimental" should not be the default cornerstone of a widely used template unless the user explicitly opts into that level of risk.
+- **Description:** An experimental, unified workflow tool in Rust. Manages Python runtimes, project structure, dependencies, build, and publish, often using `uv` internally for speed. Configurable via `pyproject.toml`.
+- **Evaluation:**
+  - **PEP Compliance:** High (Metadata). Uses PEP 621 for metadata/declaration tables. Custom lock file format (`requirements.lock`). Provides its own opinionated workflow/abstractions that wrap standard interactions.
+  - **Reproducibility:** Very High. Manages its own lock file and environments.
+  - **OS Interoperability:** Excellent. Rust binary provides native performance and robustness across platforms. Handles Python runtime installation as well.
+  - **Performance:** Excellent. Inherits `uv`'s speed for core dependency operations.
+  - **Developer Experience (DX):** Very High. Provides a very clean, unified CLI (`rye init`, `rye add`, `rye run`, `rye build`, `rye publish`). Opinionated but can simplify workflow buy-in.
+  - **Dependency Group Management:** Excellent. Supports standard `[project.optional-dependencies]`.
+  - **Integration:** Moderate (Growing). As an all-in-one, tools need to interact with `rye run` or be compatible with its env structure. Less explicit support yet than for [:term:`PDM`](pdm-documentation)/[:term:`Poetry`](poetry-documentation)/[pip](pip-documentation)+[:term:`venv`](python:venv-tutorial).
+  - **Maturity & Stability:** Low (Experimental). **Explicitly labeled experimental**. Subject to breaking changes and design evolution. This is the most significant factor for a foundation template.
+  - **Community & Documentation:** High (Active, niche). Very active development due to creator profile. Rapid adoption among early adopters.
+- **Conclusion:** Highly promising unified workflow tool built on [:term:`uv`](uv-documentation)'s performance. However, its **experimental status** makes it too high-risk for a template aiming to provide a _robust_ foundation based on current, albeit rapidly developing, _stable_ tooling. A tool marked "experimental" should not be the default cornerstone of a widely used template unless the user explicitly opts into that level of risk.
 
 ## Chosen Tool(s)
 
-*   **[:term:`uv`](uv-documentation)** as the primary **Dependency Manager**.
-*   **[:py:class:`virtualenv`](virtualenv-documentation) / [venv](python:venv-tutorial)** (orchestrated by uv) for environment management.
+- **[:term:`uv`](uv-documentation)** as the primary **Dependency Manager**.
+- **[:py:class:`virtualenv`](virtualenv-documentation) / [venv](python:venv-tutorial)** (orchestrated by uv) for environment management.
 
 ## Justification for the Choice
 
@@ -130,7 +130,7 @@ The selection of **[:term:`uv`](uv-documentation)** as the primary dependency ma
 4.  **Robust and Cross-Platform:** Implemented in Rust, [:term:`uv`](uv-documentation) offers inherent **OS Interoperability** and technical reliability across Linux, macOS, and Windows. Its resolver design is considered robust and efficient for handling complex dependency graphs.
 5.  **Leveraging Standard Environments:** While [:term:`uv`](uv-documentation) has experimental features, the template configures it to use **standard virtual environments** (`uv venv`), which are universally understood and compatible with the vast Python ecosystem. This grounds the performance benefits in a stable, well-supported environment model, balancing innovation with **Compatibility**.
 
-While [:term:`uv`](uv-documentation) is a newer tool still under rapid development, its technical stability in core dependency resolution and installation, combined with its performance benefits and adherence to key standards like PEP 621, positions it as the technically superior choice for a template prioritizing performance and modern best practices *even at this stage*. The template acknowledges its v0.x status in documentation, managing the expectation regarding pace of change versus 1.0+ tools.
+While [:term:`uv`](uv-documentation) is a newer tool still under rapid development, its technical stability in core dependency resolution and installation, combined with its performance benefits and adherence to key standards like PEP 621, positions it as the technically superior choice for a template prioritizing performance and modern best practices _even at this stage_. The template acknowledges its v0.x status in documentation, managing the expectation regarding pace of change versus 1.0+ tools.
 
 [:term:`PDM`](pdm-documentation) was a strong alternative, particularly for its maturity and strict PEP 621 adherence, but ultimately did not offer the same level of performance benefit as [:term:`uv`](uv-documentation). [:term:`Poetry`](poetry-documentation) was discounted primarily for its non-adherence to **PEP 621** declaration syntax and reported performance bottlenecks on specific complex dependency sets. [:term:`Hatch`](hatch-documentation)'s environment-centric model and lack of a single root lock file made it less aligned with the standard dependency management workflow sought for the primary manager. [:term:`Rye`](uv-documentation)'s "experimental" status made it unsuitable for a template's default foundation.
 
@@ -138,12 +138,12 @@ By choosing [:term:`uv`](uv-documentation), the template makes a deliberate, opi
 
 ## Interactions with Other Topics
 
-*   **pyproject.toml (01):** [:term:`uv`](uv-documentation) is the primary consumer and editor of the `[project]`, `[build-system]`, and `[project.optional-dependencies]` tables in `pyproject.toml`, acting as the interpreter for packaging standards. Its own configuration goes in `[tool.uv]`.
-*   **Packaging Build (09):** [:term:`uv`](uv-documentation) acts as a PEP 517 build frontend (`uv build`), calling the appropriate backend ([`setuptools`](setuptools-documentation) or [`maturin`](maturin-documentation)) configured in `pyproject.toml`.
-*   **Packaging Publish (10):** [:term:`uv`](uv-documentation) provides a command to publish packages (`uv publish`) as an alternative to using [:term:`twine`](twine-documentation) directly. The Task Automation layer (12) might call `uv publish`.
-*   **Task Automation (12):** [:term:`Nox`](nox-documentation) will orchestrate workflows by calling [:term:`uv`](uv-documentation) commands (e.g., `uv run ruff check`, `uv run pytest`, `uv build`, `uv publish`). [:term:`uv`](uv-documentation) is also configured as the backend for Nox's virtual environments (`nox.options.default_venv_backend = "uv"`), ensuring all session environments are created and managed with [:term:`uv`](uv-documentation)'s performance.
-*   **Container Build (11):** [:term:`uv`](uv-documentation) is the recommended tool for installing dependencies *inside* the `Dockerfile` (`RUN uv sync`).
-*   **Dev Containers (17):** [:term:`uv`](uv-documentation) is installed within the development container image to manage dependencies and run tools inside the container.
-*   **Pre-commit Hooks (18):** [:term:`pre-commit`](pre-commit-documentation) will be configured to run `uv run <tool>` or `uvx <tool>` commands for linting, formatting, etc., ensuring the latest and fastest execution of those tools via [:term:`uv`](uv-documentation)'s environment management.
-*   **Security Checks (08):** Tools like [:term:`pip-audit`](pip-audit-documentation) and [:term:`Bandit`](bandit-documentation) are installed via [:term:`uv`](uv-documentation) and run within a [:term:`uv`](uv-documentation)-managed environment via the Task Automation layer.
-*   **CI Orchestration (13):** CI platforms will install [:term:`uv`](uv-documentation) and [:term:`Nox`](nox-documentation) and then call [:term:`Nox`](nox-documentation) sessions, which in turn heavily utilize [:term:`uv`](uv-documentation).
+- **pyproject.toml (01):** [:term:`uv`](uv-documentation) is the primary consumer and editor of the `[project]`, `[build-system]`, and `[project.optional-dependencies]` tables in `pyproject.toml`, acting as the interpreter for packaging standards. Its own configuration goes in `[tool.uv]`.
+- **Packaging Build (09):** [:term:`uv`](uv-documentation) acts as a PEP 517 build frontend (`uv build`), calling the appropriate backend ([`setuptools`](setuptools-documentation) or [`maturin`](maturin-documentation)) configured in `pyproject.toml`.
+- **Packaging Publish (10):** [:term:`uv`](uv-documentation) provides a command to publish packages (`uv publish`) as an alternative to using [:term:`twine`](twine-documentation) directly. The Task Automation layer (12) might call `uv publish`.
+- **Task Automation (12):** [:term:`Nox`](nox-documentation) will orchestrate workflows by calling [:term:`uv`](uv-documentation) commands (e.g., `uv run ruff check`, `uv run pytest`, `uv build`, `uv publish`). [:term:`uv`](uv-documentation) is also configured as the backend for Nox's virtual environments (`nox.options.default_venv_backend = "uv"`), ensuring all session environments are created and managed with [:term:`uv`](uv-documentation)'s performance.
+- **Container Build (11):** [:term:`uv`](uv-documentation) is the recommended tool for installing dependencies _inside_ the `Dockerfile` (`RUN uv sync`).
+- **Dev Containers (17):** [:term:`uv`](uv-documentation) is installed within the development container image to manage dependencies and run tools inside the container.
+- **Pre-commit Hooks (18):** [:term:`pre-commit`](pre-commit-documentation) will be configured to run `uv run <tool>` or `uvx <tool>` commands for linting, formatting, etc., ensuring the latest and fastest execution of those tools via [:term:`uv`](uv-documentation)'s environment management.
+- **Security Checks (08):** Tools like [:term:`pip-audit`](pip-audit-documentation) and [:term:`Bandit`](bandit-documentation) are installed via [:term:`uv`](uv-documentation) and run within a [:term:`uv`](uv-documentation)-managed environment via the Task Automation layer.
+- **CI Orchestration (13):** CI platforms will install [:term:`uv`](uv-documentation) and [:term:`Nox`](nox-documentation) and then call [:term:`Nox`](nox-documentation) sessions, which in turn heavily utilize [:term:`uv`](uv-documentation).
