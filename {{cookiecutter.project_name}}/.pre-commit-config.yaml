@@ -60,6 +60,12 @@ repos:
       - id: prettier
         name: Prettier
 
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.33.1
+    hooks:
+      - id: check-github-workflows
+        args: [ "--verbose" ]
+
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v4.8.2
     hooks:
