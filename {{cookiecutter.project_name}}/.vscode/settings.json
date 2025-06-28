@@ -1,0 +1,43 @@
+{
+  "editor.formatOnSave": true,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+
+  // Python
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.codeActionsOnSave": {
+      // keep imports tidy automatically
+      "source.organizeImports": "always"
+    }
+  },
+  "ruff.args": [
+    "--config",
+    "${workspaceFolder}/.ruff.toml"
+  ],
+  "python.linting.enabled": true,
+  "python.linting.ruffEnabled": true,
+  // Pyright
+  "python.analysis.typeCheckingMode": "basic",
+
+  // Pytest
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": ["tests"],
+  "python.testing.cwd": "${workspaceFolder}",
+
+  // Rust
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer",
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": "always"
+    }
+  },
+  // Run Clippy on save (matches pre-commit hooks)
+  "rust-analyzer.checkOnSave.command": "clippy",
+
+  // Prettier for non-Python text formats
+  "[json]":  { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[yaml]":  { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }
+}
