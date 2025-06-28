@@ -12,6 +12,12 @@ from util import templates_matching
     indirect=True,
     ids=["base", "maturin"]
 )
+@pytest.mark.parametrize(
+    argnames="robust_demo__is_setup",
+    argvalues=[False],
+    indirect=True,
+    ids=["no-setup"]
+)
 class TestWorkflow:
     @pytest.mark.parametrize(
         argnames="robust_file__path__relative",
