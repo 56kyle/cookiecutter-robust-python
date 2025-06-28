@@ -29,9 +29,9 @@ on:
 
 jobs:
   build-package-python:
-    name: Run Python Package Build Check on {% raw %}${{ matrix.os }}{% endraw %}
+    name: Run Python Package Build Check on {{ "${{ matrix.os }}" }}
     # Building pure Python packages should work reliably across OSs.
-    runs-on: {% raw %}${{ matrix.os }}{% endraw %}
+    runs-on: {{ "${{ matrix.os }}" }}
     strategy:
       matrix:
         os: [ubuntu-latest]
@@ -55,6 +55,6 @@ jobs:
       - name: Upload built packages artifact
         uses: actions/upload-artifact@v4
         with:
-          name: distribution-packages-{% raw %}{{ github.event.inputs.tag }}{% endraw %}
+          name: distribution-packages-{{ "${{ github.event.inputs.tag }}" }}
           path: dist/
           retention-days: 7
