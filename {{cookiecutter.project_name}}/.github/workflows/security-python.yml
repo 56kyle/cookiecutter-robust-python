@@ -18,13 +18,13 @@ on:
       - main
       - master
     paths:
-      - 'src/**/*.py'
-      - 'tests/**/*.py'
-      - 'noxfile.py'
-      - 'pyproject.toml'
-      - '.bandit'
-      - '.ruff.toml'
-      - '.github/workflows/security-python.yml'
+      - "src/**/*.py"
+      - "tests/**/*.py"
+      - "noxfile.py"
+      - "pyproject.toml"
+      - ".bandit"
+      - ".ruff.toml"
+      - ".github/workflows/security-python.yml"
 
   workflow_dispatch:
 
