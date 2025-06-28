@@ -175,7 +175,7 @@ def tests_rust(session: Session) -> None:
 def docs_build(session: Session) -> None:
     """Build the project documentation (Sphinx)."""
     session.log("Installing documentation dependencies...")
-    session.install("-e", ".", "--group", "dev")
+    session.install("-e", ".", "--group", "docs")
 
     session.log(f"Building documentation with py{session.python}.")
     docs_build_dir = Path("docs") / "_build" / "html"

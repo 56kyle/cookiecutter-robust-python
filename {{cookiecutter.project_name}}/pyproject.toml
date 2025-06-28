@@ -28,6 +28,14 @@ dev = [
     "nox>=2025.5.1",
     "pre-commit>=4.2.0",
     "pre-commit-hooks>=5.0.0",
+    "ruff>=0.11.9",
+    "bandit>=1.8.3",
+    "pip-audit>=2.9.0",
+    "pytest>=8.3.5",
+    "pytest-cov>=6.1.1",
+    "pyright>=1.1.400",
+]
+docs = [
     "furo>=2024.8.6",
     "myst-parser>=3.0.1",
     "sphinx>=7.4.7",
@@ -35,13 +43,6 @@ dev = [
     "sphinx-copybutton>=0.5.2",
     "sphinx-tabs>=3.4.7",
     "sphinxcontrib-typer>=0.5.1",
-    "pydocstyle>=6.3.0",
-    "ruff>=0.11.9",
-    "bandit>=1.8.3",
-    "pip-audit>=2.9.0",
-    "pytest>=8.3.5",
-    "pytest-cov>=6.1.1",
-    "pyright>=1.1.400",
 ]
 
 [project.urls]
