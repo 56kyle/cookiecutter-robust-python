@@ -1,6 +1,6 @@
 [tool.commitizen]
 tag_format = "v$version"
-version = {{ cookiecutter.version }}
+version = "{{ cookiecutter.version }}"
 version_scheme = "pep440"
 version_provider = "pep621"
 
