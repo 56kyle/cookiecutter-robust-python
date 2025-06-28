@@ -11,3 +11,8 @@ repos:
     rev: v2.6.0
     hooks:
       - id: prettier
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.33.1
+    hooks:
+      - id: check-github-workflows
+        args: [ "--verbose" ]
