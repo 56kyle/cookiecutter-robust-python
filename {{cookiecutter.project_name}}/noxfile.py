@@ -187,7 +187,7 @@ def docs_build(session: Session) -> None:
     session.run("sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-W")
 
 
-@nox.session(python=DEFAULT_PYTHON_VERSION, name="build-python", tags=[BUILD, PYTHON])
+@nox.session(python=None, name="build-python", tags=[BUILD, PYTHON])
 def build_python(session: Session) -> None:
     """Build sdist and wheel packages (uv build)."""
     session.log(f"Building sdist and wheel packages with py{session.python}.")
@@ -202,7 +202,7 @@ def build_python(session: Session) -> None:
         session.log(f"- {path.name}")
 
 
-@nox.session(python=DEFAULT_PYTHON_VERSION, name="build-container", tags=[BUILD])
+@nox.session(python=None, name="build-container", tags=[BUILD])
 def build_container(session: Session) -> None:
     """Build the Docker container image.
 
@@ -224,7 +224,7 @@ def build_container(session: Session) -> None:
 
     current_dir: Path = Path.cwd()
     session.log(f"Ensuring core dependencies are synced in {current_dir.resolve()} for build context...")
-    session.run("-e", ".")
+    session.install("-e", ".")
 
     session.log(f"Building Docker image using {container_cli}.")
     project_image_name = PACKAGE_NAME.replace("_", "-").lower()
