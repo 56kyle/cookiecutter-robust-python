@@ -17,14 +17,14 @@ cli: typer.Typer = typer.Typer()
 @cli.callback(invoke_without_command=True)
 def lint_from_demo(
     demos_cache_folder: Annotated[Path, FolderOption("--demos-cache-folder", "-c")],
-    demo_name: Annotated[str, typer.Option("--demo-name", "-d")],
-    no_cache: Annotated[bool, typer.Option("--no-cache", "-n")] = False,
+    add_rust_extension: Annotated[bool, typer.Option("--add-rust-extension", "-r")] = False,
+    no_cache: Annotated[bool, typer.Option("--no-cache", "-n")] = False
 ) -> None:
     """Runs precommit in a generated project and matches the template to the results."""
     try:
         with in_new_demo(
             demos_cache_folder=demos_cache_folder,
-            demo_name=demo_name,
+            add_rust_extension=add_rust_extension,
             no_cache=no_cache
         ) as demo_path:
             pre_commit.main.main(["run", "--all-files", "--hook-stage=manual", "--show-diff-on-failure"])

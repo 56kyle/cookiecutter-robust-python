@@ -53,14 +53,14 @@ uv: partial[subprocess.CompletedProcess] = partial(run_command, "uv")
 @contextmanager
 def in_new_demo(
     demos_cache_folder: Path,
-    demo_name: str,
+    add_rust_extension: bool,
     no_cache: bool,
     **kwargs: Any
 ) -> Generator[Path, None, None]:
     """Returns a context manager for working within a new demo."""
     demo_path: Path = generate_demo(
         demos_cache_folder=demos_cache_folder,
-        demo_name=demo_name,
+        add_rust_extension=add_rust_extension,
         no_cache=no_cache,
         **kwargs
     )
@@ -70,18 +70,20 @@ def in_new_demo(
 
 def generate_demo(
     demos_cache_folder: Path,
-    demo_name: str,
+    add_rust_extension: bool,
     no_cache: bool,
     **kwargs: Any
 ) -> Path:
     """Generates a demo project and returns its root path."""
+    name_modifier: str = "maturin" if add_rust_extension else "python"
+    demo_name: str = f"robust-{name_modifier}-demo"
     demos_cache_folder.mkdir(exist_ok=True)
     if no_cache:
         _remove_existing_demo(demo_path=demos_cache_folder / demo_name)
     cruft.create(
         template_git_url=str(REPO_FOLDER),
         output_dir=demos_cache_folder,
-        extra_context={"project_name": demo_name, **kwargs},
+        extra_context={"project_name": demo_name, "add_rust_extension": add_rust_extension, **kwargs},
         no_input=True,
         overwrite_if_exists=True
     )

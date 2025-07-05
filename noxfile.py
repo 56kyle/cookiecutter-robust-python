@@ -36,7 +36,6 @@ DEMO_ROOT_FOLDER: Path = PROJECT_DEMOS_FOLDER / DEFAULT_DEMO_NAME
 GENERATE_DEMO_SCRIPT: Path = SCRIPTS_FOLDER / "generate-demo.py"
 GENERATE_DEMO_OPTIONS: tuple[str, ...] = (
     *("--demos-cache-folder", PROJECT_DEMOS_FOLDER),
-    *("--demo-name", DEFAULT_DEMO_NAME),
 )
 
 
@@ -124,7 +123,8 @@ def test(session: Session) -> None:
 @nox.session(python=None, name="update-demos")
 def update_demo(session: Session) -> None:
     session.log("Updating generated project demos...")
-    session.notify("generate-demo",)
+    session.run(GENERATE_DEMO_SCRIPT, *GENERATE_DEMO_OPTIONS)
+    session.run(GENERATE_DEMO_SCRIPT, *GENERATE_DEMO_OPTIONS, "-r")
 
 
 @nox.session(venv_backend="none")
