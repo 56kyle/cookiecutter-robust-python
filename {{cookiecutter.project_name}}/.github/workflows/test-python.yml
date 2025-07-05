@@ -28,13 +28,18 @@ on:
 
 jobs:
   test-python:
-    name: Run Python Tests on {{"${{ matrix.os }}/${{ matrix.python-version }}"}}
+    name: Run Python Tests on {{"${{ matrix.os }}/${{ matrix.python }}"}}
     runs-on: {{"${{ matrix.os }}"}}
     strategy:
       matrix:
-        python-version: [ "3.9", "3.10", "3.11", "3.12", "3.13" ]
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
-
+        include:
+          - { python: "3.9", os: "ubuntu-latest" }
+          - { python: "3.10", os: "ubuntu-latest" }
+          - { python: "3.11", os: "ubuntu-latest" }
+          - { python: "3.12", os: "ubuntu-latest" }
+          - { python: "3.13", os: "ubuntu-latest" }
+          - { python: "3.13", os: "macos-latest" }
+          - { python: "3.13", os: "windows-latest" }
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -45,21 +50,21 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: {{"${{ matrix.python-version }}"}}
+          python-version: {{"${{ matrix.python }}"}}
 
       - name: Run test suite
-        run: uvx nox -s {{"tests-python-${{ matrix.python-version }}"}}
+        run: uvx nox -s {{"tests-python-${{ matrix.python }}"}}
 
       - name: Upload test reports
         uses: actions/upload-artifact@v4
         with:
-          name: {{"test-results-${{ matrix.os }}-py${{ matrix.python-version }}"}}
+          name: {{"test-results-${{ matrix.os }}-py${{ matrix.python }}"}}
           path: tests/results/*.xml
           retention-days: 5
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
         with:
-          name: {{"coverage-report-${{ matrix.os }}-py${{ matrix.python-version }}"}}
+          name: {{"coverage-report-${{ matrix.os }}-py${{ matrix.python }}"}}
           path: coverage.xml
           retention-days: 5
