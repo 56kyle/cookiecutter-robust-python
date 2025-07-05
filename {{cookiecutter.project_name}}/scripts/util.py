@@ -8,6 +8,9 @@ from typing import Any
 from typing import Callable
 
 
+REPO_FOLDER: Path = Path(__file__).resolve().parent.parent
+
+
 class MissingDependencyError(Exception):
     """Exception raised when a depedency is missing from the system running setup-repo."""
 
