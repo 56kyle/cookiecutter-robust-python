@@ -108,7 +108,7 @@ def lint_rust(session: Session) -> None:
 
 
 {% endif -%}
-@nox.parametrize(arg_names="python_version", arg_values_list=PYTHON_VERSIONS)
+@nox.parametrize(arg_names="python_version", arg_values_list=PYTHON_VERSIONS, ids=PYTHON_VERSIONS)
 @nox.session(python=None, name="typecheck", tags=[TYPE, PYTHON, CI])
 def typecheck(session: Session, python_version: str) -> None:
     """Run static type checking (Pyright) on Python code."""
