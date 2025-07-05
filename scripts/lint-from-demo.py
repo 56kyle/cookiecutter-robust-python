@@ -16,7 +16,6 @@ cli: typer.Typer = typer.Typer()
 
 @cli.callback(invoke_without_command=True)
 def lint_from_demo(
-    repo_folder: Annotated[Path, FolderOption("--repo-folder", "-r")],
     demos_cache_folder: Annotated[Path, FolderOption("--demos-cache-folder", "-c")],
     demo_name: Annotated[str, typer.Option("--demo-name", "-d")],
     no_cache: Annotated[bool, typer.Option("--no-cache", "-n")] = False,
@@ -24,7 +23,6 @@ def lint_from_demo(
     """Runs precommit in a generated project and matches the template to the results."""
     try:
         with in_new_demo(
-            repo_folder=repo_folder,
             demos_cache_folder=demos_cache_folder,
             demo_name=demo_name,
             no_cache=no_cache

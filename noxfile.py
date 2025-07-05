@@ -1,7 +1,6 @@
 """Noxfile for the cookiecutter-robust-python template."""
 import os
 import shutil
-import tempfile
 from pathlib import Path
 
 import nox
@@ -36,7 +35,6 @@ DEMO_ROOT_FOLDER: Path = PROJECT_DEMOS_FOLDER / DEFAULT_DEMO_NAME
 
 GENERATE_DEMO_SCRIPT: Path = SCRIPTS_FOLDER / "generate-demo.py"
 GENERATE_DEMO_OPTIONS: tuple[str, ...] = (
-    *("--repo-folder", REPO_ROOT),
     *("--demos-cache-folder", PROJECT_DEMOS_FOLDER),
     *("--demo-name", DEFAULT_DEMO_NAME),
 )
@@ -121,6 +119,12 @@ def test(session: Session) -> None:
     # Sync deps from template's own pyproject.toml, e.g., 'dev' group that includes 'pytest', 'cookiecutter'
     session.install("-e", ".", "--group", "dev", "--group", "test")
     session.run("pytest", "tests")
+
+
+@nox.session(python=None, name="update-demos")
+def update_demo(session: Session) -> None:
+    session.log("Updating generated project demos...")
+    session.notify("generate-demo",)
 
 
 @nox.session(venv_backend="none")

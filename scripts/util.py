@@ -13,10 +13,12 @@ from typing import Generator
 
 import cruft
 import typer
-from cookiecutter.main import cookiecutter
 from cookiecutter.utils import work_in
 from pygments.lexers import q
 from typer.models import OptionInfo
+
+
+REPO_FOLDER: Path = Path(__file__).resolve().parent.parent
 
 
 FolderOption: partial[OptionInfo] = partial(
@@ -50,7 +52,6 @@ uv: partial[subprocess.CompletedProcess] = partial(run_command, "uv")
 
 @contextmanager
 def in_new_demo(
-    repo_folder: Path,
     demos_cache_folder: Path,
     demo_name: str,
     no_cache: bool,
@@ -58,7 +59,6 @@ def in_new_demo(
 ) -> Generator[Path, None, None]:
     """Returns a context manager for working within a new demo."""
     demo_path: Path = generate_demo(
-        repo_folder=repo_folder,
         demos_cache_folder=demos_cache_folder,
         demo_name=demo_name,
         no_cache=no_cache,
@@ -69,7 +69,6 @@ def in_new_demo(
 
 
 def generate_demo(
-    repo_folder: Path,
     demos_cache_folder: Path,
     demo_name: str,
     no_cache: bool,
@@ -80,7 +79,7 @@ def generate_demo(
     if no_cache:
         _remove_existing_demo(demo_path=demos_cache_folder / demo_name)
     cruft.create(
-        template_git_url=str(repo_folder),
+        template_git_url=str(REPO_FOLDER),
         output_dir=demos_cache_folder,
         extra_context={"project_name": demo_name, **kwargs},
         no_input=True,
