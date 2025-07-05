@@ -43,7 +43,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version-file: "pyproject.toml"
+          python-version-file: ".githubworkflows.python-version"
 
       - name: Run Python code security analysis
         run: uvx nox -s security-python
