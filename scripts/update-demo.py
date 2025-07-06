@@ -28,8 +28,8 @@ def update_demo(
         with work_in(demo_path):
             git("status", "--porcelain")
             cruft.update(
-                template_git_url=str(REPO_FOLDER),
-                output_dir=demo_path,
+                project_dir=demo_path,
+                template_path=str(REPO_FOLDER),
                 extra_context={"project_name": demo_name, "add_rust_extension": add_rust_extension},
                 no_input=True
             )
