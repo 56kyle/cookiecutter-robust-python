@@ -38,9 +38,11 @@ GENERATE_DEMO_OPTIONS: tuple[str, ...] = (
     *("--demos-cache-folder", PROJECT_DEMOS_FOLDER),
 )
 
-
 LINT_FROM_DEMO_SCRIPT: Path = SCRIPTS_FOLDER / "lint-from-demo.py"
 LINT_FROM_DEMO_OPTIONS: tuple[str, ...] = GENERATE_DEMO_OPTIONS
+
+UPDATE_DEMO_SCRIPT: Path = SCRIPTS_FOLDER / "update-demo.py"
+UPDATE_DEMO_OPTIONS: tuple[str, ...] = GENERATE_DEMO_OPTIONS
 
 
 @nox.session(name="generate-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
@@ -120,11 +122,14 @@ def test(session: Session) -> None:
     session.run("pytest", "tests")
 
 
-@nox.session(python=None, name="update-demos")
-def update_demo(session: Session) -> None:
+@nox.parametrize(arg_names="add_rust_extension", arg_values_list=[False, True], ids=["no-rust", "with-rust"])
+@nox.session(python=None, name="update-demo")
+def update_demo(session: Session, add_rust_extension: bool) -> None:
     session.log("Updating generated project demos...")
-    session.run(GENERATE_DEMO_SCRIPT, *GENERATE_DEMO_OPTIONS)
-    session.run(GENERATE_DEMO_SCRIPT, *GENERATE_DEMO_OPTIONS, "-r")
+    args: list[str] = [*UPDATE_DEMO_OPTIONS]
+    if add_rust_extension:
+        args.append("--add-rust-extension")
+    session.run(UPDATE_DEMO_SCRIPT, *UPDATE_DEMO_OPTIONS)
 
 
 @nox.session(venv_backend="none")

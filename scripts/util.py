@@ -75,8 +75,7 @@ def generate_demo(
     **kwargs: Any
 ) -> Path:
     """Generates a demo project and returns its root path."""
-    name_modifier: str = "maturin" if add_rust_extension else "python"
-    demo_name: str = f"robust-{name_modifier}-demo"
+    demo_name: str = get_demo_name(add_rust_extension=add_rust_extension)
     demos_cache_folder.mkdir(exist_ok=True)
     if no_cache:
         _remove_existing_demo(demo_path=demos_cache_folder / demo_name)
@@ -105,3 +104,8 @@ def _remove_existing_demo(demo_path: Path) -> None:
 
         typer.secho(f"Removing existing demo project at {demo_path=}.", fg="yellow")
         shutil.rmtree(demo_path, onerror=remove_readonly)
+
+
+def get_demo_name(add_rust_extension: bool) -> str:
+    name_modifier: str = "maturin" if add_rust_extension else "python"
+    return f"robust-{name_modifier}-demo"
