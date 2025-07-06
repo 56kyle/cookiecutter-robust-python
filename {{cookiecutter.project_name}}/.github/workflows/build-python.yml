@@ -10,7 +10,7 @@ on:
       - "tests/**/*.py" # Test files shouldn't trigger *build* unless needed? Consider paths carefully.
       - "noxfile.py" # Build task config
       - "pyproject.toml" # Packaging config (metadata, deps, build system)
-      - ".github/workflows/build-package-python.yml" # This workflow file
+      - ".github/workflows/build-python.yml"
       - "rust/**/*.rs"
       # Add paths to other relevant build-related files (e.g., manifest files)
   push:
@@ -22,7 +22,7 @@ on:
       - "tests/**/*.py"
       - "noxfile.py"
       - "pyproject.toml"
-      - ".github/workflows/build-package-python.yml"
+      - ".github/workflows/build-python.yml"
 
   # This workflow is also triggered explicitly as part of the CD workflow.
   # workflow_dispatch: # Remove if only triggered by push/PR or other workflows
