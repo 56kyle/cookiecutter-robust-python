@@ -29,9 +29,8 @@ def update_demo(
             git("status", "--porcelain")
             cruft.update(
                 project_dir=demo_path,
-                template_path=str(REPO_FOLDER),
+                template_path=REPO_FOLDER,
                 extra_context={"project_name": demo_name, "add_rust_extension": add_rust_extension},
-                no_input=True
             )
             git("add", ".")
             git("commit", "-m", "chore: update demo to the latest cookiecutter-robust-python", "--no-verify")
