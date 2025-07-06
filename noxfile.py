@@ -123,7 +123,7 @@ def test(session: Session) -> None:
 
 
 @nox.parametrize(arg_names="add_rust_extension", arg_values_list=[False, True], ids=["no-rust", "with-rust"])
-@nox.session(python=None, name="update-demo")
+@nox.session(name="update-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
 def update_demo(session: Session, add_rust_extension: bool) -> None:
     session.log("Updating generated project demos...")
     args: list[str] = [*UPDATE_DEMO_OPTIONS]
