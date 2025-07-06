@@ -132,7 +132,7 @@ def update_demo(session: Session, add_rust_extension: bool) -> None:
     args: list[str] = [*UPDATE_DEMO_OPTIONS]
     if add_rust_extension:
         args.append("--add-rust-extension")
-    session.run("python", UPDATE_DEMO_SCRIPT, *UPDATE_DEMO_OPTIONS)
+    session.run("python", UPDATE_DEMO_SCRIPT, *args)
 
 
 @nox.session(venv_backend="none")
