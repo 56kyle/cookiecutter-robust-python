@@ -241,15 +241,15 @@ def build_container(session: Session) -> None:
     session.log(f"Container image {project_image_name}:latest built locally.")
 
 
-@nox.session(python=None, name="prepare-release", tags=[RELEASE])
-def prepare_release(session: Session) -> None:
+@nox.session(python=None, name="seutp-release", tags=[RELEASE])
+def setup_release(session: Session) -> None:
     """Prepares a release by creating a release branch and bumping the version.
 
-    Does not commit or push the release branch. Additionally, does not tag the release.
+    Additionally, creates the initial bump commit but doesn't push it.
     """
-    session.log("Preparing release...")
+    session.log("Setting up release...")
 
-    session.run("python", SCRIPTS_FOLDER / "prepare-release.py", external=True)
+    session.run("python", SCRIPTS_FOLDER / "setup-release.py", external=True)
 
 
 @nox.session(python=None, tags=[RELEASE])

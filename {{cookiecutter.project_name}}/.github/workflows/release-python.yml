@@ -109,6 +109,16 @@ jobs:
         id: get_tag
         run: echo "tag={{"${{ github.ref_name }}"}}" >> $GITHUB_OUTPUT
 
+      - name: Generate Release Notes
+        run: |
+          if [ -z {{"\"${{ steps.previous_tag.outputs.previous }}\""}} ]; then
+            echo "No previous tag found: generating changelog for all commits."
+            cz changelog --dry-run > RELEASE_NOTES.md
+          else
+            echo "Previous tag found: generating changelog diff."
+            cz changelog --dry-run --rev-range {{"${{ steps.previous_tag.outputs.previous }}..${GITHUB_REF_NAME}"}} > RELEASE_NOTES.md
+          fi
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
