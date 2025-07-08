@@ -7,9 +7,9 @@ on:
 
 jobs:
   bump-version:
+    name: "Bump version and create changelog with commitizen"
     if: "!startsWith(github.event.head_commit.message, 'bump:')"
     runs-on: ubuntu-latest
-    name: "Bump version and create changelog with commitizen"
     steps:
       - name: Check out
         uses: actions/checkout@v4
@@ -20,3 +20,38 @@ jobs:
         uses: commitizen-tools/commitizen-action@master
         with:
           github_token: {{ "${{ secrets.GITHUB_TOKEN }}" }}
+          changelog_increment_filename: body.md
+
+  generate-release-notes:
+    name: "Generate Release Notes"
+    if: "startsWith(github.event.head_commit.message, 'bump:')"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".github/workflows/.python-version"
+
+      - name: Get Release Notes
+        run: uvx -s
+
+  generate-release-draft:
+    name: "Generate Release Draft"
+    if: always()
+    needs: [bump-version, generate-release-notes]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: "body.md"
+          tag_name: {{ "${{ env.REVISION }}" }}
+          draft: "true"
+        env:
+          GITHUB_TOKEN: {{ "${{ secrets.GITHUB_TOKEN }}" }}

@@ -113,7 +113,7 @@ def get_latest_tag() -> Optional[str]:
     return tag
 
 
-def get_latest_release_notes() -> None:
+def get_latest_release_notes() -> str:
     """Gets the release notes.
 
     Assumes the latest_tag hasn't been applied yet.
