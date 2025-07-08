@@ -8,7 +8,7 @@ from typing import Any
 from typing import Callable
 from typing import Literal
 from typing import Optional
-from typing import TypeAlias
+from typing_extensions import TypeAlias
 
 
 REPO_FOLDER: Path = Path(__file__).resolve().parent.parent
