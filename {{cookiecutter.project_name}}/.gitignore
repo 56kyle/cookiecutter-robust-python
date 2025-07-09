@@ -71,3 +71,6 @@ nohup.out
 
 # Prettier dependencies
 node_modules/
+
+# Release Notes
+body.md
