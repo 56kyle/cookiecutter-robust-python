@@ -67,7 +67,7 @@ def get_package_version() -> str:
 
 def get_bumped_package_version(increment: Optional[str] = None) -> str:
     """Gets the bumped package version."""
-    args: list[str] = ["uvx", "--with", "commitizen", "cz", "bump", "--get-next", "--yes", "--dry-run"]
+    args: list[str] = ["uvx", "--from", "commitizen", "cz", "bump", "--get-next", "--yes", "--dry-run"]
     if increment is not None:
         args.extend(["--increment", increment])
     result: subprocess.CompletedProcess = subprocess.run(args, cwd=REPO_FOLDER, capture_output=True)
