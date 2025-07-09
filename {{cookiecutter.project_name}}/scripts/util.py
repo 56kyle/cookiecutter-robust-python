@@ -86,7 +86,7 @@ def create_release_branch(new_version: str) -> None:
 
 def bump_version(increment: Optional[str] = None) -> None:
     """Bumps the package version."""
-    bump_cmd: list[str] = ["uvx", "cz", "bump", "--yes", "--files-only", "--changelog"]
+    bump_cmd: list[str] = ["uvx", "--from", "commitizen", "cz", "bump", "--yes", "--files-only", "--changelog"]
     if increment is not None:
         bump_cmd.extend(["--increment", increment])
     subprocess.run(bump_cmd, cwd=REPO_FOLDER, check=True)
@@ -122,7 +122,7 @@ def get_latest_release_notes() -> str:
     rev_range: str = latest_version if latest_tag is None else f"{latest_tag}..{latest_version}"
 
     result: subprocess.CompletedProcess = subprocess.run(
-        ["uvx", "cz", "changelog", rev_range, "--dry-run"],
+        ["uvx", "--from", "commitizen", "cz", "changelog", rev_range, "--dry-run"],
         cwd=REPO_FOLDER,
         check=True
     )
@@ -131,4 +131,4 @@ def get_latest_release_notes() -> str:
 
 def tag_release() -> None:
     """Tags the release using commitizen bump with tag only."""
-    subprocess.run(["uvx", "cz", "bump", "--tag-only", "--yes"], cwd=REPO_FOLDER, check=True)
+    subprocess.run(["uvx", "--from", "commitizen", "cz", "bump", "--tag-only", "--yes"], cwd=REPO_FOLDER, check=True)
