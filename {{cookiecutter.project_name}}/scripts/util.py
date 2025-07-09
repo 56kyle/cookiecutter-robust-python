@@ -58,7 +58,7 @@ def remove_readonly(func: Callable[[str], Any], path: str, _: Any) -> None:
 def get_package_version() -> str:
     """Gets the package version."""
     result: subprocess.CompletedProcess = subprocess.run(
-        ["uvx", "--with", "commitizen", "cz", "version", "-p"],
+        ["uvx", "--from", "commitizen", "cz", "version", "-p"],
         cwd=REPO_FOLDER,
         capture_output=True
     )
