@@ -23,7 +23,7 @@ jobs:
           changelog_increment_filename: body.md
 
   generate-release-notes:
-    name: "Generate Release Notes"
+    name: "Get Release Notes"
     if: "startsWith(github.event.head_commit.message, 'bump:')"
     runs-on: ubuntu-latest
     steps:
@@ -39,7 +39,7 @@ jobs:
           python-version-file: ".github/workflows/.python-version"
 
       - name: Get Release Notes
-        run: uvx -s
+        run: uvx nox -s get-release-notes
 
   generate-release-draft:
     name: "Generate Release Draft"
