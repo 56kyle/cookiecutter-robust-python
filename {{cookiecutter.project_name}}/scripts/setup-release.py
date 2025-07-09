@@ -26,9 +26,11 @@ def get_parser() -> argparse.ArgumentParser:
     )
     parser.add_argument(
         "increment",
+        nargs="?",
+        default=None,
         type=str,
         help="Increment type to use when preparing the release.",
-        choices=["major", "minor", "patch", "prerelease"],
+        choices=["MAJOR", "MINOR", "PATCH", "PRERELEASE"],
     )
     return parser
 
