@@ -41,7 +41,7 @@ def setup_release(increment: Optional[str] = None) -> None:
     Sets up a release branch from the branch develop, bumps the version, and creates a release commit. Does not tag the
     release or push any changes.
     """
-    check_dependencies(path=REPO_FOLDER, dependencies=["git", "cz"])
+    check_dependencies(path=REPO_FOLDER, dependencies=["git"])
 
     current_version: str = get_package_version()
     new_version: str = get_bumped_package_version(increment=increment)
