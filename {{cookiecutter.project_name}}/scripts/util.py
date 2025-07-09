@@ -124,6 +124,7 @@ def get_latest_release_notes() -> str:
     result: subprocess.CompletedProcess = subprocess.run(
         ["uvx", "--from", "commitizen", "cz", "changelog", rev_range, "--dry-run"],
         cwd=REPO_FOLDER,
+        capture_output=True,
         check=True
     )
     return result.stdout.decode("utf-8")
