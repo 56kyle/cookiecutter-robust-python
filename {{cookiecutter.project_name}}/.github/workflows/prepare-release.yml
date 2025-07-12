@@ -38,7 +38,7 @@ jobs:
 
       - name: Get Release Notes
         id: changelog
-        run: echo "CHANGELOG=$(uvx nox -s get-release-notes)" >> $GITHUB_OUTPUT
+        run: echo "CHANGELOG=$(python ./scripts/get-release-notes.py)" >> $GITHUB_OUTPUT
 
       - name: Create Release Draft
         uses: softprops/action-gh-release@v1
