@@ -43,7 +43,7 @@ jobs:
       - name: Create Release Draft
         uses: softprops/action-gh-release@v1
         with:
-          body_path: body.md
+          body: {{ "${{ steps.changelog.outputs.CHANGELOG }}" }}
           draft: true
           tag_name: {{ "${{ steps.new_version.outputs.NEW_VERSION }}" }}
         env:
