@@ -37,13 +37,12 @@ jobs:
         run: uvx nox -s bump-version {{ "${{ steps.new_version.outputs.NEW_VERSION }}" }}
 
       - name: Get Release Notes
-        id: changelog
-        run: echo "CHANGELOG=$(python ./scripts/get-release-notes.py | base64)" >> $GITHUB_OUTPUT
+        run: uvx nox -s get-release-notes {{ "${{ github.workspace }}-CHANGELOG.md" }}
 
       - name: Create Release Draft
         uses: softprops/action-gh-release@v2
         with:
-          body: {{ "${{ steps.changelog.outputs.CHANGELOG }} | base64 --decode" }}
+          body_path: {{ "${{ github.workspace }}-CHANGELOG.md" }}
           draft: true
           tag_name: {{ "${{ steps.new_version.outputs.NEW_VERSION }}" }}
         env:
