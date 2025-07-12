@@ -37,7 +37,7 @@ jobs:
         run: uvx nox -s bump-version {{ "${{ steps.new_version.outputs.NEW_VERSION }}" }}
 
       - name: Get Release Notes
-        run: uvx nox -s get-release-notes {{ "${{ github.workspace }}-CHANGELOG.md" }}
+        run: uvx nox -s get-release-notes -- {{ "${{ github.workspace }}-CHANGELOG.md" }}
 
       - name: Create Release Draft
         uses: softprops/action-gh-release@v2
