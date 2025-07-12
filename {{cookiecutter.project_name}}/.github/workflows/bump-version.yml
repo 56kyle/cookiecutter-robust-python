@@ -30,7 +30,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           body_path: body.md
-          tag_name: {{ "${{ env.REVISION }}" }}
           draft: true
         env:
           GITHUB_TOKEN: {{ "${{ secrets.GITHUB_TOKEN }}" }}
@@ -58,7 +57,6 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           body_path: body.md
-          tag_name: {{ "${{ env.REVISION }}" }}
           draft: true
         env:
           GITHUB_TOKEN: {{ "${{ secrets.GITHUB_TOKEN }}" }}
