@@ -38,12 +38,12 @@ jobs:
 
       - name: Get Release Notes
         id: changelog
-        run: echo "CHANGELOG=$(python ./scripts/get-release-notes.py)" >> $GITHUB_OUTPUT
+        run: echo "CHANGELOG=$(python ./scripts/get-release-notes.py | base64)" >> $GITHUB_OUTPUT
 
       - name: Create Release Draft
         uses: softprops/action-gh-release@v1
         with:
-          body: {{ "${{ steps.changelog.outputs.CHANGELOG }}" }}
+          body: {{ "${{ steps.changelog.outputs.CHANGELOG }} | base64 --decode" }}
           draft: true
           tag_name: {{ "${{ steps.new_version.outputs.NEW_VERSION }}" }}
         env:
