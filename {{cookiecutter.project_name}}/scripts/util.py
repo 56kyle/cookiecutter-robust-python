@@ -120,9 +120,11 @@ def get_latest_release_notes() -> str:
             "The latest tag and version are the same. Please ensure the release notes are taken before tagging."
         )
     rev_range: str = "" if latest_tag is None else f"{latest_tag}..{latest_version}"
-
+    command: list[str] = [
+        "uvx", "--from", "commitizen", "cz", "changelog", rev_range, "--dry-run", "--unreleased-version", latest_version
+    ]
     result: subprocess.CompletedProcess = subprocess.run(
-        ["uvx", "--from", "commitizen", "cz", "changelog", rev_range, "--dry-run"],
+        command,
         cwd=REPO_FOLDER,
         capture_output=True,
         check=True
