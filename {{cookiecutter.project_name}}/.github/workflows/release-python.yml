@@ -43,8 +43,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          ref: {{"${{ github.event_name == 'push' && github.ref || github.event.inputs.tag }}"}}
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v6
@@ -60,7 +58,7 @@ jobs:
       - name: Upload built package artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: distribution-packages
+          name: distribution-packages-{{ "${{ needs.get_tag.outputs.tag }}" }}
           path: dist/
           retention-days: 7
 
@@ -82,11 +80,8 @@ jobs:
     needs: build_and_testpypi
 
     steps:
-      - name: Download package artifacts
-        uses: actions/download-artifact@v4
-        with:
-          name: distribution-packages
-          path: dist/
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -95,6 +90,12 @@ jobs:
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v6
+
+      - name: Download package artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: distribution-packages-{{ "${{ needs.build_and_testpypi.outputs.tag }}" }}
+          path: dist/
 
       - name: Create Tag
         run: |
