@@ -249,7 +249,7 @@ def setup_release(session: Session) -> None:
     """
     session.log("Setting up release...")
 
-    session.run("python", SCRIPTS_FOLDER / "setup-release.py", external=True)
+    session.run("python", SCRIPTS_FOLDER / "setup-release.py", *session.posargs, external=True)
 
 
 @nox.session(python=False, name="get-release-notes", tags=[RELEASE])
