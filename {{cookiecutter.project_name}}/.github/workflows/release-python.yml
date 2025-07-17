@@ -54,6 +54,9 @@ jobs:
         with:
           python-version-file: ".github/workflows/.python-version"
 
+      - name: Run package build
+        run: uvx nox -s build-python
+
       - name: Upload built package artifacts
         uses: actions/upload-artifact@v4
         with:
