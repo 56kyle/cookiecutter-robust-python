@@ -50,6 +50,12 @@ docs = [
 Homepage = "https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}"
 Repository = "https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}"
 
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true
+
 {% if cookiecutter.add_rust_extension == 'y' -%}
 [build-system]
 requires = ["maturin>=1.3.0,<2.0"]
