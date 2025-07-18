@@ -105,10 +105,10 @@ jobs:
           git tag {{ "${{ needs.build_and_testpypi.outputs.tag }}" }}
           git push origin {{ "${{ needs.build_and_testpypi.outputs.tag }}" }}
 
-      - name: Publish package distributions to TestPyPI
+      - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
 
       - name: Publish to GitHub
         env:
           GITHUB_TOKEN: {{ "${{ secrets.GITHUB_TOKEN }}" }}
-        run: gh release upload {{ "${{ needs.build_and_testpypi.outputs.tag }}" }} dist/
+        run: gh release upload {{ "${{ needs.build_and_testpypi.outputs.tag }}" }} dist/*
