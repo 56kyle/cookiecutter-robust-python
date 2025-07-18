@@ -72,7 +72,7 @@ jobs:
         env:
           TWINE_USERNAME: __token__
           TWINE_PASSWORD: {{"${{ secrets.TESTPYPI_API_TOKEN }}"}}
-        run: uvx nox -s publish-package -- --repository testpypi
+        run: uvx nox -s publish-python -- --repository testpypi
 
   publish_pypi_and_github:
     name: Publish to Production PyPI and GitHub
