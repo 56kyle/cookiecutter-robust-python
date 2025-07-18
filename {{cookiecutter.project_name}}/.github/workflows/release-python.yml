@@ -68,10 +68,10 @@ jobs:
           name: distribution-packages-{{ "${{ needs.get_tag.outputs.tag }}" }}
           path: dist/
 
-      - name: Publish to TestPyPI
-        env:
-          UV_PUBLISH_TOKEN: {{"${{ secrets.TESTPYPI_API_TOKEN }}"}}
-        run: uvx nox -s publish-python -- --index testpypi
+      - name: Publish package distributions to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
 
   publish_pypi_and_github:
     name: Publish to Production PyPI and GitHub
@@ -101,10 +101,8 @@ jobs:
           git tag {{ "${{ needs.build_and_testpypi.outputs.tag }}" }}
           git push origin {{ "${{ needs.build_and_testpypi.outputs.tag }}" }}
 
-      - name: Publish to PyPI
-        env:
-          UV_PUBLISH_TOKEN: {{ "${{ secrets.PYPI_API_TOKEN }}" }}
-        run: uvx nox -s publish-python
+      - name: Publish package distributions to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
 
       - name: Publish to GitHub
         env:
