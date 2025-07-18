@@ -81,6 +81,7 @@ jobs:
     needs: build_and_testpypi
     permissions:
       id-token: write
+      contents: write
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
