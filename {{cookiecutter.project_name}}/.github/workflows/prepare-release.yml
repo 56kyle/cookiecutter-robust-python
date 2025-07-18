@@ -47,6 +47,6 @@ jobs:
         with:
           body_path: {{ "${{ github.workspace }}-CHANGELOG.md" }}
           draft: true
-          tag_name: {{ "${{ steps.new_version.outputs.NEW_VERSION }}" }}
+          tag_name: v{{ "${{ steps.new_version.outputs.NEW_VERSION }}" }}
         env:
           GITHUB_TOKEN: {{ "${{ secrets.GITHUB_TOKEN }}" }}
