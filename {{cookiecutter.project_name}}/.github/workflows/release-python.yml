@@ -102,7 +102,7 @@ jobs:
 
       - name: Create Tag
         run: |
-          git tag {{ "${{ needs.build_and_testpypi.outputs.tag }}" }}
+          git tag v{{ "${{ needs.build_and_testpypi.outputs.tag }}" }}
           git push origin {{ "${{ needs.build_and_testpypi.outputs.tag }}" }}
 
       - name: Publish package distributions to PyPI
