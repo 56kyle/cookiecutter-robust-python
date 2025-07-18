@@ -259,41 +259,6 @@ def get_release_notes(session: Session) -> None:
     session.run("python", SCRIPTS_FOLDER / "get-release-notes.py", *session.posargs, external=True)
 
 
-@nox.session(python=False, tags=[RELEASE])
-def release(session: Session) -> None:
-    """Run the release process using Commitizen.
-
-    Requires uvx in PATH (from uv install). Requires Git. Assumes Conventional Commits.
-    Optionally accepts increment (major, minor, patch) after '--'.
-    """
-    session.log("Running release process using Commitizen...")
-    try:
-        session.run("git", "version", success_codes=[0], external=True, silent=True)
-    except CommandFailed:
-        session.log("Git command not found. Commitizen requires Git.")
-        session.skip("Git not available.")
-
-    session.log("Checking Commitizen availability via uvx.")
-    session.run("uvx", "--from=commitizen", "cz", "version", success_codes=[0])
-
-    increment = session.posargs[0] if session.posargs else None
-    session.log(
-        "Bumping version and tagging release (increment: %s).",
-        increment if increment else "default",
-    )
-
-    cz_bump_args = ["uvx", "--from=commitizen", "cz", "bump", "--changelog"]
-
-    if increment:
-        cz_bump_args.append(f"--increment={increment}")
-
-    session.log("Running cz bump with args: %s", cz_bump_args)
-    session.run(*cz_bump_args, success_codes=[0, 1], external=True)
-
-    session.log("Version bumped and tag created locally via Commitizen/uvx.")
-    session.log("IMPORTANT: Push commits and tags to remote (`git push --follow-tags`) to trigger CD pipeline.")
-
-
 @nox.session(python=False, name="publish-python", tags=[RELEASE])
 def publish_python(session: Session) -> None:
     """Publish sdist and wheel packages to PyPI via uv publish.
