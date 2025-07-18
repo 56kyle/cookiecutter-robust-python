@@ -70,8 +70,7 @@ jobs:
 
       - name: Publish to TestPyPI
         env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: {{"${{ secrets.TESTPYPI_API_TOKEN }}"}}
+          UV_PUBLISH_TOKEN: {{"${{ secrets.TESTPYPI_API_TOKEN }}"}}
         run: uvx nox -s publish-python -- --index testpypi
 
   publish_pypi_and_github:
@@ -104,8 +103,7 @@ jobs:
 
       - name: Publish to PyPI
         env:
-          TWINE_USERNAME: __token__
-          TWINE_PASSWORD: {{ "${{ secrets.PYPI_API_TOKEN }}" }}
+          UV_PUBLISH_TOKEN: {{ "${{ secrets.PYPI_API_TOKEN }}" }}
         run: uvx nox -s publish-python
 
       - name: Publish to GitHub
