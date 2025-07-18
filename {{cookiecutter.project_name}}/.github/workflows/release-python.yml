@@ -111,4 +111,4 @@ jobs:
       - name: Publish to GitHub
         env:
           GITHUB_TOKEN: {{ "${{ secrets.GITHUB_TOKEN }}" }}
-        run: gh release upload {{ "${{ needs.build_and_testpypi.outputs.tag }}" }} dist/* --clobber --draft
+        run: gh release upload {{ "${{ needs.build_and_testpypi.outputs.tag }}" }} dist/* --clobber
