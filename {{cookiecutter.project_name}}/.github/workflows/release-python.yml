@@ -31,7 +31,7 @@ jobs:
 
       - name: Get Current Version
         id: current_version
-        run: echo "CURRENT_VERSION=$(uvx --from commitizen cz version -p)" >> $GITHUB_OUTPUT
+        run: echo "CURRENT_VERSION=v$(uvx --from commitizen cz version -p)" >> $GITHUB_OUTPUT
 
 
   build_and_testpypi:
@@ -102,7 +102,7 @@ jobs:
 
       - name: Create Tag
         run: |
-          git tag v{{ "${{ needs.build_and_testpypi.outputs.tag }}" }}
+          git tag {{ "${{ needs.build_and_testpypi.outputs.tag }}" }}
           git push origin {{ "${{ needs.build_and_testpypi.outputs.tag }}" }}
 
       - name: Publish package distributions to PyPI
