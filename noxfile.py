@@ -172,7 +172,7 @@ def release_template(session: Session):
     session.log("IMPORTANT: Push commits and tags to remote (`git push --follow-tags`) to trigger CD for the TEMPLATE.")
 
 
-@nox.session(python=False)
+@nox.session(python=False, name="remove-demo-release")
 def remove_demo_release(session: Session) -> None:
     """Deletes the latest demo release."""
     session.run("git", "branch", "-d", f"release/{session.posargs[0]}", external=True)
