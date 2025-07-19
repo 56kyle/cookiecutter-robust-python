@@ -93,7 +93,7 @@ We evaluated the primary tools for dependency and code-level security checks in 
   - **Reporting:** Excellent. Uses :ruff-documentation:`Ruff`'s standard, clear reporting format.
   - **Performance:** Excellent. As a Rust binary, running these checks is very fast (similar to linting performance).
   - **OS Interoperability:** Excellent. Rust binary, works across OSs.
-  - **Integration:** Excellent. Seamlessly integrated into :ruff-documentation:`Ruff`'s check command, leveraging its integrations (:pre-commit-documentation:`pre-commit`, :nox-documentation:`Nox`/[:term:`uv` run](uv-documentation), CI). Speed makes it ideal for fast checks.
+  - **Integration:** Excellent. Seamlessly integrated into :ruff-documentation:`Ruff`'s check command, leveraging its integrations (:pre-commit-documentation:`pre-commit`, :nox-documentation:`Nox`/:uv-documentation:`uv`, CI). Speed makes it ideal for fast checks.
   - **Maturity & Stability:** High (:ruff-documentation:`Ruff`), Low (Security Rules). The :ruff-documentation:`Ruff` platform is mature. The _security rule set_ is still very new and under active development, not comprehensive enough for full standalone security code analysis.
   - **Community & Documentation:** High (:ruff-documentation:`Ruff`), Moderate (Security Rules). Benefits from the large :ruff-documentation:`Ruff` community, but specific documentation and community experience with _just_ the security rules are still building.
 

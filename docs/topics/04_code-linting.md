@@ -38,7 +38,7 @@ We evaluated the leading options for Python code linting and static analysis:
   - **Configurable:** High. Configurable via `.flake8`, `setup.cfg`, or `pyproject.toml` (`[flake8]`). Default checks are standard, but many plugins require explicit configuration.
   - **Performance:** Moderate. As a Python tool wrapping other Python tools, performance is acceptable for many projects but noticeably slower than Rust-based alternatives, potentially impacting editor feedback speed or pre-commit hook viability on large codebases.
   - **OS Interoperability:** Excellent. Pure Python package, works reliably across Linux, macOS, and Windows.
-  - **Integration:** Excellent. A long-standing standard, deep integration across editors/IDEs, :pre-commit-documentation:`pre-commit` (official hook), :nox-documentation:`Nox`/[:term:`uv` run](uv-documentation), CI/CD platforms.
+  - **Integration:** Excellent. A long-standing standard, deep integration across editors/IDEs, :pre-commit-documentation:`pre-commit` (official hook), :nox-documentation:`Nox`/:uv-documentation:`uv`, CI/CD platforms.
   - **Tool Count:** Moderate. It's a wrapper, so requires installing :flake8-documentation:`flake8` itself plus desired plugins. Simpler than installing PyFlakes, pycodestyle, etc. separately. Often used alongside a formatter.
   - **Maturity & Stability:** Very High. Mature, stable, widely adopted for many years.
   - **Community & Documentation:** Very High. Large, active community, extensive documentation for both base :flake8-documentation:`flake8` and its plugins.
@@ -91,7 +91,7 @@ We evaluated the leading options for Python code linting and static analysis:
   - **Configurable:** High. Configurable via `.ruff.toml` or `pyproject.toml`. Powerful and flexible rule selection. Default set includes core checks, adding more rules (like Pylint conventions) is explicit.
   - **Performance:** Excellent. **Orders of magnitude faster** than Python-based linters. Transformative for developer workflow feedback loops (real-time checks in editors, pre-commit speed) and CI times.
   - **OS Interoperability:** Excellent. Rust binary, works natively and reliably across all major operating systems.
-  - **Integration:** Excellent. Rapidly gaining ecosystem integration. Native :pre-commit-documentation:`pre-commit` hook (highly recommended due to speed). Easily callable via CLI for :nox-documentation:`Nox`/[:term:`uv` run](uv-documentation), integrates into CI, strong and increasing editor/IDE support.
+  - **Integration:** Excellent. Rapidly gaining ecosystem integration. Native :pre-commit-documentation:`pre-commit` hook (highly recommended due to speed). Easily callable via CLI for :nox-documentation:`Nox`/:uv-documentation:`uv`, integrates into CI, strong and increasing editor/IDE support.
   - **Tool Count:** Excellent. **Consolidates the functionality of multiple separate linters** into a single binary and configuration file. Also includes formatting.
   - **Maturity & Stability:** Very High (Linter). :ruff-documentation:`Ruff` as a linter is mature, stable, and very widely adopted. The project has a massive and active community.
   - **Community & Documentation:** Very High (Exploding). Very active development, massive and rapidly growing user base, excellent and extensive documentation.

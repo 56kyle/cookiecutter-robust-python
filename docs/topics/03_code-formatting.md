@@ -33,7 +33,7 @@ We evaluated the leading options for automated code formatting:
   - **Opinionatedness & Configuration:** Very High. Famously requires minimal configuration (`--line-length` is a common option). Aligns with the "Opinionated is better than impartial" philosophy.
   - **Performance:** Good. Reasonably fast for typical file sizes and project sizes. Noticeably slower than Rust-based alternatives like :ruff-documentation:`Ruff` on larger codebases or when run very frequently.
   - **OS Interoperability:** Excellent. Pure Python package, works reliably on all major operating systems.
-  - **Integration:** Excellent. Long-standing standard, strong integration with :pre-commit-documentation:`pre-commit`, :nox-documentation:`Nox`/[:term:`uv` run](uv-documentation), CI platforms, and almost all editors/IDEs.
+  - **Integration:** Excellent. Long-standing standard, strong integration with :pre-commit-documentation:`pre-commit`, :nox-documentation:`Nox`/:uv-documentation:`uv`, CI platforms, and almost all editors/IDEs.
   - **Tool Count:** Moderate. Requires using two separate tools (`black`, `isort`) for the complete formatting task (code style + import sorting). Adds a small layer of management (dependencies, running both).
   - **Maturity & Stability:** Very High. Mature, stable, widely used standard.
   - **Community & Documentation:** Very High. Large, active community, extensive documentation.
@@ -79,7 +79,7 @@ We evaluated the leading options for automated code formatting:
   - **Opinionatedness & Configuration:** Very High. Highly opinionated with minimal configuration, inheriting philosophy from :black-documentation:`Black`. Configuration is shared with the linter in `pyproject.toml` or `.ruff.toml`.
   - **Performance:** Excellent. **Orders of magnitude faster** than all Python-based formatters (:black-documentation:`Black`, :isort-documentation:`isort`, :autopep8-documentation:`autopep8`, :yapf-documentation:`yapf`). This is a major practical advantage, especially for pre-commit hooks and large projects.
   - **OS Interoperability:** Excellent. Rust binary, works natively and reliably across all major operating systems.
-  - **Integration:** Excellent and Growing Rapidly. Native support in :pre-commit-documentation:`pre-commit`, easily callable via CLI for :nox-documentation:`Nox`/[:term:`uv` run](uv-documentation), integrates into CI, rapidly gaining editor/IDE support due to its speed and dual formatting/linting capabilities.
+  - **Integration:** Excellent and Growing Rapidly. Native support in :pre-commit-documentation:`pre-commit`, easily callable via CLI for :nox-documentation:`Nox`/:uv-documentation:`uv`, integrates into CI, rapidly gaining editor/IDE support due to its speed and dual formatting/linting capabilities.
   - **Tool Count:** Excellent. **Consolidates code formatting AND import sorting** into a single tool and command (`ruff format`).
   - **Maturity & Stability:** High (Formatter is newer than Linter, but built on stable core). :ruff-documentation:`Ruff` as a project is very mature. The formatter feature itself is newer but built on the same highly performant core and rapidly stabilizing, considered production-ready by its authors.
   - **Community & Documentation:** High (Exploding). Very active development, massive and rapidly growing user base, excellent and extensive documentation.
