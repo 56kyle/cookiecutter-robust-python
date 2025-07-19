@@ -45,14 +45,14 @@ UPDATE_DEMO_SCRIPT: Path = SCRIPTS_FOLDER / "update-demo.py"
 UPDATE_DEMO_OPTIONS: tuple[str, ...] = GENERATE_DEMO_OPTIONS
 
 
-@nox.session(name="generate-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+@nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION, name="generate-demo")
 def generate_demo(session: Session) -> None:
     """Generates a project demo using the cookiecutter-robust-python template."""
     session.install("cookiecutter", "cruft", "platformdirs", "loguru", "typer")
     session.run("python", GENERATE_DEMO_SCRIPT, *GENERATE_DEMO_OPTIONS, *session.posargs)
 
 
-@nox.session(name="clear-cache", python=None)
+@nox.session(python=False, name="clear-cache")
 def clear_cache(session: Session) -> None:
     """Clear the cache of generated project demos.
 
@@ -76,7 +76,7 @@ def lint(session: Session):
     session.run("ruff", "check", "--verbose", "--fix")
 
 
-@nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION, name="lint-from-demo", tags=[])
+@nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION, name="lint-from-demo")
 def lint_from_demo(session: Session):
     """Lint the generated project's Python files and configurations."""
     session.log("Installing linting dependencies for the generated project...")
@@ -123,7 +123,7 @@ def test(session: Session) -> None:
 
 
 @nox.parametrize(arg_names="add_rust_extension", arg_values_list=[False], ids=["no-rust"])
-@nox.session(name="update-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+@nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION, name="update-demo")
 def update_demo(session: Session, add_rust_extension: bool) -> None:
     session.log("Installing script dependencies for updating generated project demos...")
     session.install("cookiecutter", "cruft", "platformdirs", "loguru", "typer")
@@ -135,7 +135,7 @@ def update_demo(session: Session, add_rust_extension: bool) -> None:
     session.run("python", UPDATE_DEMO_SCRIPT, *args)
 
 
-@nox.session(venv_backend="none")
+@nox.session(python=False, name="release-template")
 def release_template(session: Session):
     """Run the release process for the TEMPLATE using Commitizen.
 
