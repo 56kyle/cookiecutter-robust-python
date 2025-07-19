@@ -113,6 +113,7 @@ extlinks = {
 
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
+    "pip": ("https://pip.pypa.io/en/stable/", None),
 }
 
 html_theme = "furo"
