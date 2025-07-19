@@ -16,6 +16,7 @@ version = "2025.04"
 extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.napoleon",
+    "sphinx.ext.extlinks",
     "myst_parser",
     "sphinx_autodoc_typehints",
     "sphinx_copybutton",
