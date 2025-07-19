@@ -23,7 +23,6 @@ topics/index
 criteria
 getting-started-template-contributing
 maintenance
-glossary
 ```
 
 ## Evaluated Toolchain Topics
