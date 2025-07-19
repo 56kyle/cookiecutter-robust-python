@@ -13,10 +13,12 @@ from typing import Generator
 
 import cruft
 import typer
-from cookiecutter.main import cookiecutter
 from cookiecutter.utils import work_in
 from pygments.lexers import q
 from typer.models import OptionInfo
+
+
+REPO_FOLDER: Path = Path(__file__).resolve().parent.parent
 
 
 FolderOption: partial[OptionInfo] = partial(
@@ -50,17 +52,15 @@ uv: partial[subprocess.CompletedProcess] = partial(run_command, "uv")
 
 @contextmanager
 def in_new_demo(
-    repo_folder: Path,
     demos_cache_folder: Path,
-    demo_name: str,
+    add_rust_extension: bool,
     no_cache: bool,
     **kwargs: Any
 ) -> Generator[Path, None, None]:
     """Returns a context manager for working within a new demo."""
     demo_path: Path = generate_demo(
-        repo_folder=repo_folder,
         demos_cache_folder=demos_cache_folder,
-        demo_name=demo_name,
+        add_rust_extension=add_rust_extension,
         no_cache=no_cache,
         **kwargs
     )
@@ -69,20 +69,20 @@ def in_new_demo(
 
 
 def generate_demo(
-    repo_folder: Path,
     demos_cache_folder: Path,
-    demo_name: str,
+    add_rust_extension: bool,
     no_cache: bool,
     **kwargs: Any
 ) -> Path:
     """Generates a demo project and returns its root path."""
+    demo_name: str = get_demo_name(add_rust_extension=add_rust_extension)
     demos_cache_folder.mkdir(exist_ok=True)
     if no_cache:
         _remove_existing_demo(demo_path=demos_cache_folder / demo_name)
     cruft.create(
-        template_git_url=str(repo_folder),
+        template_git_url=str(REPO_FOLDER),
         output_dir=demos_cache_folder,
-        extra_context={"project_name": demo_name, **kwargs},
+        extra_context={"project_name": demo_name, "add_rust_extension": add_rust_extension, **kwargs},
         no_input=True,
         overwrite_if_exists=True
     )
@@ -104,3 +104,8 @@ def _remove_existing_demo(demo_path: Path) -> None:
 
         typer.secho(f"Removing existing demo project at {demo_path=}.", fg="yellow")
         shutil.rmtree(demo_path, onerror=remove_readonly)
+
+
+def get_demo_name(add_rust_extension: bool) -> str:
+    name_modifier: str = "maturin" if add_rust_extension else "python"
+    return f"robust-{name_modifier}-demo"

@@ -1,14 +1,13 @@
 [tool.commitizen]
 tag_format = "v$version"
+version = "{{ cookiecutter.version }}"
 version_scheme = "pep440"
+version_provider = "pep621"
 
 # Set to true to allow bumping to 0.y.z from 0.(y-1).z when commit types normally trigger major bump.
 # Recommended for initial development phases before 1.0.0.
 major_version_zero = true
 
-write_version_files = [
-    "pyproject.toml:version",
-]
 commit_msg_file = ".git/COMMIT_EDITMSG"
 retry_after_failure = true
 update_changelog_on_bump = true

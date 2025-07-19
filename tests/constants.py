@@ -22,7 +22,7 @@ DEFAULT_PYTHON_VERSION: str = PYTHON_VERSIONS[1]
 TYPE_CHECK_NOX_SESSIONS: list[str] = [f"typecheck-{python_version}" for python_version in PYTHON_VERSIONS]
 TESTS_NOX_SESSIONS: list[str] = [f"tests-python-{python_version}" for python_version in PYTHON_VERSIONS]
 
-GLOBAL_NOX_SESSIONS: list[str] = [
+IDEMPOTENT_NOX_SESSIONS: list[str] = [
     "pre-commit",
     "lint-python",
     "format-python",
@@ -31,8 +31,13 @@ GLOBAL_NOX_SESSIONS: list[str] = [
     "docs-build",
     "build-python",
     "build-container",
-    "publish-python",
-    "release",
     "tox",
     "coverage",
 ]
+CONTEXT_DEPENDENT_NOX_SESSIONS: list[str] = [
+    "coverage",
+    "publish-python",
+    "release",
+]
+
+ALL_NOX_SESSIONS: list[str] = IDEMPOTENT_NOX_SESSIONS + CONTEXT_DEPENDENT_NOX_SESSIONS

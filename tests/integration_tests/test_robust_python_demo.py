@@ -4,12 +4,11 @@ import subprocess
 from pathlib import Path
 
 import pytest
-from pbr.options import TRUE_VALUES
 
-from tests.constants import GLOBAL_NOX_SESSIONS
+from tests.constants import IDEMPOTENT_NOX_SESSIONS
 
 
-@pytest.mark.parametrize("session", GLOBAL_NOX_SESSIONS)
+@pytest.mark.parametrize("session", IDEMPOTENT_NOX_SESSIONS)
 def test_demo_project_nox_session(robust_demo: Path, session: str) -> None:
     command: list[str] = ["nox", "-s", session]
     try:

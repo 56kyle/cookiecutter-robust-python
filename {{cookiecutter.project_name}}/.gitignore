@@ -9,7 +9,12 @@
 /src/*.egg-info/
 *.egg-info/
 target
-/.idea/
+
+# IDE specific mutable portions
+.idea/*
+!.idea/externalDependencies.xml
+!.idea/inspectionProfiles/Project_Default.xml
+.vscode/launch.json
 
 # Byte-code files
 *.pyc
@@ -66,3 +71,6 @@ nohup.out
 
 # Prettier dependencies
 node_modules/
+
+# Release Notes
+body.md

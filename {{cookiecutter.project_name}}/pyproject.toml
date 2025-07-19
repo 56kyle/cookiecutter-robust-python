@@ -19,7 +19,8 @@ classifiers = [
 dependencies = [
     "loguru>=0.7.3",
     "platformdirs>=4.3.8",
-    "typer>=0.15.4"
+    "typer>=0.15.4",
+    "typing-extensions>=4.13.2"
 ]
 
 [dependency-groups]
@@ -28,14 +29,6 @@ dev = [
     "nox>=2025.5.1",
     "pre-commit>=4.2.0",
     "pre-commit-hooks>=5.0.0",
-    "furo>=2024.8.6",
-    "myst-parser>=3.0.1",
-    "sphinx>=7.4.7",
-    "sphinx-autodoc-typehints>=2.3.0",
-    "sphinx-copybutton>=0.5.2",
-    "sphinx-tabs>=3.4.7",
-    "sphinxcontrib-typer>=0.5.1",
-    "pydocstyle>=6.3.0",
     "ruff>=0.11.9",
     "bandit>=1.8.3",
     "pip-audit>=2.9.0",
@@ -43,10 +36,25 @@ dev = [
     "pytest-cov>=6.1.1",
     "pyright>=1.1.400",
 ]
+docs = [
+    "furo>=2024.8.6",
+    "myst-parser>=3.0.1",
+    "sphinx>=7.4.7",
+    "sphinx-autodoc-typehints>=2.3.0",
+    "sphinx-copybutton>=0.5.2",
+    "sphinx-tabs>=3.4.7",
+    "sphinxcontrib-typer>=0.5.1",
+]
 
 [project.urls]
 Homepage = "https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}"
 Repository = "https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}"
+
+[[tool.uv.index]]
+name = "testpypi"
+url = "https://test.pypi.org/simple/"
+publish-url = "https://test.pypi.org/legacy/"
+explicit = true
 
 {% if cookiecutter.add_rust_extension == 'y' -%}
 [build-system]

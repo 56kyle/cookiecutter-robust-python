@@ -15,17 +15,15 @@ cli: typer.Typer = typer.Typer()
 
 @cli.callback(invoke_without_command=True)
 def main(
-    repo_folder: Annotated[Path, FolderOption("--repo-folder", "-r")],
     demos_cache_folder: Annotated[Path, FolderOption("--demos-cache-folder", "-c")],
-    demo_name: Annotated[str, typer.Option("--demo-name", "-d")],
-    no_cache: Annotated[bool, typer.Option("--no-cache", "-n")] = False,
+    add_rust_extension: Annotated[bool, typer.Option("--add-rust-extension", "-r")] = False,
+    no_cache: Annotated[bool, typer.Option("--no-cache", "-n")] = False
 ) -> None:
     """Updates the poetry.lock file."""
     try:
         generate_demo(
-            repo_folder=repo_folder,
             demos_cache_folder=demos_cache_folder,
-            demo_name=demo_name,
+            add_rust_extension=add_rust_extension,
             no_cache=no_cache
         )
     except Exception as error:

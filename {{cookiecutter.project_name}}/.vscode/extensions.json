@@ -1,0 +1,23 @@
+{
+  "recommendations": [
+    // Python
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "charliermarsh.ruff",
+    "ms-pyright.pyright",
+
+    // Git + pre-commit workflow
+    "ryanluker.vscode-pre-commit",
+
+    // Rust
+    "rust-lang.rust-analyzer",
+    "serayuzgur.crates",
+
+    // Formatting / schema helpers
+    "EditorConfig.EditorConfig",
+    "esbenp.prettier-vscode",
+
+    // Container work
+    "ms-azuretools.vscode-docker"
+  ]
+}

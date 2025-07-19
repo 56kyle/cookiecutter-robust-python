@@ -1,7 +1,6 @@
 """Noxfile for the cookiecutter-robust-python template."""
 import os
 import shutil
-import tempfile
 from pathlib import Path
 
 import nox
@@ -36,14 +35,14 @@ DEMO_ROOT_FOLDER: Path = PROJECT_DEMOS_FOLDER / DEFAULT_DEMO_NAME
 
 GENERATE_DEMO_SCRIPT: Path = SCRIPTS_FOLDER / "generate-demo.py"
 GENERATE_DEMO_OPTIONS: tuple[str, ...] = (
-    *("--repo-folder", REPO_ROOT),
     *("--demos-cache-folder", PROJECT_DEMOS_FOLDER),
-    *("--demo-name", DEFAULT_DEMO_NAME),
 )
-
 
 LINT_FROM_DEMO_SCRIPT: Path = SCRIPTS_FOLDER / "lint-from-demo.py"
 LINT_FROM_DEMO_OPTIONS: tuple[str, ...] = GENERATE_DEMO_OPTIONS
+
+UPDATE_DEMO_SCRIPT: Path = SCRIPTS_FOLDER / "update-demo.py"
+UPDATE_DEMO_OPTIONS: tuple[str, ...] = GENERATE_DEMO_OPTIONS
 
 
 @nox.session(name="generate-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
@@ -123,6 +122,19 @@ def test(session: Session) -> None:
     session.run("pytest", "tests")
 
 
+@nox.parametrize(arg_names="add_rust_extension", arg_values_list=[False], ids=["no-rust"])
+@nox.session(name="update-demo", python=DEFAULT_TEMPLATE_PYTHON_VERSION)
+def update_demo(session: Session, add_rust_extension: bool) -> None:
+    session.log("Installing script dependencies for updating generated project demos...")
+    session.install("cookiecutter", "cruft", "platformdirs", "loguru", "typer")
+
+    session.log("Updating generated project demos...")
+    args: list[str] = [*UPDATE_DEMO_OPTIONS]
+    if add_rust_extension:
+        args.append("--add-rust-extension")
+    session.run("python", UPDATE_DEMO_SCRIPT, *args)
+
+
 @nox.session(venv_backend="none")
 def release_template(session: Session):
     """Run the release process for the TEMPLATE using Commitizen.
@@ -158,3 +170,11 @@ def release_template(session: Session):
 
     session.log("Template version bumped and tag created locally via Commitizen/uvx.")
     session.log("IMPORTANT: Push commits and tags to remote (`git push --follow-tags`) to trigger CD for the TEMPLATE.")
+
+
+@nox.session(python=False)
+def remove_demo_release(session: Session) -> None:
+    """Deletes the latest demo release."""
+    session.run("git", "branch", "-d", f"release/{session.posargs[0]}", external=True)
+    session.run("git", "push", "--progress", "--porcelain", "origin", f"release/{session.posargs[0]}", external=True)
+

@@ -6,10 +6,10 @@ A Python project template robust enough to follow up [cookiecutter-hypermodern-p
 
 I really believe this idea has a lot of good ideas and best practices, however, creating it is a ton of work.
 
-There is definitely a lot left to do before this project is truly a daily driver, but I think there are just a few more pieces missing from this being at least useful in many cases.
-
 If you have any interest in this project, please don't hesitate to reach out!
 Any advice, support, PR's, etc. are welcome and would be greatly appreciated.
+
+As it stands this project is getting rather close to being ready, but not quite yet. Mainly I want to ensure the github actions pipeline is steady, but once that is done it should be alright for use.
 
 # Why does this project exist?
 
