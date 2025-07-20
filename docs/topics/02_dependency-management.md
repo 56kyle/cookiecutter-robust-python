@@ -118,7 +118,7 @@ We evaluated the most prominent options for managing Python project dependencies
 ## Chosen Tool(s)
 
 - **{uv}`uv-documentation`** as the primary **Dependency Manager**.
-- **[:py{virtualenv}`class`](virtualenv-documentation) / [venv](python:venv-tutorial)** (orchestrated by uv) for environment management.
+- **{virtualenv-documentation}`virtualenv` / {venv-tutorial}`venv`** (orchestrated by uv) for environment management.
 
 ## Justification for the Choice
 
@@ -139,7 +139,7 @@ By choosing {uv}`uv-documentation`, the template makes a deliberate, opinionated
 ## Interactions with Other Topics
 
 - **pyproject.toml (01):** {uv}`uv-documentation` is the primary consumer and editor of the `[project]`, `[build-system]`, and `[project.optional-dependencies]` tables in `pyproject.toml`, acting as the interpreter for packaging standards. Its own configuration goes in `[tool.uv]`.
-- **Packaging Build (09):** {uv}`uv-documentation` acts as a PEP 517 build frontend (`uv build`), calling the appropriate backend ([`setuptools`](setuptools-documentation) or [`maturin`](maturin-documentation)) configured in `pyproject.toml`.
+- **Packaging Build (09):** {uv}`uv-documentation` acts as a PEP 517 build frontend (`uv build`), calling the appropriate backend ({setuptools-documentation}`setuptools` or {maturin-documentation}`maturin`) configured in `pyproject.toml`.
 - **Packaging Publish (10):** {uv}`uv-documentation` provides a command to publish packages (`uv publish`) as an alternative to using {twine}`twine-documentation` directly. The Task Automation layer (12) might call `uv publish`.
 - **Task Automation (12):** {Nox}`nox-documentation` will orchestrate workflows by calling {uv}`uv-documentation` commands (e.g., `uv run ruff check`, `uv run pytest`, `uv build`, `uv publish`). {uv}`uv-documentation` is also configured as the backend for Nox's virtual environments (`nox.options.default_venv_backend = "uv"`), ensuring all session environments are created and managed with {uv}`uv-documentation`'s performance.
 - **Container Build (11):** {uv}`uv-documentation` is the recommended tool for installing dependencies _inside_ the `Dockerfile` (`RUN uv sync`).
