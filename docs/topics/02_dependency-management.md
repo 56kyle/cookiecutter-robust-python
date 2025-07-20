@@ -118,7 +118,7 @@ We evaluated the most prominent options for managing Python project dependencies
 ## Chosen Tool(s)
 
 - **{uv}`uv<>`** as the primary **Dependency Manager**.
-- **{virtualenv-documentation}`virtualenv<>` / {venv-tutorial}`venv<>`** (orchestrated by uv) for environment management.
+- **{virtualenv}`virtualenv<>` / {venv-tutorial}`venv<>`** (orchestrated by uv) for environment management.
 
 ## Justification for the Choice
 

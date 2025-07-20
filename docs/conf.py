@@ -109,6 +109,7 @@ extlinks = {
     "tox": ("https://tox.readthedocs.io/%s", None),
     "twine": ("https://twine.readthedocs.io/%s", None),
     "uv": ("https://docs.uv.dev/%s", None),
+    "venv": ("https://docs.python.org/3/library/venv%s", None),
     "virtualenv": ("https://virtualenv.pypa.io/%s", None),
     "yapf": ("https://github.com/google/yapf/%s", None)
 }
