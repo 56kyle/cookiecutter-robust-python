@@ -63,9 +63,9 @@ We evaluated the leading options for Python code linting and static analysis:
 
 - **Conclusion:** The most comprehensive static analyzer for Python. Offers great depth but requires significant configuration effort and suffers from performance issues that impact its usability in fast, iterative development stages. Best suited for thorough analysis in slower workflows like CI.
 
-### Option 3: :flake8-documentation - often evaluated alongside linters:`Prospector`
+### Option 3: {prospector}`Prospector<>` (Lint Tool Composer)
 
-- **Description:** A meta-tool that runs multiple other Python analysis tools (like {flake8}`Flake8<>`, {pylint}`Pylint<>`, {bandit}`Bandit<>`, :pyright-documentation - alternative to Pyright:`Mypy`) and aggregates their output into a unified report.
+- **Description:** A meta-tool that runs multiple other Python analysis tools (like {flake8}`Flake8<>`, {pylint}`Pylint<>`, {bandit}`Bandit<>`, {mypy}`Mypy<>` (alternative to Pyright)) and aggregates their output into a unified report.
 - **Evaluation:**
 
   - **Static Analysis Capabilities:** Varies (Delegated). Its capabilities are the sum of the tools it wraps.
