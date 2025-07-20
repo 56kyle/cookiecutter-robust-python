@@ -93,7 +93,7 @@ The template uses {pytest-pytest-cov}`pytest<>` ([Topic 06](topics/06_testing-co
   ```bash
   uvx nox -s test
   ```
-  This runs tests across applicable Python versions and measures code coverage with {coverage.py}`coveragepy-coverage-documentation<>` ([Topic 06](topics/06_testing-coverage.md)) based on `.coveragerc`. Reports are generated (JUnit XML for CI, terminal summary).
+  This runs tests across applicable Python versions and measures code coverage with {coverage.py}`coverage.py<>` ([Topic 06](topics/06_testing-coverage.md)) based on `.coveragerc`. Reports are generated (JUnit XML for CI, terminal summary).
 
 ## Building and Publishing
 
