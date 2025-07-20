@@ -43,7 +43,7 @@ This section evaluates tools and approaches for setting up automated checks and 
 
 - **Conclusion:** Low-level and highly flexible, but suffers from poor user setup experience, update complexity, lack of environment management/isolation, and severe OS interoperability issues for standard Python development tasks. Not suitable for a template aiming for ease of use and reliability.
 
-### Option 2: {pre-commit}`pre-commit-documentation` (Framework)
+### Option 2: {pre-commit}`pre-commit` (Framework)
 
 - **Description:** A language-agnostic framework that manages Git hook scripts. Configuration via `.pre-commit-config.yaml`. Downloads hook tool dependencies into isolated environments managed by the framework itself. Executes tools on staged files.
 - **Evaluation:**
@@ -60,38 +60,38 @@ This section evaluates tools and approaches for setting up automated checks and 
 
 - **Conclusion:** Provides a standard, user-friendly, and technically robust solution for managing Git hooks, uniquely handling dependency isolation and OS interoperability effectively. The ideal framework for this purpose.
 
-### Option 3: Dependency Manager Hooks (e.g., {Poetry}`poetry-documentation`, {Hatch}`hatch-documentation`)
+### Option 3: Dependency Manager Hooks (e.g., {poetry}`Poetry`, {hatch}`Hatch`)
 
-- **Description:** Some dependency managers offer built-in ways to configure or run hooks. For example, {Hatch}`hatch-documentation` allows defining scripts/tasks to run pre-commit.
-- **Evaluation:** These features are specific to the dependency manager. They might not provide the same level of language agnosticism or explicit hook dependency isolation/management as the {pre-commit}`pre-commit-documentation` framework. They tie your hook management strategy tightly to your dependency manager choice.
-- **Conclusion:** Less suitable as the primary framework for managing hooks compared to a dedicated, language-agnostic tool like {pre-commit}`pre-commit-documentation`, which is designed solely for this purpose and excels at tool/language integration and dependency isolation across any mix of tools.
+- **Description:** Some dependency managers offer built-in ways to configure or run hooks. For example, {hatch}`Hatch` allows defining scripts/tasks to run pre-commit.
+- **Evaluation:** These features are specific to the dependency manager. They might not provide the same level of language agnosticism or explicit hook dependency isolation/management as the {pre-commit}`pre-commit` framework. They tie your hook management strategy tightly to your dependency manager choice.
+- **Conclusion:** Less suitable as the primary framework for managing hooks compared to a dedicated, language-agnostic tool like {pre-commit}`pre-commit`, which is designed solely for this purpose and excels at tool/language integration and dependency isolation across any mix of tools.
 
 ## Chosen Tool(s) and Strategy
 
-- Pre-commit hook management framework: **{pre-commit}`pre-commit-documentation`**.
-- Specific Hooks Used: Primarily **{Ruff}`ruff-documentation`** hooks (`ruff-format`, `ruff`). Add standard, language-agnostic hooks (check-yaml, end-of-file-fixer, trailing-whitespace, check-large-files).
-- Strategy: Configure {pre-commit}`pre-commit-documentation` with **fast, essential checks** (formatting, basic linting/autofixes) to run automatically on every commit.
+- Pre-commit hook management framework: **{pre-commit}`pre-commit`**.
+- Specific Hooks Used: Primarily **{ruff}`Ruff`** hooks (`ruff-format`, `ruff`). Add standard, language-agnostic hooks (check-yaml, end-of-file-fixer, trailing-whitespace, check-large-files).
+- Strategy: Configure {pre-commit}`pre-commit` with **fast, essential checks** (formatting, basic linting/autofixes) to run automatically on every commit.
 
 ## Justification for the Choice
 
-**{pre-commit}`pre-commit-documentation`** is selected as the framework for managing pre-commit hooks because it is the **clear standard** and offers the most robust, user-friendly, and technically sound solution for this specific workflow stage:
+**{pre-commit}`pre-commit`** is selected as the framework for managing pre-commit hooks because it is the **clear standard** and offers the most robust, user-friendly, and technically sound solution for this specific workflow stage:
 
 1.  **Reliability & OS Interoperability:** It solves the hard problem of running hooks reliably and consistently across different operating systems by handling **environment isolation** and executing tools within self-managed environments. This is a critical advantage over manually managed scripts (addressing **Reliability & OS Interoperability** and **Environment Isolation**).
 2.  **User Experience:** It makes hook setup and usage **simple and highly automated** for the developer (`pre-commit install`), requiring minimal manual effort after cloning the project (addressing **Ease of Setup**). It also provides a simple default command to run hooks manually.
 3.  **Flexible Tool Integration:** It provides a standard, configuration-driven way to integrate various external tools and hooks (addressing **Tool Integration** and **Configurability**).
 4.  **Ensuring Quality Incrementally:** By running automated checks automatically before _each_ commit, it helps catch issues early and maintain code quality and style standards incrementally, preventing them from accumulating and simplifying subsequent reviews and automation stages (CI/CD) (addressing **Goals Addressed**).
 
-While {pre-commit}`pre-commit-documentation` itself doesn't define _which_ checks are run, the template configures **{Ruff}`ruff-documentation`** as the primary tool used by pre-commit hooks due to its exceptional **Performance** for formatting and linting, making these checks fast enough to run reliably on every commit without causing frustration. Hooks for `ruff-format` (covering formatting and import sorting) and `ruff` (for fast linting checks with autofixing) are essential here. We include other standard hooks (like YAML check, trailing whitespace) that are simple, fast, and universally beneficial.
+While {pre-commit}`pre-commit` itself doesn't define _which_ checks are run, the template configures **{ruff}`Ruff`** as the primary tool used by pre-commit hooks due to its exceptional **Performance** for formatting and linting, making these checks fast enough to run reliably on every commit without causing frustration. Hooks for `ruff-format` (covering formatting and import sorting) and `ruff` (for fast linting checks with autofixing) are essential here. We include other standard hooks (like YAML check, trailing whitespace) that are simple, fast, and universally beneficial.
 
-Comprehensive checks (full type checks via {Pyright}`pyright-documentation`, security scans via {Bandit}`bandit-bandit-documentation`/{pip-audit}`pip-audit-documentation`) are **not** mandated in pre-commit due to their potential performance overhead or complexity; they are deferred to the Task Automation layer ({Nox}`nox-documentation` - Area 12) and enforced in CI (Area 13), creating a layered approach to code quality where pre-commit provides the fastest initial feedback.
+Comprehensive checks (full type checks via {pyright}`Pyright`, security scans via {bandit-bandit}`Bandit`/{pip-audit}`pip-audit`) are **not** mandated in pre-commit due to their potential performance overhead or complexity; they are deferred to the Task Automation layer ({nox}`Nox` - Area 12) and enforced in CI (Area 13), creating a layered approach to code quality where pre-commit provides the fastest initial feedback.
 
-By using {pre-commit}`pre-commit-documentation` with well-chosen fast hooks, the template ensures that fundamental quality standards are applied consistently and automatically at the point of code contribution.
+By using {pre-commit}`pre-commit` with well-chosen fast hooks, the template ensures that fundamental quality standards are applied consistently and automatically at the point of code contribution.
 
 **Manual Execution:** When hooks are installed, `git commit` automatically runs them. You can also trigger them manually on staged files by running the simple command `pre-commit` from the project root. To run them on _all_ files in the repository (staged or not), use `pre-commit run --all-files`. The template's Task Automation layer provides a `nox -s pre-commit` command that **defaults to running `pre-commit` on staged files when called without arguments**, and allows passing specific `pre-commit` arguments (like `--install`, `--uninstall`, `run --all-files`) via positional arguments. This simplifies the user interface to `nox -s pre-commit`.
 
 ## Interactions with Other Topics
 
-- **Code Formatting (03) & Linting (04):** {Ruff}`ruff-documentation` is configured and run as a core hook for these tasks.
-- **Type Checking (05), Security (08):** Full comprehensive checks from these areas are typically not run in pre-commit, but fast subsets _could_ potentially be added using {Ruff}`ruff-documentation` or focused tools if performance allows in the future. The main checks for these areas run in Task Automation/CI.
-- **Task Automation (12):** {Nox}`nox-documentation` provides commands like `nox -s pre-commit -- install` to set up the hooks and defaults to running `pre-commit` on staged files with `nox -s pre-commit`. The full `check` task in Nox (Area 12) includes all linters/checkers, including those also used by pre-commit, but runs on the entire codebase in controlled environments.
+- **Code Formatting (03) & Linting (04):** {ruff}`Ruff` is configured and run as a core hook for these tasks.
+- **Type Checking (05), Security (08):** Full comprehensive checks from these areas are typically not run in pre-commit, but fast subsets _could_ potentially be added using {ruff}`Ruff` or focused tools if performance allows in the future. The main checks for these areas run in Task Automation/CI.
+- **Task Automation (12):** {nox}`Nox` provides commands like `nox -s pre-commit -- install` to set up the hooks and defaults to running `pre-commit` on staged files with `nox -s pre-commit`. The full `check` task in Nox (Area 12) includes all linters/checkers, including those also used by pre-commit, but runs on the entire codebase in controlled environments.
 - **CI Orchestration (13):** CI acts as the final gatekeeper, verifying that even the comprehensive checks (which aren't in pre-commit) pass. It doubles as a check that pre-commit hooks are functioning correctly (by ensuring formatted code passes the linter check, etc., although CI usually checks _before_ potential manual hook fixes).

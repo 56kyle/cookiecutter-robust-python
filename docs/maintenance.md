@@ -8,7 +8,7 @@ Maintaining a project template is an ongoing effort that involves updating depen
 
 ## Template Dependencies and Development Environment
 
-The `cookiecutter-robust-python` template repository is itself a project with dependencies needed for its development and maintenance. These include `cookiecutter`, the specific versions of the tools evaluated (to ensure compatibility and test against them), and maintenance-specific tools (like {Commitizen}`commitizen-documentation` for template versioning, {Nox}`nox-documentation` for template task automation, potentially testing frameworks for the template's functionality).
+The `cookiecutter-robust-python` template repository is itself a project with dependencies needed for its development and maintenance. These include `cookiecutter`, the specific versions of the tools evaluated (to ensure compatibility and test against them), and maintenance-specific tools (like {commitizen}`Commitizen` for template versioning, {nox}`Nox` for template task automation, potentially testing frameworks for the template's functionality).
 
 The template's `pyproject.toml` file at the **template repository root** lists these dependencies.
 
@@ -48,20 +48,20 @@ The template repository uses its own `noxfile.py` at the **template repository r
 
 ## Keeping Template Tooling and Dependencies Current
 
-As the tools recommended by the template ({uv}`uv-documentation`, {Ruff}`ruff-documentation`, {Pyright}`pyright-documentation`, {pytest}`pytest-pytest-cov-documentation`, etc.) release new versions, you will need to:
+As the tools recommended by the template ({uv}`uv`, {ruff}`Ruff`, {pyright}`Pyright`, {pytest-pytest-cov}`pytest`, etc.) release new versions, you will need to:
 
 1.  **Update Template Dependencies:** Manually update the version specifiers for the desired tools in the template's **`pyproject.toml` at the template root**. Run `uv sync` at the template root to update the template's own `uv.lock` file with the new versions.
 2.  **Update Template Configuration:** Review release notes for the updated tools. Modify the **separate configuration files** (like `.ruff.toml`, `pyrightconfig.json`, `.coveragerc`) and `pyproject.toml` (e.g., `[tool.uv]`, `[tool.pytest]`) within the **template structure** (e.g., `{{cookiecutter.project_slug}}/pyproject.toml`, `{{cookiecutter.project_slug}}/.ruff.toml`) if the tools have breaking changes in configuration or recommended settings.
 3.  **Test Template:** Run the template's own checks and tests (`uvx nox`) to ensure the template still functions correctly and generates projects with working workflows using the new tool versions. This is crucial! Consider adding tests that render a project and run its default checks/tests within the template's own CI.
-4.  **Update Pre-commit Hook `rev`s:** For tools used as {pre-commit}`pre-commit-documentation` hooks, update the `rev` (version hash/tag) for those hooks in the template's **`.pre-commit-config.yaml` at the template root** to match tested, compatible versions of the hook repositories. You can use `uvx nox -s pre-commit -- autoupdate` in the template repository to update these `rev`s interactively.
+4.  **Update Pre-commit Hook `rev`s:** For tools used as {pre-commit}`pre-commit` hooks, update the `rev` (version hash/tag) for those hooks in the template's **`.pre-commit-config.yaml` at the template root** to match tested, compatible versions of the hook repositories. You can use `uvx nox -s pre-commit -- autoupdate` in the template repository to update these `rev`s interactively.
 5.  **Update CI/CD Example Configs:** Ensure the versions referenced in example CI/CD workflow files (`.github/workflows/`, `bitbucket-pipelines.yml`, etc.) are current and consistent with the tested tool versions (e.g., Python versions tested against, commands to install uv/Nox if pinned).
 6.  **Update Documentation:** **CRITICAL.** If tool updates change behavior, configuration, workflow steps, or even render previous justifications less valid, **update the documentation** (specifically the `docs/topics/` files) to reflect the current state and rationale. This ensures the documentation remains accurate and the justifications for tool choices are based on the _current_ versions and understanding.
 
 ## Keeping Generated Projects Updated
 
-A project generated from this template is a copy at a point in time. Template updates do **not** automatically apply to existing generated projects. We recommend using **{cruft}`cruft-documentation`** to help manage updates in projects _after_ they've been generated:
+A project generated from this template is a copy at a point in time. Template updates do **not** automatically apply to existing generated projects. We recommend using **{cruft}`cruft`** to help manage updates in projects _after_ they've been generated:
 
-1.  **Ensure `cruft` is Used:** During template generation, the `{{cookiecutter.project_slug}}` should have a `.cruft.json` file created (handled automatically by {cruft}`cruft-documentation` if the template is run via `cruft create`, or added as a post-gen hook). This file tracks the template version used.
+1.  **Ensure `cruft` is Used:** During template generation, the `{{cookiecutter.project_slug}}` should have a `.cruft.json` file created (handled automatically by {cruft}`cruft` if the template is run via `cruft create`, or added as a post-gen hook). This file tracks the template version used.
 2.  **Instruct Users on `cruft`:** The documentation _within the generated project's_ `docs/` (e.g., the Getting Started guide) should clearly explain how to use `cruft` (`cruft check`, `cruft update`) to bring in changes from template updates. You can mention running `uvx nox -s cruft-check` (if you add a Nox session for this) or integrating `cruft check --exit-code` into the generated project's CI workflow to alert users of template updates.
 
 ## Releasing a New Template Version
@@ -70,7 +70,7 @@ Releasing a new version of the template itself follows a standard process, often
 
 1.  **Finalize Changes:** Ensure all desired updates for the release are committed to the main branch of the template repository.
 2.  **Verify Template Health:** Run the full suite of checks and tests for the template itself (`uvx nox`) to confirm it's functioning correctly.
-3.  **Run Commitizen Bump:** Use {Commitizen}`commitizen-documentation` (installed as a dev dependency in the template repo) to automatically bump the calendar version string(s) in your template files (e.g., `docs/conf.py`), create a Git tag (e.g., `2025.04.28`), and generate/update a `CHANGELOG.md` for the template repository.
+3.  **Run Commitizen Bump:** Use {commitizen}`Commitizen` (installed as a dev dependency in the template repo) to automatically bump the calendar version string(s) in your template files (e.g., `docs/conf.py`), create a Git tag (e.g., `2025.04.28`), and generate/update a `CHANGELOG.md` for the template repository.
     ```bash
     uvx cz bump # Run in template repo root; follow prompts. Updates version, tags, changelog.
     ```
@@ -83,4 +83,4 @@ Releasing a new version of the template itself follows a standard process, often
 
 ## Documenting Template Changes
 
-Maintain a `CHANGELOG.md` file at the **template repository root** to clearly document the changes included in each template release (often generated automatically by {Commitizen}`commitizen-documentation`). This helps users understand the benefits and potential impacts of updating their generated projects to a newer template version. Link to specific documentation topics if updates involve significant changes in tooling or workflows.
+Maintain a `CHANGELOG.md` file at the **template repository root** to clearly document the changes included in each template release (often generated automatically by {commitizen}`Commitizen`). This helps users understand the benefits and potential impacts of updating their generated projects to a newer template version. Link to specific documentation topics if updates involve significant changes in tooling or workflows.

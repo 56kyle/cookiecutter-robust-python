@@ -8,7 +8,7 @@ Make sure you have completed the steps in the [Quickstart](quickstart.md) guide 
 
 ## Dependency Management with uv
 
-Your project uses {uv}`uv-documentation` to manage dependencies, environments, and basic project tasks. The primary configuration is in `pyproject.toml` ([Topic 01](topics/01_project-structure.md), [Topic 02](topics/02_dependency-management.md)).
+Your project uses {uv}`uv` to manage dependencies, environments, and basic project tasks. The primary configuration is in `pyproject.toml` ([Topic 01](topics/01_project-structure.md), [Topic 02](topics/02_dependency-management.md)).
 
 - **Add a new dependency:**
 
@@ -54,26 +54,26 @@ Refer to the [uv documentation](https://docs.astral.sh/uv/cli/) for more advance
 
 The template provides a suite of tools for maintaining code quality, integrated via Task Automation ([Topic 12](topics/12_task-automation.md)) and pre-commit ([Topic 18](topics/18_pre-commit-hooks.md)).
 
-- **Format Code:** Code formatting and import sorting is handled by {Ruff}`ruff-documentation` ([Topic 03](topics/03_code-formatting.md)) using the configuration in `.ruff.toml`. Your pre-commit hooks automatically fix these on commit. To format manually:
+- **Format Code:** Code formatting and import sorting is handled by {ruff}`Ruff` ([Topic 03](topics/03_code-formatting.md)) using the configuration in `.ruff.toml`. Your pre-commit hooks automatically fix these on commit. To format manually:
 
   ```bash
   uvx nox -s lint # Includes a formatting check
   # Or directly via uv run (often requires specific args): uv run ruff format .
   ```
 
-- **Lint Code:** Linting checks for code style (beyond formatting), errors, potential bugs, and code smells using {Ruff}`ruff-documentation` and {pydocstyle}`pydocstyle-documentation` ([Topic 04](topics/04_code-linting.md)). Run checks via Task Automation:
+- **Lint Code:** Linting checks for code style (beyond formatting), errors, potential bugs, and code smells using {ruff}`Ruff` and {pydocstyle}`pydocstyle` ([Topic 04](topics/04_code-linting.md)). Run checks via Task Automation:
 
   ```bash
   uvx nox -s lint
   ```
 
-- **Type Check Code:** Static type analysis using {Pyright}`pyright-documentation` ([Topic 05](topics/05_type-checking.md)) based on `pyrightconfig.json`:
+- **Type Check Code:** Static type analysis using {pyright}`Pyright` ([Topic 05](topics/05_type-checking.md)) based on `pyrightconfig.json`:
 
   ```bash
   uvx nox -s typecheck
   ```
 
-- **Security Checks:** Scan for dependency vulnerabilities with {pip-audit}`pip-audit-documentation` and code security issues with {Bandit}`bandit-bandit-documentation` ([Topic 08](topics/08_security-checks.md)):
+- **Security Checks:** Scan for dependency vulnerabilities with {pip-audit}`pip-audit` and code security issues with {bandit-bandit}`Bandit` ([Topic 08](topics/08_security-checks.md)):
 
   ```bash
   uvx nox -s security
@@ -86,7 +86,7 @@ The template provides a suite of tools for maintaining code quality, integrated 
 
 ## Testing
 
-The template uses {pytest}`pytest-pytest-cov-documentation` ([Topic 06](topics/06_testing-coverage.md)) as the test framework.
+The template uses {pytest-pytest-cov}`pytest` ([Topic 06](topics/06_testing-coverage.md)) as the test framework.
 
 - **Write Tests:** Place test files (e.g., `test_*.py` or `*_test.py`) in the `tests/` directory.
 - **Run Tests with Coverage:**
@@ -103,7 +103,7 @@ Create and publish your package following Python standards ([Topic 09](topics/09
   ```bash
   uvx nox -s build
   ```
-- **Publish Package:** Upload built packages using {uv}`uv-documentation`'s publish command. Requires credentials set via environment variables (e.g., `UV_TOKEN` or `TWINE_API_KEY`).
+- **Publish Package:** Upload built packages using {uv}`uv`'s publish command. Requires credentials set via environment variables (e.g., `UV_TOKEN` or `TWINE_API_KEY`).
   ```bash
   uvx nox -s publish
   ```
@@ -124,7 +124,7 @@ Define and build Docker container images for your application ([Topic 11](topics
 
 ## Release Management
 
-Use {Commitizen}`commitizen-documentation` ([Topic 12](topics/12_task-automation.md)) via {uvx}`uv-documentation` to manage project versions based on Conventional Commits and create Git tags.
+Use {commitizen}`Commitizen` ([Topic 12](topics/12_task-automation.md)) via {uv}`uvx` to manage project versions based on Conventional Commits and create Git tags.
 
 - **Bump Version:** Automatically determine the next version (major, minor, patch, etc.) based on commit messages since the last tag, update version strings, and create a Git tag.
   ```bash
@@ -134,12 +134,12 @@ Use {Commitizen}`commitizen-documentation` ([Topic 12](topics/12_task-automation
 
 ## Advanced Usage & Customization
 
-- **Template Update Management:** Use {cruft}`cruft-documentation` to update your project from newer versions of the template. (See [Template Maintenance](maintenance.md) in the template documentation for maintainers).
+- **Template Update Management:** Use {cruft}`cruft` to update your project from newer versions of the template. (See [Template Maintenance](maintenance.md) in the template documentation for maintainers).
 - **CI/CD Configuration:** Explore the example workflow files in `.github/workflows/` (etc.) and adapt them to your specific needs ([Topic 13](topics/13_ci-orchestration.md), [Topic 14](topics/14_cd-orchestration.md)).
 - **Custom Task Automation:** Modify the `noxfile.py` to add or change automation tasks ([Topic 12](topics/12_task-automation.md)).
 - **Tool Configuration:** Adjust the configuration files (e.g., `.ruff.toml`, `pyrightconfig.json`) to tailor tool behavior to your project's specific requirements. Refer to each tool's official documentation (linked from the [Criteria](criteria.md) and [Toolchain Topics](topics/index.md) pages).
 - **Dev Container Customization:** Modify the `.devcontainer/` configuration for specific editor settings or tools needed in the container ([Topic 17](topics/17_dev-containers.md)).
-- **Native Extensions:** If you chose to add Rust extensions during template generation, see the `rust/` directory and the role of {Maturin}`maturin-documentation` in the build process ([Topic 09](topics/09_packaging-build.md)).
+- **Native Extensions:** If you chose to add Rust extensions during template generation, see the `rust/` directory and the role of {maturin}`Maturin` in the build process ([Topic 09](topics/09_packaging-build.md)).
 - **Production Deployment:** Review guidance on deploying the generated artifacts to production ([Topic 16](topics/16_prod-deploy-guidance.md)).
 
 This guide covers the main interactions you will have with the template's toolchain. The remaining documentation topics provide the in-depth rationale and evaluation process that led to these choices.
