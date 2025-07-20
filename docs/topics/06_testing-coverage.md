@@ -26,17 +26,17 @@ This section evaluates tools for writing, running, and measuring test effectiven
 
 We evaluated the primary testing framework and coverage tools:
 
-### Option 1: {mod}`unittest<>` (+ [coverage.py](coveragepy-documentation))
+### Option 1: {mod}`unittest<>` (+ [coverage.py](coverage.py))
 
-- **Description:** {unittest-documentation}`unittest<>` is Python's built-in testing framework, inspired by JUnit. Tests are written in classes inheriting from `unittest.TestCase`. {coverage.py}`coveragepy-documentation<>` is the standard standalone tool for measuring code coverage.
+- **Description:** {unittest-documentation}`unittest<>` is Python's built-in testing framework, inspired by JUnit. Tests are written in classes inheriting from `unittest.TestCase`. {coverage.py}`coverage.py<>` is the standard standalone tool for measuring code coverage.
 - **Evaluation:**
 
   - **Ease of Use:** Moderate. Requires significant boilerplate (class definitions, inheritance, specific method names, explicit `setUp`/`tearDown` methods). Writing simple tests is more verbose than alternatives.
   - **Feature-Rich:** Moderate. Provides core testing features but lacks the advanced features and extensive plugin ecosystem of {pytest}`pytest<>` (e.g., simple functional fixtures, powerful parametrization decorators built-in).
-  - **Performance:** Moderate. Test execution can be slower than {pytest}`pytest<>` for large test suites due to its architecture (creating a class instance per test method). {coverage.py}`coveragepy-documentation<>` performance is generally good.
-  - **OS Interoperability:** Excellent. Both are foundational Python tools, highly robust across OSs. {unittest-documentation}`unittest<>` is standard library, {coverage.py}`coveragepy-documentation<>` is pure Python.
+  - **Performance:** Moderate. Test execution can be slower than {pytest}`pytest<>` for large test suites due to its architecture (creating a class instance per test method). {coverage.py}`coverage.py<>` performance is generally good.
+  - **OS Interoperability:** Excellent. Both are foundational Python tools, highly robust across OSs. {unittest-documentation}`unittest<>` is standard library, {coverage.py}`coverage.py<>` is pure Python.
   - **Integration:** High (Individual). Both have CLIs easily called from Task Automation/CI. Integrating them _together_ requires explicitly wrapping `unittest` execution with `coverage run -m unittest` or using less standardized plugins compared to the {pytest-pytest-cov}`pytest<>` ecosystem. Generating standard reports like JUnit XML also often requires extra steps or third-party runners for {unittest-documentation}`unittest<>`.
-  - **Reporting:** Moderate (Test) / Excellent (Coverage). {unittest-documentation}`unittest<>` provides basic terminal output. {coverage.py}`coveragepy-documentation<>` provides excellent, standard reports (text, HTML, XML).
+  - **Reporting:** Moderate (Test) / Excellent (Coverage). {unittest-documentation}`unittest<>` provides basic terminal output. {coverage.py}`coverage.py<>` provides excellent, standard reports (text, HTML, XML).
   - **Maturity & Stability:** Very High. Both are extremely mature, stable, battle-tested.
   - **Community & Documentation:** Very High. Widely adopted, vast documentation.
 
@@ -53,13 +53,13 @@ We evaluated the primary testing framework and coverage tools:
   - **OS Interoperability:** Excellent. Pure Python package, works reliably across OSs.
   - **Integration:** Excellent. Widely supported, integrates seamlessly into editors/IDEs, {pre-commit}`pre-commit<>`, Task Automation, CI/CD. Designed for external execution via CLI.
   - **Reporting:** Excellent. Provides clear terminal output. Standard support for generating JUnit XML reports (`--junitxml=...`), which is essential for CI platform integration.
-  - **Coverage Reporting:** Poor (Not built-in). Requires an external tool (like {coverage.py}`coveragepy-documentation<>`) and integration mechanism.
+  - **Coverage Reporting:** Poor (Not built-in). Requires an external tool (like {coverage.py}`coverage.py<>`) and integration mechanism.
   - **Maturity & Stability:** Very High. Mature, stable, widely adopted standard for modern Python testing.
   - **Community & Documentation:** Very High. Massive, active community, extensive documentation.
 
 - **Conclusion:** The de facto standard for modern Python testing. Excels at ease of use, features, performance, and integration for the testing framework itself. Lacks built-in coverage, requiring integration with another tool.
 
-### Option 3: {coverage.py}`coveragepy-documentation<>`
+### Option 3: {coverage.py}`coverage.py<>`
 
 - **Description:** The standard standalone tool for measuring code coverage in Python. Monitors code execution and reports on lines/branches executed.
 - **Evaluation:** (Evaluated primarily as an engine, its integration is key).
@@ -76,11 +76,11 @@ We evaluated the primary testing framework and coverage tools:
 
 ### Option 4: {pytest-pytest-cov}`pytest-cov<>`
 
-- **Description:** The official {pytest}`pytest<>` plugin that integrates {coverage.py}`coveragepy-documentation<>` seamlessly into the {pytest}`pytest<>` workflow.
+- **Description:** The official {pytest}`pytest<>` plugin that integrates {coverage.py}`coverage.py<>` seamlessly into the {pytest}`pytest<>` workflow.
 - **Evaluation:** (Evaluated as the integration bridge).
 
-  - **Integration with Testing & Coverage:** Excellent. Provides seamless, standard integration by adding `--cov` flags to the `pytest` command. Orchestrates running {coverage.py}`coveragepy-documentation<>` around the {pytest-pytest-cov}`pytest<>` run.
-  - **Accurate & Detailed Reporting:** Excellent. Leverages {coverage.py}`coveragepy-documentation<>`'s full reporting capabilities via {pytest-pytest-cov}`pytest<>` command-line arguments and config files.
+  - **Integration with Testing & Coverage:** Excellent. Provides seamless, standard integration by adding `--cov` flags to the `pytest` command. Orchestrates running {coverage.py}`coverage.py<>` around the {pytest-pytest-cov}`pytest<>` run.
+  - **Accurate & Detailed Reporting:** Excellent. Leverages {coverage.py}`coverage.py<>`'s full reporting capabilities via {pytest-pytest-cov}`pytest<>` command-line arguments and config files.
   - **Performance:** High (Combined). Adds minimal overhead; combined performance is driven by {pytest-pytest-cov}`pytest<>` and {coverage.py}`coveragepy-coverage-documentation<>` execution.
   - **OS Interoperability:** Excellent. Pure Python plugin, inherits compatibility from {pytest-pytest-cov}`pytest<>` and {coverage.py}`coveragepy-coverage-documentation<>`.
   - **Callable for Workflow:** Excellent. Simply adds flags to the standard `pytest` command, easily used in Task Automation and CI.
@@ -104,7 +104,7 @@ We evaluated the primary testing framework and coverage tools:
 ## Chosen Tool(s)
 
 - Primary Test Framework: **{pytest}`pytest<>`**.
-- Primary Coverage Engine: **{coverage.py}`coveragepy-documentation<>`**.
+- Primary Coverage Engine: **{coverage.py}`coverage.py<>`**.
 - Integration Plugin: **{pytest-pytest-cov}`pytest-cov<>`**.
 - Matrix Orchestration (for full matrix): **{nox}`Nox<>`** (invoking {pytest-pytest-cov}`pytest<>` across matrix) or optionally **{tox}`Tox<>`** (invoked by {nox}`Nox<>` for specific needs).
 
