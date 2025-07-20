@@ -12,12 +12,12 @@ This section discusses how to set up Continuous Integration (CI) for a project. 
 
 ## Core Orchestration Strategy: Leveraging Task Automation
 
-A fundamental design choice of this template is to place the specific logic for _how_ to run checks and tests within the project's **Task Automation layer (Topic 12 - {nox}`Nox`)**. The CI platform's configuration acts as a **thin orchestration layer**.
+A fundamental design choice of this template is to place the specific logic for _how_ to run checks and tests within the project's **Task Automation layer (Topic 12 - {nox}`Nox<>`)**. The CI platform's configuration acts as a **thin orchestration layer**.
 
 This design means the CI configuration (e.g., a YAML file) should primarily:
 
 1.  Check out the project's source code.
-2.  Set up a compatible Python environment and ensure the Task Automation tool ({nox}`Nox`, and {uv}`uv` as its backend) is available.
+2.  Set up a compatible Python environment and ensure the Task Automation tool ({nox}`Nox<>`, and {uv}`uv<>` as its backend) is available.
 3.  Call the relevant, universal **`nox -s <task>`** commands to execute the desired checks and tests.
 
 ## Evaluation Criteria (for CI Platform Orchestration Approach)
@@ -33,27 +33,27 @@ Since we don't choose _a single_ CI platform for users, we evaluate _the charact
 
 ## Approaches and Tools Evaluated
 
-We focus on the approach of using standard CI platforms to orchestrate the template's built-in Task Automation. We discuss various platforms (e.g., {github-actions}`GitHub Actions`, {bitbucket-pipelines}`Bitbucket Pipelines`, {gitlab-ci}`GitLab CI`) not to select _the_ best platform, but as examples demonstrating this approach.
+We focus on the approach of using standard CI platforms to orchestrate the template's built-in Task Automation. We discuss various platforms (e.g., {github-actions}`GitHub Actions<>`, {bitbucket-pipelines}`Bitbucket Pipelines<>`, {gitlab-ci}`GitLab CI<>`) not to select _the_ best platform, but as examples demonstrating this approach.
 
-### Approach: Using Standard CI Platforms ({github-actions}`GitHub Actions`, {bitbucket-pipelines}`Bitbucket Pipelines`, {gitlab-ci}`GitLab CI`, etc.) to orchestrate {nox}`Nox` tasks.
+### Approach: Using Standard CI Platforms ({github-actions}`GitHub Actions<>`, {bitbucket-pipelines}`Bitbucket Pipelines<>`, {gitlab-ci}`GitLab CI<>`, etc.) to orchestrate {nox}`Nox<>` tasks.
 
 - **Description:** Configuring CI workflows (via platform-specific YAML/config) to trigger jobs on VCS events, set up environment, and execute `nox -s <task>` commands to run checks and tests defined in `noxfile.py`.
 - **Evaluation against Criteria:**
-  - **Enables CI/CD Agnosticism:** Excellent. The core execution logic for checks and tests resides solely within the `noxfile.py`. The CI config is reduced to steps that install dependencies required by the nox session (like {uv}`uv`) and {nox}`Nox` itself, then run the specific `nox -s <task>` command. This means the CI config for running tests, for instance, looks very similar across different CI platforms, dramatically simplifying migration if needed.
+  - **Enables CI/CD Agnosticism:** Excellent. The core execution logic for checks and tests resides solely within the `noxfile.py`. The CI config is reduced to steps that install dependencies required by the nox session (like {uv}`uv<>`) and {nox}`Nox<>` itself, then run the specific `nox -s <task>` command. This means the CI config for running tests, for instance, looks very similar across different CI platforms, dramatically simplifying migration if needed.
   - **Simplifies CI Configuration:** Excellent. Instead of complex scripts for "how to run ruff," "how to run pyright," "how to run pytest with coverage," etc., the CI config step becomes the simple and readable `run: uvx nox -s <task_name>` or `run: nox -s <task_name>` if uv is already on the system path. This reduces boilerplate and complex scripting directly within the CI config file.
   - **Improves Workflow Consistency:** Excellent. Running `nox -s test` locally uses the same logic and environments as running `nox -s test` in CI. This minimizes "it works on my machine but not in CI" issues related to environment setup and command execution, providing a more reliable and predictable workflow for developers.
   - **Leverages Platform Features:** Excellent. This strategy effectively utilizes standard CI platform features:
     - **Checkout:** Standard step to get code.
     - **Environment Setup:** Uses platform actions/steps to set up required Python versions (e.g., `actions/setup-python` on GitHub Actions) and cache dependencies efficiently, which is better handled by the platform than trying to manage these complex caching strategies manually in a simple Task Automation script.
     - **Matrix Testing:** Combines platform matrix capabilities (OS + Python versions) with Nox's ability to run across multiple Python versions (using the Nox `python=` parameter) or specifically configured sessions to cover testing requirements reliably across combinations.
-    - **Reporting:** Leverages the platform's ability to collect standard reports (JUnit XML from {pytest}`pytest`, Cobertura XML from {coverage.py}`coveragepy-documentation`) generated by the Task Automation layer.
+    - **Reporting:** Leverages the platform's ability to collect standard reports (JUnit XML from {pytest}`pytest<>`, Cobertura XML from {coverage.py}`coveragepy-documentation<>`) generated by the Task Automation layer.
     - **Status Checks:** The platform provides visual feedback (pass/fail) linked to commits/PRs based on job outcomes.
   - **Adaptability:** Excellent. Switching CI platforms involves mapping the checkout, Python setup, caching, secrets, and artifact steps from the old platform to the new one, and then configuring the new platform to call the _same_ `nox -s <task>` commands as before. The core Task Automation logic (`noxfile.py`) remains unchanged.
-  - **Value of Examples:** Very High. Providing concrete examples for popular platforms (like {github-actions}`GitHub Actions`) significantly speeds up user adoption of this strategy by providing a ready-to-use template configuration, demonstrating exactly how to integrate Task Automation calls, setup, matrixing, and reporting.
+  - **Value of Examples:** Very High. Providing concrete examples for popular platforms (like {github-actions}`GitHub Actions<>`) significantly speeds up user adoption of this strategy by providing a ready-to-use template configuration, demonstrating exactly how to integrate Task Automation calls, setup, matrixing, and reporting.
 
 ## Chosen Approach
 
-- **Configure CI workflows (via platform-specific config files)** to orchestrate jobs that install the template's Task Automation tool chain ({uv}`uv`, {nox}`Nox`) and **call Task Automation ({nox}`Nox`) sessions** to execute checks and tests.
+- **Configure CI workflows (via platform-specific config files)** to orchestrate jobs that install the template's Task Automation tool chain ({uv}`uv<>`, {nox}`Nox<>`) and **call Task Automation ({nox}`Nox<>`) sessions** to execute checks and tests.
 - Provide **example configuration file(s)** for popular CI platforms demonstrating this approach.
 
 ## Justification for the Choice
@@ -70,7 +70,7 @@ Providing examples for popular platforms (e.g., a `.github/workflows/ci.yml` fil
 ## Interactions with Other Topics
 
 - **Task Automation (12):** This is the core layer invoked by CI. CI calls `nox -s <task>` commands.
-- **Dependency Management (02):** CI setup includes steps to install dependencies (using {uv}`uv`) needed by Nox sessions.
+- **Dependency Management (02):** CI setup includes steps to install dependencies (using {uv}`uv<>`) needed by Nox sessions.
 - **Code Quality (03, 04, 05, 08):** CI runs the checks for formatting, linting, typing, and security defined and orchestrated by Task Automation.
 - **Testing (06):** CI runs the test suite across matrices defined by Task Automation, leveraging platform matrix capabilities. Test and coverage reports are collected.
 - **Packaging Build (09) & Container Build (11):** CI may include jobs to build packages/containers via Task Automation commands to ensure the build process itself passes before merges.
