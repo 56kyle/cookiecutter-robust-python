@@ -29,7 +29,7 @@ We evaluated the leading options for Python code linting and static analysis:
 
 ### Option 1: [:term:`Flake8`](flake8-documentation)
 
-- **Description:** A popular wrapper that bundles multiple checks: [:term:`PyFlakes`](pip-tools-documentation) (finds errors like unused variables, undefined names), [:term:`pycodestyle`](flake8-documentation) (checks against PEP 8 style guide), and [:term:`mccabe`](flake8-documentation) (checks code complexity). Highly extensible via plugins.
+- **Description:** A popular wrapper that bundles multiple checks: [:term:`PyFlakes`](pyflakes-documentation) (finds errors like unused variables, undefined names), [:term:`pycodestyle`](pycodestyle-documentation) (checks against PEP 8 style guide), and [:term:`mccabe`](mccabe-documentation) (checks code complexity). Highly extensible via plugins.
 - **Evaluation:**
 
   - **Static Analysis Capabilities:** Good basic coverage via bundled tools. Very high potential via a rich ecosystem of plugins (e.g., `flake8-bugbear` for common pitfalls, `flake8-annotations` for type hint checks, etc.) covering a wide range of issues.
@@ -113,7 +113,7 @@ We evaluated the leading options for Python code linting and static analysis:
 6.  **Seamless Integration:** [:term:`Ruff`](ruff-documentation)'s speed and standard CLI integrate **excellently** into automated workflows, making it uniquely suitable for fast [:term:`pre-commit`](pre-commit-documentation) hooks (Area 18), rapid Task Automation runs ([:term:`Nox`](nox-documentation) - Area 12), and efficient CI checks (Area 13) (addressing **Integration**).
 7.  **Unified with Formatting:** Choosing [:term:`Ruff`](ruff-documentation) for both formatting (03) and linting (04) provides a powerful, unified solution for code style and quality from a single tool with a single configuration file.
 
-While [:term:`Pylint`](pylint-documentation) offers potentially deeper analysis in some niche areas and [:term:`Flake8`](flake8-documentation) has a mature plugin ecosystem, [:term:`Ruff`](ruff-documentation)'s overwhelming performance advantage and consolidation of common rules provide a better balance for a general-purpose, high-quality template prioritizing automated workflow efficiency. [:term:`Prospector`](flake8-documentation), as a meta-tool, does not offer performance benefits and adds complexity.
+While [:term:`Pylint`](pylint-documentation) offers potentially deeper analysis in some niche areas and [:term:`Flake8`](flake8-documentation) has a mature plugin ecosystem, [:term:`Ruff`](ruff-documentation)'s overwhelming performance advantage and consolidation of common rules provide a better balance for a general-purpose, high-quality template prioritizing automated workflow efficiency. [:term:`Prospector`](prospector-documentation), as a meta-tool, does not offer performance benefits and adds complexity.
 
 We also include **[:term:`pydocstyle`](pydocstyle-documentation)** conceptually here (or within Topic 07 justification) as it specifically checks **PEP 257** compliance for docstrings, which is crucial for documentation generation quality. Its rules are included in [:term:`Ruff`](ruff-documentation)'s linting set ('D' codes), so running [:term:`Ruff`](ruff-documentation) with 'D' rules enabled covers this. We list it separately to highlight the specific focus on docstrings, noting [:term:`Ruff`](ruff-documentation) handles these checks.
 
