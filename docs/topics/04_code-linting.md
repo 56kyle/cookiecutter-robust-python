@@ -29,7 +29,7 @@ We evaluated the leading options for Python code linting and static analysis:
 
 ### Option 1: [:term:`Flake8`](flake8-documentation)
 
-- **Description:** A popular wrapper that bundles multiple checks: [:term:`PyFlakes`](pip-tools-documentation - often used as part of pip-tools toolchain concept) (finds errors like unused variables, undefined names), [:term:`pycodestyle`](flake8-documentation - part of flake8) (checks against PEP 8 style guide), and [:term:`mccabe`](flake8-documentation - part of flake8) (checks code complexity). Highly extensible via plugins.
+- **Description:** A popular wrapper that bundles multiple checks: [:term:`PyFlakes`](pip-tools-documentation) (finds errors like unused variables, undefined names), [:term:`pycodestyle`](flake8-documentation) (checks against PEP 8 style guide), and [:term:`mccabe`](flake8-documentation) (checks code complexity). Highly extensible via plugins.
 - **Evaluation:**
 
   - **Static Analysis Capabilities:** Good basic coverage via bundled tools. Very high potential via a rich ecosystem of plugins (e.g., `flake8-bugbear` for common pitfalls, `flake8-annotations` for type hint checks, etc.) covering a wide range of issues.
@@ -63,9 +63,9 @@ We evaluated the leading options for Python code linting and static analysis:
 
 - **Conclusion:** The most comprehensive static analyzer for Python. Offers great depth but requires significant configuration effort and suffers from performance issues that impact its usability in fast, iterative development stages. Best suited for thorough analysis in slower workflows like CI.
 
-### Option 3: [:term:`Prospector`](flake8-documentation - often evaluated alongside linters)
+### Option 3: [:term:`Prospector`](flake8-documentation)
 
-- **Description:** A meta-tool that runs multiple other Python analysis tools (like [:term:`Flake8`](flake8-documentation), [:term:`Pylint`](pylint-documentation), [:term:`Bandit`](bandit-documentation), [:term:`Mypy`](pyright-documentation - alternative to Pyright)) and aggregates their output into a unified report.
+- **Description:** A meta-tool that runs multiple other Python analysis tools (like [:term:`Flake8`](flake8-documentation), [:term:`Pylint`](pylint-documentation), [:term:`Bandit`](bandit-documentation), [:term:`Mypy`](pyright-documentation)) and aggregates their output into a unified report.
 - **Evaluation:**
 
   - **Static Analysis Capabilities:** Varies (Delegated). Its capabilities are the sum of the tools it wraps.
@@ -85,7 +85,7 @@ We evaluated the leading options for Python code linting and static analysis:
 
 - **Description:** An extremely fast linter written in Rust. Re-implements hundreds of rules from various Python linters ([:term:`Flake8`](flake8-documentation) and its plugins, [:term:`Pylint`](pylint-documentation), [:term:`isort`](isort-documentation), [:term:`pydocstyle`](pydocstyle-documentation), etc.) into a single, high-performance binary. Configurable primarily via `.ruff.toml` or `pyproject.toml` (`[tool.ruff]`).
 - **Evaluation:**
-  - **Static Analysis Capabilities:** Very High (Consolidating). Re-implements a vast and growing set of rules covering error detection (like PyFlakes), style (like [:term:`pycodestyle`](flake8-documentation), [:term:`pydocstyle`](pydocstyle-documentation)), code smells ([:term:`flake8-bugbear`](flake8-documentation - often evaluated alongside linters)), complexity ([:term:`mccabe`](flake8-documentation - part of flake8)), unused code, and even some security rules (subset of [:term:`Bandit`](bandit-documentation)). Rapidly adding more rules, aiming for comprehensive coverage across major linters.
+  - **Static Analysis Capabilities:** Very High (Consolidating). Re-implements a vast and growing set of rules covering error detection (like PyFlakes), style (like [:term:`pycodestyle`](flake8-documentation), [:term:`pydocstyle`](pydocstyle-documentation)), code smells ([:term:`flake8-bugbear`](flake8-documentation)), complexity ([:term:`mccabe`](flake8-documentation)), unused code, and even some security rules (subset of [:term:`Bandit`](bandit-documentation)). Rapidly adding more rules, aiming for comprehensive coverage across major linters.
   - **Enforces Coding Standards:** Very High. Enforces a wide range of standards derived from multiple popular linters and best practices. Highly configurable rule selection via codes.
   - **Informative & Actionable Feedback:** High. Provides clear rule codes (often matching original tools) and messages. Supports auto-fixing for many issues. Auto-generates configuration suggestions based on other linters.
   - **Configurable:** High. Configurable via `.ruff.toml` or `pyproject.toml`. Powerful and flexible rule selection. Default set includes core checks, adding more rules (like Pylint conventions) is explicit.
@@ -113,7 +113,7 @@ We evaluated the leading options for Python code linting and static analysis:
 6.  **Seamless Integration:** [:term:`Ruff`](ruff-documentation)'s speed and standard CLI integrate **excellently** into automated workflows, making it uniquely suitable for fast [:term:`pre-commit`](pre-commit-documentation) hooks (Area 18), rapid Task Automation runs ([:term:`Nox`](nox-documentation) - Area 12), and efficient CI checks (Area 13) (addressing **Integration**).
 7.  **Unified with Formatting:** Choosing [:term:`Ruff`](ruff-documentation) for both formatting (03) and linting (04) provides a powerful, unified solution for code style and quality from a single tool with a single configuration file.
 
-While [:term:`Pylint`](pylint-documentation) offers potentially deeper analysis in some niche areas and [:term:`Flake8`](flake8-documentation) has a mature plugin ecosystem, [:term:`Ruff`](ruff-documentation)'s overwhelming performance advantage and consolidation of common rules provide a better balance for a general-purpose, high-quality template prioritizing automated workflow efficiency. [:term:`Prospector`](flake8-documentation - often evaluated alongside linters), as a meta-tool, does not offer performance benefits and adds complexity.
+While [:term:`Pylint`](pylint-documentation) offers potentially deeper analysis in some niche areas and [:term:`Flake8`](flake8-documentation) has a mature plugin ecosystem, [:term:`Ruff`](ruff-documentation)'s overwhelming performance advantage and consolidation of common rules provide a better balance for a general-purpose, high-quality template prioritizing automated workflow efficiency. [:term:`Prospector`](flake8-documentation), as a meta-tool, does not offer performance benefits and adds complexity.
 
 We also include **[:term:`pydocstyle`](pydocstyle-documentation)** conceptually here (or within Topic 07 justification) as it specifically checks **PEP 257** compliance for docstrings, which is crucial for documentation generation quality. Its rules are included in [:term:`Ruff`](ruff-documentation)'s linting set ('D' codes), so running [:term:`Ruff`](ruff-documentation) with 'D' rules enabled covers this. We list it separately to highlight the specific focus on docstrings, noting [:term:`Ruff`](ruff-documentation) handles these checks.
 
