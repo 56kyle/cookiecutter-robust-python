@@ -23,7 +23,7 @@ dev = [
 ]
 docs = [
     "furo>=2024.8.6",
-    "myst-parser>=3.0.1",
+    "myst-parser[linkify]>=3.0.1",
     "sphinx>=7.4.7",
     "sphinx-autodoc-typehints>=2.3.0",
     "sphinx-copybutton>=0.5.2",
