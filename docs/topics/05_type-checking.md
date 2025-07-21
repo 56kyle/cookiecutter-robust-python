@@ -37,7 +37,7 @@ We evaluated the primary static type checkers for Python:
   - **Performance:** Moderate. Can be slow on larger codebases or initial runs. Caching helps, but still generally slower than [:term:`Pyright`](pyright-documentation). Impacts fast feedback loops.
   - **OS Interoperability:** Excellent. Pure Python package, works reliably across OSs.
   - **Integration:** Excellent. Widely supported, integrates well into editors (though real-time performance is a factor), [:term:`pre-commit`](pre-commit-documentation) (official hook exists but can be slow), Task Automation, CI/CD.
-  - **Support for Stubs:** Excellent. Deep integration with [:term:`typeshed`](python:typeshed) and the stub ecosystem.
+  - **Support for Stubs:** Excellent. Deep integration with [:term:`typeshed`](typeshed-documentation) and the stub ecosystem.
   - **Error Messages:** High. Generally clear, but can be verbose or challenging in complex cases.
   - **Maturity & Stability:** Very High. Extremely mature, stable, long-standing.
   - **Community & Documentation:** Very High. Large, active community, extensive documentation and resources.
@@ -52,7 +52,7 @@ We evaluated the primary static type checkers for Python:
   - **Performance:** Excellent. **Significantly faster** than [:term:`Mypy`](mypy-documentation). Designed for fast incremental checks and overall lower analysis time. Much more practical for real-time editor feedback, fast pre-commit runs, and quicker CI.
   - **OS Interoperability:** High. Works on major OSs. Relies on Node.js runtime internally (often bundled in distributions), making installation/setup slightly more complex than pure Python tools, but seamless for users of common distributions (like `npm` or bundled wheels/binaries).
   - **Integration:** Excellent. Strong CLI (`pyright`). Integrates exceptionally well with editors (real-time analysis via Language Server Protocol), well-suited for fast [:term:`pre-commit`](pre-commit-documentation) hooks (better performance than [:term:`Mypy`](mypy-documentation)), Task Automation, CI/CD.
-  - **Support for Stubs:** Excellent. Works effectively with [:term:`typeshed`](python:typeshed) and other stub sources.
+  - **Support for Stubs:** Excellent. Works effectively with [:term:`typeshed`](typeshed-documentation) and other stub sources.
   - **Error Messages:** Very High. Generally very clear, precise, and actionable messages.
   - **Maturity & Stability:** High. Mature, actively developed by Microsoft. Large user base, especially via [:term:`Pylance`](pyright-documentation - part of Pyright documentation). Stable for production use.
   - **Community & Documentation:** High. Strong community (especially VS Code users), extensive documentation (though sometimes focused on [:term:`Pylance`](pyright-documentation - part of Pyright documentation)).
@@ -67,7 +67,7 @@ We evaluated the primary static type checkers for Python:
   - **Performance:** Moderate. Can be faster than [:term:`Mypy`](mypy-documentation) on initial runs for some codebases due to backend, but not typically as fast as [:term:`Pyright`](pyright-documentation) for incremental checks.
   - **OS Interoperability:** Excellent. Pure Python package, works reliably across OSs.
   - **Integration:** High. CLI tool for Task Automation and CI. Less common for real-time editor feedback or fast pre-commit due to performance and focus.
-  - **Support for Stubs:** Very High. Deep integration with [:term:`typeshed`](python:typeshed) and excels at type inference.
+  - **Support for Stubs:** Very High. Deep integration with [:term:`typeshed`](typeshed-documentation) and excels at type inference.
   - **Error Messages:** Moderate to High. Can be less precise in inference scenarios.
   - **Maturity & Stability:** High. Mature, actively developed at Google. Community outside Google is smaller than [:term:`Mypy`](mypy-documentation) or [:term:`Pyright`](pyright-documentation).
 - **Conclusion:** Best suited for gradually adding typing to unannotated codebases. For a template that _mandates_ or strongly encourages type hints, its core strength (inference) is less relevant, and its performance and strictness on explicit hints are not better than [:term:`Mypy`](mypy-documentation) or [:term:`Pyright`](pyright-documentation).
