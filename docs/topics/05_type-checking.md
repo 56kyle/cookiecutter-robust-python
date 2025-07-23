@@ -45,7 +45,7 @@ We evaluated the primary static type checkers for Python:
 
 ### Option 2: [:term:`Pyright`](pyright-documentation)
 
-- **Description:** A static type checker from Microsoft, implemented in TypeScript/Node.js. Built with performance and strong PEP adherence as key goals. Powers the [:term:`Pylance`](pyright-documentation - part of Pyright documentation) VS Code extension.
+- **Description:** A static type checker from Microsoft, implemented in TypeScript/Node.js. Built with performance and strong PEP adherence as key goals. Powers the [:term:`Pylance`](pyright-documentation) VS Code extension.
 - **Evaluation:**
   - **PEP Compliance:** Very High. Actively developed to adhere closely to and quickly support type hinting PEPs. Provides excellent and sometimes stricter analysis based on PEP interpretation than default [:term:`Mypy`](mypy-documentation).
   - **Comprehensive & Strict Checking:** Very High. Provides a deep level of type analysis. Strong strictness modes (`strict` flag).
@@ -54,8 +54,8 @@ We evaluated the primary static type checkers for Python:
   - **Integration:** Excellent. Strong CLI (`pyright`). Integrates exceptionally well with editors (real-time analysis via Language Server Protocol), well-suited for fast [:term:`pre-commit`](pre-commit-documentation) hooks (better performance than [:term:`Mypy`](mypy-documentation)), Task Automation, CI/CD.
   - **Support for Stubs:** Excellent. Works effectively with [:term:`typeshed`](typeshed-documentation) and other stub sources.
   - **Error Messages:** Very High. Generally very clear, precise, and actionable messages.
-  - **Maturity & Stability:** High. Mature, actively developed by Microsoft. Large user base, especially via [:term:`Pylance`](pyright-documentation - part of Pyright documentation). Stable for production use.
-  - **Community & Documentation:** High. Strong community (especially VS Code users), extensive documentation (though sometimes focused on [:term:`Pylance`](pyright-documentation - part of Pyright documentation)).
+  - **Maturity & Stability:** High. Mature, actively developed by Microsoft. Large user base, especially via [:term:`Pylance`](pyright-documentation). Stable for production use.
+  - **Community & Documentation:** High. Strong community (especially VS Code users), extensive documentation (though sometimes focused on [:term:`Pylance`](pyright-documentation)).
 - **Conclusion:** Offers compelling performance advantages over [:term:`Mypy`](mypy-documentation) while maintaining high standards adherence and comprehensiveness. Its speed makes it a much better fit for integrating type checks into rapid workflow stages.
 
 ### Option 3: [:term:`Pytype`](pytype-documentation)
