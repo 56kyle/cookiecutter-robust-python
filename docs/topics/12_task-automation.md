@@ -27,7 +27,7 @@ This section evaluates tools that provide a standardized command-line interface 
 
 We evaluated tools designed for defining and running tasks, particularly in a Python context:
 
-### Option 1: `Makefile` / [:term:`Just`](just-documentation - example task runner)
+### Option 1: `Makefile` / [:term:`Just`](just-documentation)
 
 - **Description:** Generic task runners (`make`, `just`, `task`, etc.) configured with their own syntax (Makefiles, Justfiles) to execute shell commands. Not Python-specific.
 - **Evaluation:**
