@@ -120,7 +120,7 @@ We also include **`pydocstyle`{pydocstyle-documentation}** conceptually here (or
 ## Interactions with Other Topics
 
 - **Code Formatting (03):** `Ruff`{ruff-documentation} is also the chosen formatter, creating a single tool for style and quality.
-- **pyproject.toml (01):** `Ruff`{ruff-documentation} configuration is primarily in a separate `.ruff.toml` file.
+- **pyproject.toml (01):** [:term:`Ruff`](ruff-documentation] configuration is primarily in a separate `.ruff.toml` file.
 - **Documentation (07):** Docstring quality checked by `pydocstyle`{pydocstyle-documentation} rules (within `Ruff`{ruff-documentation}) is important for API doc generation.
 - **Pre-commit Hooks (18):** `Ruff`{ruff-documentation}'s speed makes it an ideal tool for mandated pre-commit linting checks.
 - **Task Automation (12):** `Nox`{nox-documentation} sessions call `uv run ruff check` to run comprehensive linting checks.
