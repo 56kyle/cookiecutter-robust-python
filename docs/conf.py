@@ -113,6 +113,7 @@ extlinks = {
     "sphinxautodoctypehints": ("https://sphinx-autodoc-typehints.readthedocs.io/%s", None),
     "tox": ("https://tox.readthedocs.io/%s", None),
     "twine": ("https://twine.readthedocs.io/%s", None),
+    "unittest": ("https://docs.python.org/3/library/unittest.html%s", None),
     "uv": ("https://docs.uv.dev/%s", None),
     "uv-install": ("https://docs.astral.sh/uv/installation/%s", None),
     "venv": ("https://docs.python.org/3/library/venv%s", None),
