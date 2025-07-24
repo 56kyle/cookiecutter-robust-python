@@ -12,12 +12,12 @@ This section discusses the tools and configurations used to set up Continuous De
 
 ## Core Orchestration Strategy: Leveraging Task Automation
 
-As with CI (Topic 13), a core principle is **CI/CD agnosticism**. The detailed logic for _how_ to build packages, containers, and publish them resides within the project's **Task Automation layer (Topic 12 - {Nox}`nox-documentation`)**. The CD configuration acts as a **thin orchestration layer** for these release-focused tasks.
+As with CI (Topic 13), a core principle is **CI/CD agnosticism**. The detailed logic for _how_ to build packages, containers, and publish them resides within the project's **Task Automation layer (Topic 12 - :nox-documentation:`Nox`)**. The CD configuration acts as a **thin orchestration layer** for these release-focused tasks.
 
 This strategy means the CD configuration primarily:
 
 1.  Checks out the code (often triggered by a specific event like a tag or successful CI run).
-2.  Sets up a compatible environment (Python, Task Automation tools like {Nox}`nox-documentation`, and {uv}`uv-documentation` as its backend).
+2.  Sets up a compatible environment (Python, Task Automation tools like :nox-documentation:`Nox`, and :uv-documentation:`uv` as its backend).
 3.  Securely injects necessary credentials (e.g., PyPI API token, container registry credentials).
 4.  Calls the relevant Task Automation commands (e.g., `nox -s build:package`, `nox -s publish`) to perform the release steps.
 
@@ -26,7 +26,7 @@ This strategy means the CD configuration primarily:
 We evaluate the types of tools and configurations used at this orchestration layer based on how well they support the goals and strategy:
 
 - **Event Triggering:** Capability to trigger workflows based on specific VCS events (tags, branches), manual triggers, or successful completion of other workflows (like CI).
-- **Environment Setup Features:** Does the platform/tool provide robust ways to obtain source code, set up required runtime environments (Python), and install necessary orchestration tools ({Nox}`nox-documentation`, {uv}`uv-documentation`)?
+- **Environment Setup Features:** Does the platform/tool provide robust ways to obtain source code, set up required runtime environments (Python), and install necessary orchestration tools (:nox-documentation:`Nox`, :uv-documentation:`uv`)?
 - **Secure Credential Management:** Ability to store and inject sensitive information (API keys, passwords) securely into job environments without exposing them in logs or configuration.
 - **Orchestration Capability:** Ability to define a sequence of steps (jobs, stages) and execute external commands (calling `nox -s ...`).
 - **Reporting:** How well does it report the success/failure status of the CD process?
@@ -41,11 +41,11 @@ At the CD orchestration layer, the "tool" is primarily the **configuration forma
 
 ### Approach: Platform-Specific CI/CD Workflow Configurations
 
-- **Configuration Method:** Configuration files provided by the CI/CD platform (e.g., YAML for {GitHub Actions}`github-actions-documentation`, {GitLab CI}`gitlab-ci-documentation`, {Bitbucket Pipelines}`bitbucket-pipelines-documentation`, etc.). These files define jobs, steps, environments, triggers, and secrets.
+- **Configuration Method:** Configuration files provided by the CI/CD platform (e.g., YAML for :github-actions-documentation:`GitHub Actions`, :gitlab-ci-documentation:`GitLab CI`, :bitbucket-pipelines-documentation:`Bitbucket Pipelines`, etc.). These files define jobs, steps, environments, triggers, and secrets.
 - **Evaluation:**
 
   - **Event Triggering:** Excellent. All major platforms provide rich and flexible ways to trigger workflows based on VCS events (push to tag, merge to main branch, etc.) or workflow dependencies.
-  - **Environment Setup Features:** Excellent. Platforms provide robust features for checking out code, setting up specific Python versions (via built-in steps/actions), and caching dependencies required for running the Task Automation tools ({Nox}`nox-documentation`, {uv}`uv-documentation`) in the CD job.
+  - **Environment Setup Features:** Excellent. Platforms provide robust features for checking out code, setting up specific Python versions (via built-in steps/actions), and caching dependencies required for running the Task Automation tools (:nox-documentation:`Nox`, :uv-documentation:`uv`) in the CD job.
   - **Secure Credential Management:** Excellent. This is a core function of modern CI/CD platforms. They provide secure methods (UI secrets, encrypted variables) to store and inject credentials into job environments using environment variables (like `TWINE_API_KEY`, `DOCKER_HUB_PASSWORD`), making them available for Task Automation commands to use securely.
   - **Orchestration Capability:** Excellent. Platforms are designed to define job sequences (stages), dependencies between jobs, and execute steps which involve running arbitrary command-line commands (crucially, `nox -s ...`).
   - **Reporting:** Excellent. Platforms provide clear success/failure status for CD jobs, detailed logs, and often reporting dashboards.
@@ -63,8 +63,8 @@ At the CD orchestration layer, the "tool" is primarily the **configuration forma
 
 ## Chosen Approach
 
-- **Leveraging platform-specific CI/CD Workflow Configurations** provided by services like {GitHub Actions}`github-actions-documentation`, {Bitbucket Pipelines}`bitbucket-pipelines-documentation`, {GitLab CI}`gitlab-ci-documentation`.
-- Configuring these to install the Task Automation layer ({uv}`uv-documentation`, {Nox}`nox-documentation`), securely inject credentials, and **call Task Automation ({Nox}`nox-documentation`) build and publish tasks** (Topic 09, 10, 11, 12).
+- **Leveraging platform-specific CI/CD Workflow Configurations** provided by services like :github-actions-documentation:`GitHub Actions`, :bitbucket-pipelines-documentation:`Bitbucket Pipelines`, :gitlab-ci-documentation:`GitLab CI`.
+- Configuring these to install the Task Automation layer (:uv-documentation:`uv`, :nox-documentation:`Nox`), securely inject credentials, and **call Task Automation (:nox-documentation:`Nox`) build and publish tasks** (Topic 09, 10, 11, 12).
 - Provide **example configuration file(s)** for popular platforms demonstrating this approach.
 
 ## Justification for the Choice
@@ -76,7 +76,7 @@ This approach is chosen because it utilizes the appropriate tools for this layer
 3.  **CD Agnosticism (via Task Automation):** This strategy ensures the underlying build and publish logic (in `noxfile.py`) is decoupled from the CD platform configuration. This dramatically simplifies the CD config file, focusing it solely on platform orchestration (triggers, secrets, job structure) rather than application-specific build/publish shell scripting. This is key for **Adaptability** and **Maintainability** of the CD setup.
 4.  **Best Fit for Strategy:** This method effectively leverages the strengths of the CI/CD platform layer for orchestration concerns and delegates execution logic to the Task Automation layer, creating a clean separation of concerns.
 
-Providing example configuration files (e.g., for {GitHub Actions}`github-actions-documentation`) is essential to guide users on implementing this strategy in practice and demonstrate secure secret usage when calling publishing tasks (addressing **Value of Examples**).
+Providing example configuration files (e.g., for :github-actions-documentation:`GitHub Actions`) is essential to guide users on implementing this strategy in practice and demonstrate secure secret usage when calling publishing tasks (addressing **Value of Examples**).
 
 ## Interactions with Other Topics
 
