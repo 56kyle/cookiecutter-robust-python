@@ -27,7 +27,7 @@ This section evaluates tools that provide a standardized command-line interface 
 
 We evaluated tools designed for defining and running tasks, particularly in a Python context:
 
-### Option 1: `Makefile` / `Just`{just-documentation}
+### Option 1: `Makefile` / `Just`{just}
 
 - **Description:** Generic task runners (`make`, `just`, `task`, etc.) configured with their own syntax (Makefiles, Justfiles) to execute shell commands. Not Python-specific.
 - **Evaluation:**
@@ -41,7 +41,7 @@ We evaluated tools designed for defining and running tasks, particularly in a Py
   - **Community & Documentation:** Very High (Makefile), High (Just/Task).
 - **Conclusion:** Functional for simple scripts, but ill-suited for a template prioritizing robust OS-interoperable _environment-aware_ task execution without burdening task definitions with cross-shell/OS activation logic. Not Python-native.
 
-### Option 2: `Poe the Poet`{poethepoet-documentation}
+### Option 2: `Poe the Poet`{poethepoet}
 
 - **Description:** A Python task runner configured directly in `pyproject.toml` (`[tool.poe.tasks]`). Tasks are simple shell scripts, sequences of tasks, or Python function calls.
 - **Evaluation:**
@@ -49,13 +49,13 @@ We evaluated tools designed for defining and running tasks, particularly in a Py
   - **CI/CD Agnosticism:** High. `poe <task>` is callable. Similar to Make/Just, **user/CI typically needs to activate the correct project environment before calling `poe`**, limiting true task call agnosticism across environments without external setup.
   - **CLI Usability & Discoverability:** Good. Simple CLI (`poe`), supports listing tasks from `pyproject.toml`.
   - **Scripting & Orchestration:** Moderate to High. Simple tasks in TOML/shell are easy. Python function calls offer more power. Less programmatic flexibility than Python-based runners for complex, conditional workflows.
-  - **Environment Management:** Poor (Delegated). Runs commands in the current environment. Can run Python functions from the active env. Doesn't manage isolated environments per task automatically like `Nox`{nox-documentation}.
+  - **Environment Management:** Poor (Delegated). Runs commands in the current environment. Can run Python functions from the active env. Doesn't manage isolated environments per task automatically like `Nox`{nox}.
   - **Tool Integration:** High. Easily calls other command-line tools.
   - **Maturity & Stability:** High. Stable, well-maintained.
   - **Community & Documentation:** Moderate. Smaller community compared to other options, but active.
 - **Conclusion:** Simplest option for centralizing task aliases in `pyproject.toml`. Less suitable for complex, environment-isolated, or reliably OS-interoperable _environment-aware_ tasks without extra manual steps or scripting effort within tasks.
 
-### Option 3: `Invoke`{invoke-documentation}
+### Option 3: `Invoke`{invoke}
 
 - **Description:** A Python task execution tool. Tasks are Python functions decorated with `@task` in `tasks.py`. Commands executed within tasks using `context.run()`.
 - **Evaluation:**
@@ -69,7 +69,7 @@ We evaluated tools designed for defining and running tasks, particularly in a Py
   - **Community & Documentation:** High. Active community, excellent documentation.
 - **Conclusion:** Powerful and flexible Python-native runner with great CLI. Its primary limitation for this template's specific goals is the lack of built-in, automatic, OS-interoperable environment management _per task_, requiring complex external setup or manual logic in task definitions.
 
-### Option 4: `Nox`{nox-documentation}
+### Option 4: `Nox`{nox}
 
 - **Description:** A Python automation tool using a `noxfile.py` to define tasks ("sessions") as Python functions. Each session runs in an _isolated virtual environment_ (`.nox/` by default) created and managed by Nox, installing specific task dependencies within that env. Designed for running CI-like workflows locally.
 - **Evaluation:**
@@ -78,8 +78,8 @@ We evaluated tools designed for defining and running tasks, particularly in a Py
   - **CI/CD Agnosticism:** Excellent. Each Nox session (`nox -s <task>`) is a single, universal command that can be called identically by a developer, a git hook, or any CI/CD script on any OS _where Nox is installed_, without needing external OS-specific environment activation logic _before_ calling `nox`. The environment is managed by Nox internally. This achieves true **CI/CD agnosticism of the task call itself**.
   - **CLI Usability & Discoverability:** Good. Standard CLI (`nox -s <task>`, `nox -l`). Clear task listing.
   - **Scripting & Orchestration:** Excellent. Tasks are defined in Python (`noxfile.py`), offering full programmatic power for complex sequences, conditions, and dynamic behavior. Explicit `session.install()` and `session.run()` manage task environments and execution clearly. Supports powerful matrixing (`@nox.parametrize`).
-  - **Environment Management:** Excellent. **Core strength.** Creates **isolated, reproducible environments** for each session based on specified dependencies and runs subsequent commands _within_ that correctly activated environment, abstracting away OS/shell differences. Can use `uv`{uv-documentation} as a fast backend.
-  - **Tool Integration:** Excellent. `session.run()` is designed to call any command-line tool reliably within the session's environment, including commands from the primary dependency manager (`uv`{uv-documentation} run) or other tools (`ruff`{ruff-documentation}, `pytest`{pytest-documentation}, `docker`{docker-documentation}, `commitizen`{commitizen-documentation}, etc.).
+  - **Environment Management:** Excellent. **Core strength.** Creates **isolated, reproducible environments** for each session based on specified dependencies and runs subsequent commands _within_ that correctly activated environment, abstracting away OS/shell differences. Can use `uv`{uv} as a fast backend.
+  - **Tool Integration:** Excellent. `session.run()` is designed to call any command-line tool reliably within the session's environment, including commands from the primary dependency manager (`uv`{uv} run) or other tools (`ruff`{ruff}, `pytest`{pytest}, `docker`{docker}, `commitizen`{commitizen}, etc.).
   - **Maturity & Stability:** High. Mature, stable, well-maintained.
   - **Community & Documentation:** High. Active community, good documentation.
 
@@ -87,31 +87,31 @@ We evaluated tools designed for defining and running tasks, particularly in a Py
 
 ## Chosen Tool(s)
 
-- Primary Task Automation Runner: **`Nox`{nox-documentation}**.
-- Release Preparation Orchestrator (Invoked by Nox): **`Commitizen`{commitizen-documentation}**.
-- Just-In-Time Task Dependency Runner (Invoked by Nox): **`uvx`{uv-documentation}**.
+- Primary Task Automation Runner: **`Nox`{nox}**.
+- Release Preparation Orchestrator (Invoked by Nox): **`Commitizen`{commitizen}**.
+- Just-In-Time Task Dependency Runner (Invoked by Nox): **`uvx`{uv}**.
 
 ## Justification for the Choice
 
-**`Nox`{nox-documentation}** is chosen as the primary Task Automation runner because it provides the most robust and reliable solution for meeting the critical requirements of **OS Interoperability** and **CI/CD Agnosticism** for environment-aware tasks:
+**`Nox`{nox}** is chosen as the primary Task Automation runner because it provides the most robust and reliable solution for meeting the critical requirements of **OS Interoperability** and **CI/CD Agnosticism** for environment-aware tasks:
 
-1.  **Guaranteed OS Interoperability:** `Nox`{nox-documentation}'s core strength lies in its **reliable and explicit cross-platform environment management** for executing tasks. By defining dependencies within a session (`session.install()`) and running commands using `session.run()`, `Nox`{nox-documentation} handles the complexities of creating and activating virtual environments across Linux, macOS, and Windows shells. This prevents the user or CI pipeline from needing complex, OS-specific scripts _before_ calling the task runner, ensuring a command like `nox -s test` works the same way everywhere (addressing **OS Interoperability** and **Environment Management**).
-2.  **True CI/CD Agnosticism:** Because `Nox`{nox-documentation} manages the environment activation internally within a session, the command to _run the task_ (`nox -s <task>`) becomes truly universal and repeatable. Any CI platform or script can simply install `Nox`{nox-documentation} and then call this command without needing special logic for activating environments in bash, zsh, cmd.exe, or PowerShell. This is a major **CI/CD Agnosticism** win.
+1.  **Guaranteed OS Interoperability:** `Nox`{nox}'s core strength lies in its **reliable and explicit cross-platform environment management** for executing tasks. By defining dependencies within a session (`session.install()`) and running commands using `session.run()`, `Nox`{nox} handles the complexities of creating and activating virtual environments across Linux, macOS, and Windows shells. This prevents the user or CI pipeline from needing complex, OS-specific scripts _before_ calling the task runner, ensuring a command like `nox -s test` works the same way everywhere (addressing **OS Interoperability** and **Environment Management**).
+2.  **True CI/CD Agnosticism:** Because `Nox`{nox} manages the environment activation internally within a session, the command to _run the task_ (`nox -s <task>`) becomes truly universal and repeatable. Any CI platform or script can simply install `Nox`{nox} and then call this command without needing special logic for activating environments in bash, zsh, cmd.exe, or PowerShell. This is a major **CI/CD Agnosticism** win.
 3.  **Powerful Python Scripting:** Task definitions in `noxfile.py` use standard Python, providing full programmatic power for complex automation logic (addressing **Scripting & Orchestration**).
-4.  **Excellent Tool Integration:** `session.run()` easily calls any command-line tool within the managed session environment, including [:term:`uv` run](uv-documentation) for executing tools installed by `uv`{uv-documentation}, or other external commands like `docker`{docker-documentation} build.
+4.  **Excellent Tool Integration:** `session.run()` easily calls any command-line tool within the managed session environment, including [:term:`uv` run](uv-documentation) for executing tools installed by `uv`{uv}, or other external commands like `docker`{docker} build.
 
-`Just`{just-documentation}, `Poe the Poet`{poethepoet-documentation}, and `Invoke`{invoke-documentation}, while capable runners, rely on the _caller_ (developer or CI script) to activate the correct project environment _before_ running the tool, often requiring OS-specific scripts for activation, which undermines the goal of having a single, universally invokable task command.
+`Just`{just}, `Poe the Poet`{poethepoet}, and `Invoke`{invoke}, while capable runners, rely on the _caller_ (developer or CI script) to activate the correct project environment _before_ running the tool, often requiring OS-specific scripts for activation, which undermines the goal of having a single, universally invokable task command.
 
-We include **`Commitizen`{commitizen-documentation}** as a specialized tool invoked by `Nox`{nox-documentation} for release preparation tasks. It handles version bumping and tagging according to conventions and is orchestrated by a dedicated Nox session (addressing **Release Preparation Integration**).
+We include **`Commitizen`{commitizen}** as a specialized tool invoked by `Nox`{nox} for release preparation tasks. It handles version bumping and tagging according to conventions and is orchestrated by a dedicated Nox session (addressing **Release Preparation Integration**).
 
-We also leverage **`uvx`{uv-documentation}**, a command provided by `uv`{uv-documentation} (02), within certain Nox sessions (`venv_backend="none"`) like `release` and `tox`. `uvx` ensures tools like `Commitizen`{commitizen-documentation} or `Tox`{tox-documentation} are available on demand in a temporary environment _without requiring them to be pre-installed_ globally or in the developer's main environment, further reducing setup friction for specific tasks and improving reliability (addressing **Integration** and **Environment Management** for specific cases).
+We also leverage **`uvx`{uv}**, a command provided by `uv`{uv} (02), within certain Nox sessions (`venv_backend="none"`) like `release` and `tox`. `uvx` ensures tools like `Commitizen`{commitizen} or `Tox`{tox} are available on demand in a temporary environment _without requiring them to be pre-installed_ globally or in the developer's main environment, further reducing setup friction for specific tasks and improving reliability (addressing **Integration** and **Environment Management** for specific cases).
 
-By choosing `Nox`{nox-documentation} as the orchestrator, the template provides a highly robust, flexible, and reliable automation backbone that simplifies workflows across different environments and automation platforms.
+By choosing `Nox`{nox} as the orchestrator, the template provides a highly robust, flexible, and reliable automation backbone that simplifies workflows across different environments and automation platforms.
 
 ## Interactions with Other Topics
 
-- **Dependency Management (02):** `uv`{uv-documentation} is heavily used by `Nox`{nox-documentation} sessions (as the venv backend, and for running commands via `uv run`). Nox session dependencies are managed via `uv`{uv-documentation}.
-- **Code Formatting (03), Linting (04), Type Checking (05), Testing (06), Documentation (07), Security (08):** These tools are installed as dependencies (Area 02) and their CLI commands are invoked by dedicated `Nox`{nox-documentation} sessions (e.g., `nox -s lint`, `nox -s test`).
-- **Packaging Build (09), Packaging Publish (10), Container Build (11):** `Nox`{nox-documentation} sessions call `uv build`, `uv publish`, and `docker build` (via `session.run` for external command) to automate the creation and distribution of artifacts.
-- **CI Orchestration (13) & CD Orchestration (14):** These platforms act as external triggers, installing `Nox`{nox-documentation} and then running the required `nox -s <task>` commands.
-- **Dev Containers (17):** `Nox`{nox-documentation} is run within the development container to execute automated tasks in a consistent environment.
+- **Dependency Management (02):** `uv`{uv} is heavily used by `Nox`{nox} sessions (as the venv backend, and for running commands via `uv run`). Nox session dependencies are managed via `uv`{uv}.
+- **Code Formatting (03), Linting (04), Type Checking (05), Testing (06), Documentation (07), Security (08):** These tools are installed as dependencies (Area 02) and their CLI commands are invoked by dedicated `Nox`{nox} sessions (e.g., `nox -s lint`, `nox -s test`).
+- **Packaging Build (09), Packaging Publish (10), Container Build (11):** `Nox`{nox} sessions call `uv build`, `uv publish`, and `docker build` (via `session.run` for external command) to automate the creation and distribution of artifacts.
+- **CI Orchestration (13) & CD Orchestration (14):** These platforms act as external triggers, installing `Nox`{nox} and then running the required `nox -s <task>` commands.
+- **Dev Containers (17):** `Nox`{nox} is run within the development container to execute automated tasks in a consistent environment.
