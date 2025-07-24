@@ -8,7 +8,7 @@ To contribute to the template, you will need:
 
 1.  **Git**: For version control.
 2.  **Python 3.9+**: We recommend using a supported Python version.
-3.  **uv**: Our chosen dependency manager (see [Dependency Management (02)](topics/02_dependency-management.md)). Install `uv` globally or in a base environment following the official [:term:`uv installation guide`](uv-install-documentation).
+3.  **uv**: Our chosen dependency manager (see [Dependency Management (02)](topics/02_dependency-management.md)). Install `uv` globally or in a base environment following the official {uv installation guide}`uv-install<>`.
 4.  **Docker or Podman**: Required for testing the containerization aspects of the generated template (see [Container Build (11)](topics/11_container-build.md), [Dev Containers (17)](topics/17_dev-containers.md)).
 5.  **Task Automation Tools**: The template itself uses a `noxfile.py` to manage its own development and documentation build workflows. Install `nox`:
     ```bash
