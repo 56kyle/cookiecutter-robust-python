@@ -59,7 +59,7 @@ Here's how the template facilitates your day-to-day coding work:
 
 The workflow extends seamlessly to automation platforms using the Task Automation layer.
 
-1.  **Continuous Integration (CI):** Triggered by pushes or pull requests. The CI configuration ([CI Orchestration (13)](../topics/13_ci-orchestration.md)) is a thin layer that:
+1.  **Continuous Integration (CI):** Triggered by pushes or pull requests. The CI configuration ([CI Orchestration (13)](../topics/13_ci_orchestration.md)) is a thin layer that:
 
     - Sets up the necessary Python version(s) and environment.
     - Installs `uv`{uv-documentation} and `Nox`{nox-documentation}.
@@ -68,7 +68,7 @@ The workflow extends seamlessly to automation platforms using the Task Automatio
     - Reports status back to the version control platform.
       This process runs tests and checks reliably across the matrix of Python versions defined in the `noxfile.py` and potentially operating systems supported by the CI platform.
 
-2.  **Continuous Deployment / Delivery (CD):** Triggered by events like successful CI runs on the main branch or Git tags. The CD configuration ([CD Orchestration (14)](../topics/14_cd-orchestration.md)) is also a thin orchestration layer:
+2.  **Continuous Deployment / Delivery (CD):** Triggered by events like successful CI runs on the main branch or Git tags. The CD configuration ([CD Orchestration (14)](../topics/14_cd_orchestration.md)) is also a thin orchestration layer:
     - Sets up the environment.
     - Manages secure credentials (`API tokens`{pypi-trusted-publishers-documentation} for PyPI, registry secrets).
     - Runs Task Automation commands to build artifacts: `uvx nox -s build:package` ([Packaging Build (09)](../topics/09_packaging-build.md)), `uvx nox -s build:container` ([Container Build (11)](../topics/11_container-build.md)).
