@@ -29,7 +29,7 @@ We evaluated the leading options for Python code linting and static analysis:
 
 ### Option 1: {flake8}`Flake8<>`
 
-- **Description:** A popular wrapper that bundles multiple checks: {pyflakes}`PyFlakes` - often used as part of pip-tools toolchain concept (finds errors like unused variables, undefined names), {flake8}`pycodestyle` - part of flake8 (checks against PEP 8 style guide), and {flake8}`mccabe` - part of flake8 (checks code complexity). Highly extensible via plugins.
+- **Description:** A popular wrapper that bundles multiple checks: :pip-tools-documentation - often used as part of pip-tools toolchain concept:`PyFlakes` (finds errors like unused variables, undefined names), :flake8-documentation - part of flake8:`pycodestyle` (checks against PEP 8 style guide), and :flake8-documentation - part of flake8:`mccabe` (checks code complexity). Highly extensible via plugins.
 - **Evaluation:**
 
   - **Static Analysis Capabilities:** Good basic coverage via bundled tools. Very high potential via a rich ecosystem of plugins (e.g., `flake8-bugbear` for common pitfalls, `flake8-annotations` for type hint checks, etc.) covering a wide range of issues.
