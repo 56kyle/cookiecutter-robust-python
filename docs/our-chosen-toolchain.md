@@ -91,7 +91,7 @@ Here is the breakdown of the chosen tool(s) for each defined area:
 
 - **15: Container Orchestration (Local / Single Host):**
 
-  - **Chosen:** {docker}`Docker Compose<>`.
+  - **Chosen:** {docker-compose}`Docker Compose<>`.
   - **Why:** The standard, intuitive tool for defining and running multi-container applications locally, seamlessly integrating with built container images for development and testing stacks. ([Details](topics/15_compose-local.md))
 
 - **16: Deployment to Production Orchestrators:**

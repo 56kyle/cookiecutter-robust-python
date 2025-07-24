@@ -74,6 +74,6 @@ By choosing this approach, the template provides a standard, flexible, robust, a
 - **Dependency Management (02):** {uv}`uv<>` is the recommended tool for managing and installing dependencies _inside_ the Docker image.
 - **Task Automation (12):** {nox}`Nox<>` sessions call the `docker build` or `podman build` command via `uv run` (or `session.run` directly for the `docker`/`podman` command itself, as it's external) to build the image.
 - **CI Orchestration (13) & CD Orchestration (14):** Container image builds are often triggered in CI/CD pipelines via Task Automation. CD pipelines handle pushing the built images to container registries.
-- **Container Orchestration (Local) (15):** The image built in this area is the base for defining multi-container setups locally using {docker}`docker-compose<>`.
+- **Container Orchestration (Local) (15):** The image built in this area is the base for defining multi-container setups locally using {docker-compose}`docker-compose<>`.
 - **Deployment to Production Orchestrators (16):** The image built here is the primary artifact deployed to production environments managed by tools like Kubernetes/{helm}`Helm<>`/{argocd}`Argo CD<>`.
 - **Dev Containers (17):** The Dev Container often uses a similar or shared base image (or even the same `Dockerfile`) as the production image, leveraging common layers and consistency.

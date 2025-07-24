@@ -47,7 +47,7 @@ Here's how the template facilitates your day-to-day coding work:
 
     {nox}`Nox<>` handles running these tools within the correct, consistent environments using {uv}`uv run<>`.
 
-4.  **Local Container Development (Optional):** If your project involves multiple services or you prefer an encapsulated environment, use **Dev Containers** ([Containerized Development Environments (17)](../topics/17_dev-containers.md)) for a consistent development environment, and **{docker}`Docker Compose<>`** ([Container Orchestration (Local) (15)](../topics/15_compose-local.md)) to orchestrate local multi-service stacks.
+4.  **Local Container Development (Optional):** If your project involves multiple services or you prefer an encapsulated environment, use **Dev Containers** ([Containerized Development Environments (17)](../topics/17_dev-containers.md)) for a consistent development environment, and **{docker-compose}`Docker Compose<>`** ([Container Orchestration (Local) (15)](../topics/15_compose-local.md)) to orchestrate local multi-service stacks.
     ```bash
     # From project root with Docker/Podman running:
     # (Inside VS Code Dev Container or with compose installed)
