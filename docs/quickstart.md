@@ -12,8 +12,8 @@ Make sure you have these installed:
 
 - **Python 3.9+** (or your chosen template version).
 - **Git**.
-- **uv**: Our chosen dependency manager. Install it [:term:`officially`](uv-install-documentation).
-- **Docker or Podman**: If you plan to work with containers (most web apps will need this). Install [:term:`Docker`](docker-install-documentation) or [:term:`Podman`](podman-install-documentation).
+- **uv**: Our chosen dependency manager. Install it `officially`{uv-install<>}.
+- **Docker or Podman**: If you plan to work with containers (most web apps will need this). Install `Docker`{docker-install<>} or `Podman`{podman-install<>}.
 
 ## 2. Create Your Project
 
