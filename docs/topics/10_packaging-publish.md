@@ -27,7 +27,7 @@ This section evaluates tools and approaches for uploading Python distribution pa
 
 While various approaches exist, there is one overwhelmingly recommended standard tool:
 
-### Option 1: :twine-documentation:`twine`
+### Option 1: [:term:`twine`](twine-documentation)
 
 - **Description:** The official, PyPA-recommended command-line utility for securely uploading Python packages. It was developed to replace older, less secure methods like `python setup.py upload` and encourages the use of secure protocols and API tokens.
 - **Evaluation:**
@@ -38,42 +38,42 @@ While various approaches exist, there is one overwhelmingly recommended standard
   - **Reliability:** High. Designed for a robust upload process. Includes checks.
   - **OS Interoperability:** Excellent. Pure Python package with a simple CLI, works reliably on all major OSs.
   - **CLI Usability:** Excellent. Simple command syntax (`twine upload dist/*`) for the core task. Easy to specify repositories or signing options.
-  - **Integration:** Excellent. Simple CLI designed for scripting, integrates seamlessly into Task Automation (:nox-documentation:`Nox`) and CI/CD pipelines, especially when leveraging environment variables for credentials.
+  - **Integration:** Excellent. Simple CLI designed for scripting, integrates seamlessly into Task Automation ([:term:`Nox`](nox-documentation)) and CI/CD pipelines, especially when leveraging environment variables for credentials.
   - **Maturity & Stability:** Very High. The established standard for publishing, very mature and stable.
   - **Community & Documentation:** Very High. Widely adopted, extensive documentation, supported by PyPA.
 
 - **Conclusion:** The clear, recommended standard tool that meets all criteria exceptionally well, particularly security and compatibility.
 
-### Option 2: Dependency Manager `publish` commands (e.g., :uv-documentation:`uv` publish, :pdm-documentation:`PDM` publish, :poetry-documentation:`Poetry` publish, :hatch-documentation:`Hatch` publish)
+### Option 2: Dependency Manager `publish` commands (e.g., [:term:`uv`](uv-documentation) publish, [:term:`PDM`](pdm-documentation) publish, [:term:`Poetry`](poetry-documentation) publish, [:term:`Hatch`](hatch-documentation) publish)
 
-- **Description:** Modern dependency managers often include their own `publish` command as part of their integrated workflow CLI. These commands typically wrap the functionality of :twine-documentation:`twine` or implement similar logic internally.
+- **Description:** Modern dependency managers often include their own `publish` command as part of their integrated workflow CLI. These commands typically wrap the functionality of [:term:`twine`](twine-documentation) or implement similar logic internally.
 - **Evaluation:**
-  - **Standard Practice:** High (Method), Excellent (Outcome). While the _command_ itself is tool-specific (`uv publish` vs `twine upload`), the _underlying process_ often uses or replicates :twine-documentation:`twine`'s logic and interacts with PyPI using standard APIs and authentication methods. They produce the same outcome as using :twine-documentation:`twine` directly.
+  - **Standard Practice:** High (Method), Excellent (Outcome). While the _command_ itself is tool-specific (`uv publish` vs `twine upload`), the _underlying process_ often uses or replicates [:term:`twine`](twine-documentation)'s logic and interacts with PyPI using standard APIs and authentication methods. They produce the same outcome as using [:term:`twine`](twine-documentation) directly.
   - **Security (Authentication):** Excellent. Rely on environment variables (e.g., `UV_TOKEN`, `TWINE_API_KEY`) or integrated config/secrets management, generally supporting secure practices.
   - **Compatibility:** Excellent. Designed to work with packages built using the manager's preferred build process (Area 09).
   - **Reliability:** High. Reliability depends on the manager's implementation of the publishing logic.
   - **OS Interoperability:** Excellent. Tools are cross-platform.
   - **CLI Usability:** Excellent. A simple command within the manager's unified CLI (e.g., `uv publish`). Potentially slightly more convenient if already using the manager's CLI for other tasks.
-  - **Integration:** Excellent. Integrates within their manager's ecosystem and is callable from Task Automation (:nox-documentation:`Nox`) and CI/CD.
-  - **Maturity & Stability:** High (depends on manager maturity). The `publish` command is usually stable if the manager itself is stable. :uv-documentation:`uv`'s `publish` command is newer but built on a solid base.
-- **Conclusion:** A strong, often more convenient alternative within a specific manager's ecosystem. Provides equivalent functionality to :twine-documentation:`twine` for the user interacting via the manager's CLI. For a template, using the manager's publish command simplifies the required tooling listed as development dependencies if the manager handles publishing internally.
+  - **Integration:** Excellent. Integrates within their manager's ecosystem and is callable from Task Automation ([:term:`Nox`](nox-documentation)) and CI/CD.
+  - **Maturity & Stability:** High (depends on manager maturity). The `publish` command is usually stable if the manager itself is stable. [:term:`uv`](uv-documentation)'s `publish` command is newer but built on a solid base.
+- **Conclusion:** A strong, often more convenient alternative within a specific manager's ecosystem. Provides equivalent functionality to [:term:`twine`](twine-documentation) for the user interacting via the manager's CLI. For a template, using the manager's publish command simplifies the required tooling listed as development dependencies if the manager handles publishing internally.
 
 ## Chosen Tool(s)
 
-- The recommended underlying tool is **:twine-documentation:`twine`**.
-- Invocation Method: **:uv-documentation:`uv`**'s `uv publish` command (calls Twine or similar internally) or calling `uv run twine upload` directly.
+- The recommended underlying tool is **[:term:`twine`](twine-documentation)**.
+- Invocation Method: **[:term:`uv`](uv-documentation)**'s `uv publish` command (calls Twine or similar internally) or calling `uv run twine upload` directly.
 
 ## Justification for the Choice
 
-For publishing packages, there is a clear consensus on using a tool that adheres to secure, standard practices for interacting with PyPI. **:twine-documentation:`twine`** is the established standard. While other tools like :uv-documentation:`uv` offer `publish` commands, they typically provide a user-facing wrapper around :twine-documentation:`twine`'s functionality or replicate its standard behavior.
+For publishing packages, there is a clear consensus on using a tool that adheres to secure, standard practices for interacting with PyPI. **[:term:`twine`](twine-documentation)** is the established standard. While other tools like [:term:`uv`](uv-documentation) offer `publish` commands, they typically provide a user-facing wrapper around [:term:`twine`](twine-documentation)'s functionality or replicate its standard behavior.
 
-Using **:uv-documentation:`uv`**'s native `uv publish` command offers the most integrated experience within the chosen dependency manager's CLI. This simplifies the Task Automation layer (Area 12) by having a single command to call (`uv publish`) rather than needing `twine` explicitly listed as a top-level dev dependency and calling `uv run twine`. It leverages the efficiency and integration provided by :uv-documentation:`uv`. If `uv publish` is confirmed to fully replicate :twine-documentation:`twine`'s best practices (secure authentication, standard protocol) then it's the preferred interface.
+Using **[:term:`uv`](uv-documentation)**'s native `uv publish` command offers the most integrated experience within the chosen dependency manager's CLI. This simplifies the Task Automation layer (Area 12) by having a single command to call (`uv publish`) rather than needing `twine` explicitly listed as a top-level dev dependency and calling `uv run twine`. It leverages the efficiency and integration provided by [:term:`uv`](uv-documentation). If `uv publish` is confirmed to fully replicate [:term:`twine`](twine-documentation)'s best practices (secure authentication, standard protocol) then it's the preferred interface.
 
-Therefore, we choose to standardize on using **:uv-documentation:`uv`'s `uv publish` command** as the primary invocation method for publishing within the Task Automation layer. This command is built using :twine-documentation:`twine`'s best practices or :twine-documentation:`twine` itself. This aligns with having :uv-documentation:`uv` as the central workflow tool (Area 12) for dependency/package operations while relying on the underlying standard (:twine-documentation:`twine` equivalent logic).
+Therefore, we choose to standardize on using **[:term:`uv`](uv-documentation)'s `uv publish` command** as the primary invocation method for publishing within the Task Automation layer. This command is built using [:term:`twine`](twine-documentation)'s best practices or [:term:`twine`](twine-documentation) itself. This aligns with having [:term:`uv`](uv-documentation) as the central workflow tool (Area 12) for dependency/package operations while relying on the underlying standard ([:term:`twine`](twine-documentation) equivalent logic).
 
 ## Interactions with Other Topics
 
 - **Packaging Build (09):** The output of Area 09 (files in `dist/`) are the input packages for publishing.
-- **Task Automation (12):** :nox-documentation:`Nox` sessions call `uv publish` to automate the publishing process. This session typically runs after a successful `build` session.
+- **Task Automation (12):** [:term:`Nox`](nox-documentation) sessions call `uv publish` to automate the publishing process. This session typically runs after a successful `build` session.
 - **CD Orchestration (14):** CD pipelines trigger the publish step (via Nox calling `uv publish`). This is where secure API tokens for PyPI are provided to the environment.
-- **Dependency Management (02):** If calling `uv run twine`, then `twine` would need to be listed as a dependency (e.g., in the `dev` or a specific `publish` group). If `uv publish` is used, `twine` itself might not need to be a direct dev dependency of the project user (though it is needed by :uv-documentation:`uv` internally if `uv publish` wraps it). Standardizing on `uv publish` might reduce the user's direct dependency list slightly.
+- **Dependency Management (02):** If calling `uv run twine`, then `twine` would need to be listed as a dependency (e.g., in the `dev` or a specific `publish` group). If `uv publish` is used, `twine` itself might not need to be a direct dev dependency of the project user (though it is needed by [:term:`uv`](uv-documentation) internally if `uv publish` wraps it). Standardizing on `uv publish` might reduce the user's direct dependency list slightly.

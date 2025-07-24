@@ -28,7 +28,7 @@ This section evaluates tools used to identify potential security risks in Python
 
 We evaluated the primary tools for dependency and code-level security checks in Python:
 
-### Option 1: :safety-documentation:`Safety`
+### Option 1: [:term:`Safety`](safety-documentation)
 
 - **Description:** A command-line tool that checks installed Python dependencies (from environments or requirement files) against a database of known security vulnerabilities (pyup.io vulnerability database).
 - **Evaluation:**
@@ -46,7 +46,7 @@ We evaluated the primary tools for dependency and code-level security checks in 
 
 - **Conclusion:** A solid, focused tool for checking dependency vulnerabilities. Well-integrated into workflows.
 
-### Option 2: :bandit-documentation:`Bandit`
+### Option 2: [:term:`Bandit`](bandit-documentation)
 
 - **Description:** A static analyzer designed specifically for finding common security issues in Python source code based on predefined patterns and rules (e.g., uses of `eval`, hardcoded passwords, SQL injection risks).
 - **Evaluation:**
@@ -56,7 +56,7 @@ We evaluated the primary tools for dependency and code-level security checks in 
   - **Analysis Reliability (Code):** High. Uses a well-developed set of rules based on security expertise.
   - **False Positives:** Moderate. Like most static analysis tools, it can produce false positives depending on code context. Requires review and potential configuration/baselining.
   - **Reporting:** High. Reports with severity levels, confidence scores, rule IDs, and code snippets. Supports various formats.
-  - **Performance:** Good. Analysis speed depends on codebase size. Generally reasonable, but can be slower than Rust-based tools like :ruff-documentation:`Ruff` in the future. Can be too slow for mandated pre-commit hooks on large projects.
+  - **Performance:** Good. Analysis speed depends on codebase size. Generally reasonable, but can be slower than Rust-based tools like [:term:`Ruff`](ruff-documentation) in the future. Can be too slow for mandated pre-commit hooks on large projects.
   - **OS Interoperability:** Excellent. Pure Python package, works reliably across OSs.
   - **Integration:** Excellent. Simple CLI (`bandit`), easily integrated into Task Automation, CI/CD. Viable for pre-commit if focused or on smaller codebases.
   - **Maturity & Stability:** High. Mature, stable, widely used for code security analysis.
@@ -64,7 +64,7 @@ We evaluated the primary tools for dependency and code-level security checks in 
 
 - **Conclusion:** The standard, reliable tool for finding security issues within the project's own code. Complements dependency checkers.
 
-### Option 3: :pip-audit-documentation:`pip-audit`
+### Option 3: [:term:`pip-audit`](pip-audit-documentation)
 
 - **Description:** A newer, PyPA-backed tool focused on dependency vulnerability scanning. Aims to use a broader set of vulnerability sources (PyPI Advisory Database, OS vendor databases) compared to relying on a single database.
 - **Evaluation:**
@@ -74,32 +74,32 @@ We evaluated the primary tools for dependency and code-level security checks in 
   - **Analysis Reliability (Code):** N/A (Dependency scanning only).
   - **False Positives:** High. Relies on established vulnerability data, leading to generally low false positives for reported CVEs.
   - **Reporting:** High. Clear reports, supports standard output formats (JSON, JUnit XML) for better integration.
-  - **Performance:** High. Similar performance profile to :safety-documentation:`Safety`, suitable for automation.
+  - **Performance:** High. Similar performance profile to [:term:`Safety`](safety-documentation), suitable for automation.
   - **OS Interoperability:** Excellent. Pure Python package, works reliably across OSs.
   - **Integration:** Excellent. Designed for automation with a clear CLI. Easily integrated into Task Automation, CI/CD.
-  - **Maturity & Stability:** High. Newer than :safety-documentation:`Safety`, but rapidly gaining maturity and features, backed by PyPA.
+  - **Maturity & Stability:** High. Newer than [:term:`Safety`](safety-documentation), but rapidly gaining maturity and features, backed by PyPA.
   - **Community & Documentation:** High. Active development, growing community, good documentation.
 
-- **Conclusion:** A modern, technically strong choice for dependency vulnerability scanning, potentially offering better vulnerability source coverage than alternatives. Preferred over :safety-documentation:`Safety` for a template prioritizing modern standards and potentially broader coverage.
+- **Conclusion:** A modern, technically strong choice for dependency vulnerability scanning, potentially offering better vulnerability source coverage than alternatives. Preferred over [:term:`Safety`](safety-documentation) for a template prioritizing modern standards and potentially broader coverage.
 
-### Option 4: :ruff-documentation:`Ruff` (Security Rules)
+### Option 4: [:term:`Ruff`](ruff-documentation) (Security Rules)
 
-- **Description:** :ruff-documentation:`Ruff`, the fast linter (04), is adding security-focused rules (prefix 'S') that re-implement checks found in :bandit-documentation:`Bandit`. This is an emerging feature.
+- **Description:** [:term:`Ruff`](ruff-documentation), the fast linter (04), is adding security-focused rules (prefix 'S') that re-implement checks found in [:term:`Bandit`](bandit-documentation). This is an emerging feature.
 - **Evaluation:**
 
-  - **Check Types & Coverage:** Moderate (Code Scanning, Limited Subset). Re-implements _some_ :bandit-documentation:`Bandit` rules, but the coverage is not yet comprehensive enough to replace :bandit-bandit-documentation:`Bandit` entirely. Does NOT check dependency vulnerabilities.
-  - **Analysis Reliability (Code):** High (Rules). Reliability of implemented rules is high, mirroring their source in :bandit-bandit-documentation:`Bandit`.
+  - **Check Types & Coverage:** Moderate (Code Scanning, Limited Subset). Re-implements _some_ [:term:`Bandit`](bandit-documentation) rules, but the coverage is not yet comprehensive enough to replace [:term:`Bandit`](bandit-bandit-documentation) entirely. Does NOT check dependency vulnerabilities.
+  - **Analysis Reliability (Code):** High (Rules). Reliability of implemented rules is high, mirroring their source in [:term:`Bandit`](bandit-bandit-documentation).
   - **False Positives:** Moderate. Inherited from source rules.
-  - **Reporting:** Excellent. Uses :ruff-documentation:`Ruff`'s standard, clear reporting format.
+  - **Reporting:** Excellent. Uses [:term:`Ruff`](ruff-documentation)'s standard, clear reporting format.
   - **Performance:** Excellent. As a Rust binary, running these checks is very fast (similar to linting performance).
   - **OS Interoperability:** Excellent. Rust binary, works across OSs.
-  - **Integration:** Excellent. Seamlessly integrated into :ruff-documentation:`Ruff`'s check command, leveraging its integrations (:pre-commit-documentation:`pre-commit`, :nox-documentation:`Nox`/[:term:`uv` run](uv-documentation), CI). Speed makes it ideal for fast checks.
-  - **Maturity & Stability:** High (:ruff-documentation:`Ruff`), Low (Security Rules). The :ruff-documentation:`Ruff` platform is mature. The _security rule set_ is still very new and under active development, not comprehensive enough for full standalone security code analysis.
-  - **Community & Documentation:** High (:ruff-documentation:`Ruff`), Moderate (Security Rules). Benefits from the large :ruff-documentation:`Ruff` community, but specific documentation and community experience with _just_ the security rules are still building.
+  - **Integration:** Excellent. Seamlessly integrated into [:term:`Ruff`](ruff-documentation)'s check command, leveraging its integrations ([:term:`pre-commit`](pre-commit-documentation), [:term:`Nox`](nox-documentation)/[:term:`uv` run](uv-documentation), CI). Speed makes it ideal for fast checks.
+  - **Maturity & Stability:** High ([:term:`Ruff`](ruff-documentation)), Low (Security Rules). The [:term:`Ruff`](ruff-documentation) platform is mature. The _security rule set_ is still very new and under active development, not comprehensive enough for full standalone security code analysis.
+  - **Community & Documentation:** High ([:term:`Ruff`](ruff-documentation)), Moderate (Security Rules). Benefits from the large [:term:`Ruff`](ruff-documentation) community, but specific documentation and community experience with _just_ the security rules are still building.
 
-- **Conclusion:** Promising for future consolidation and performance, but currently not sufficient to replace a dedicated code security tool like :bandit-bandit-documentation:`Bandit` for comprehensive checks. Valuable as a complementary set of fast checks if enabled alongside other :ruff-documentation:`Ruff` rules.
+- **Conclusion:** Promising for future consolidation and performance, but currently not sufficient to replace a dedicated code security tool like [:term:`Bandit`](bandit-bandit-documentation) for comprehensive checks. Valuable as a complementary set of fast checks if enabled alongside other [:term:`Ruff`](ruff-documentation) rules.
 
-### Option 5: :sonarcloud-documentation:`SonarCloud` / SonarQube
+### Option 5: [:term:`SonarCloud`](sonarcloud-documentation) / SonarQube
 
 - **Description:** A cloud-based (or self-hosted SonarQube) code quality and security service. Provides comprehensive static analysis (bugs, vulnerabilities, security hotspots, code smells) across many languages via a dedicated scanner integrated into CI/CD.
 - **Evaluation:**
@@ -119,33 +119,33 @@ We evaluated the primary tools for dependency and code-level security checks in 
 
 ## Chosen Tool(s) and Strategy
 
-- Dependency Vulnerability Scanning: **:pip-audit-documentation:`pip-audit`**.
-- Code Security Static Analysis: **:bandit-documentation:`Bandit`**.
+- Dependency Vulnerability Scanning: **[:term:`pip-audit`](pip-audit-documentation)**.
+- Code Security Static Analysis: **[:term:`Bandit`](bandit-documentation)**.
 
 ## Justification for the Choice
 
-We choose a combination of **:pip-audit-documentation:`pip-audit`** and **:bandit-bandit-documentation:`Bandit`** to provide comprehensive coverage for both dependency and code-level security checks, prioritizing robust, standard, and OS-interoperable CLI tools:
+We choose a combination of **[:term:`pip-audit`](pip-audit-documentation)** and **[:term:`Bandit`](bandit-bandit-documentation)** to provide comprehensive coverage for both dependency and code-level security checks, prioritizing robust, standard, and OS-interoperable CLI tools:
 
-1.  **Comprehensive Coverage:** Security requires checking _both_ dependencies (Area 02's outputs) and the project's own code. :pip-audit-documentation:`pip-audit` excels at the former (addressing **Check Types & Coverage** for deps), while :bandit-bandit-documentation:`Bandit` excels at the latter (addressing **Check Types & Coverage** for code). Using both provides the necessary breadth.
-2.  **Robust Standards and Sources:** :pip-audit-documentation:`pip-audit` leverages the official PyPI Advisory Database and other sources, offering strong **Vulnerability Sources** and high reporting **Reliability** for dependencies. :bandit-bandit-documentation:`Bandit` uses a mature and well-established set of rules for **Analysis Reliability** in code scanning.
-3.  **Workflow Integration:** Both tools are **OS-interoperable** and have **excellent CLI interfaces** suitable for automation. They are designed to be invoked by Task Automation runners (:nox-documentation:`Nox` - Area 12) and run within CI/CD pipelines (Area 13, 14) (addressing **OS Interoperability** and **Integration**). While potentially usable in :pre-commit-documentation:`pre-commit` for focused or small projects, their performance profile makes them better suited for mandatory checks in Task Automation/CI as opposed to instant commit gates.
-4.  **Tool Type Alignment:** We prioritize self-contained CLI tools over service-based platforms (like :sonarcloud-documentation:`SonarCloud`) for the template's core, as CLI tools require less external setup and are more universally runnable without external accounts or infrastructure (addressing **Best Tool for the Job** in the context of a base template).
+1.  **Comprehensive Coverage:** Security requires checking _both_ dependencies (Area 02's outputs) and the project's own code. [:term:`pip-audit`](pip-audit-documentation) excels at the former (addressing **Check Types & Coverage** for deps), while [:term:`Bandit`](bandit-bandit-documentation) excels at the latter (addressing **Check Types & Coverage** for code). Using both provides the necessary breadth.
+2.  **Robust Standards and Sources:** [:term:`pip-audit`](pip-audit-documentation) leverages the official PyPI Advisory Database and other sources, offering strong **Vulnerability Sources** and high reporting **Reliability** for dependencies. [:term:`Bandit`](bandit-bandit-documentation) uses a mature and well-established set of rules for **Analysis Reliability** in code scanning.
+3.  **Workflow Integration:** Both tools are **OS-interoperable** and have **excellent CLI interfaces** suitable for automation. They are designed to be invoked by Task Automation runners ([:term:`Nox`](nox-documentation) - Area 12) and run within CI/CD pipelines (Area 13, 14) (addressing **OS Interoperability** and **Integration**). While potentially usable in [:term:`pre-commit`](pre-commit-documentation) for focused or small projects, their performance profile makes them better suited for mandatory checks in Task Automation/CI as opposed to instant commit gates.
+4.  **Tool Type Alignment:** We prioritize self-contained CLI tools over service-based platforms (like [:term:`SonarCloud`](sonarcloud-documentation)) for the template's core, as CLI tools require less external setup and are more universally runnable without external accounts or infrastructure (addressing **Best Tool for the Job** in the context of a base template).
 
-**:ruff-documentation:`Ruff`**'s emerging security rules (Area 04) are promising but currently lack the comprehensive coverage of :bandit-bandit-documentation:`Bandit`, so :bandit-bandit-documentation:`Bandit` is chosen for the full code security analysis. :safety-documentation:`Safety` is a strong alternative to :pip-audit-documentation:`pip-audit`, but :pip-audit-documentation:`pip-audit`'s use of official PyPI sources makes it slightly preferred for adherence to PyPA recommended practices.
+**[:term:`Ruff`](ruff-documentation)**'s emerging security rules (Area 04) are promising but currently lack the comprehensive coverage of [:term:`Bandit`](bandit-bandit-documentation), so [:term:`Bandit`](bandit-bandit-documentation) is chosen for the full code security analysis. [:term:`Safety`](safety-documentation) is a strong alternative to [:term:`pip-audit`](pip-audit-documentation), but [:term:`pip-audit`](pip-audit-documentation)'s use of official PyPI sources makes it slightly preferred for adherence to PyPA recommended practices.
 
 **Deployment Strategy within Workflow:**
 
 - **Pre-commit Hooks (18):** Do NOT mandate running these comprehensive security checks in pre-commit hooks due to performance concerns and potential for false positives slowing down commits. Pre-commit focuses on fast, high-confidence issues (like formatting, basic lint).
 - **Task Automation (12):** Define a dedicated Nox session (e.g., `nox -s security`) that runs both `uv run pip-audit --python session.python` and `uv run bandit -c .bandit -r {{ cookiecutter.package_name }}`. This provides a single command for developers to run the full security suite locally.
 - **CI Orchestration (13):** Mandate running the `nox -s security` task as part of the automated CI pipeline, ensuring the full security suite passes before merges or deployments.
-- **Optional Service Integration:** Document :sonarcloud-documentation:`SonarCloud` as a powerful optional addition for teams needing deeper analysis, dashboards, and quality gates, integrated directly into CI workflows.
+- **Optional Service Integration:** Document [:term:`SonarCloud`](sonarcloud-documentation) as a powerful optional addition for teams needing deeper analysis, dashboards, and quality gates, integrated directly into CI workflows.
 
 This layered approach ensures that robust security checks are a mandatory part of the CI process, easily runnable locally on demand, using standard, OS-interoperable CLI tools, while acknowledging the existence of more advanced service options.
 
 ## Interactions with Other Topics
 
-- **Dependency Management (02):** :pip-audit-documentation:`pip-audit` relies on the dependencies managed by :uv-documentation:`uv` and the `uv.lock` file. Security tools themselves are installed as dependencies via :uv-documentation:`uv`.
-- **Code Linting (04):** Both :bandit-bandit-documentation:`Bandit` and :ruff-documentation:`Ruff` (which includes some security rules) perform static code analysis, but with different focuses and rule sets. They can be run alongside other linters.
-- **Task Automation (12):** :nox-documentation:`Nox` orchestrates the execution of :pip-audit-documentation:`pip-audit` and :bandit-bandit-documentation:`Bandit` within dedicated sessions.
-- **CI Orchestration (13):** The CI pipeline mandates running the security checks defined in the Task Automation layer. :sonarcloud-documentation:`SonarCloud` is integrated at this layer as an optional service.
+- **Dependency Management (02):** [:term:`pip-audit`](pip-audit-documentation) relies on the dependencies managed by [:term:`uv`](uv-documentation) and the `uv.lock` file. Security tools themselves are installed as dependencies via [:term:`uv`](uv-documentation).
+- **Code Linting (04):** Both [:term:`Bandit`](bandit-bandit-documentation) and [:term:`Ruff`](ruff-documentation) (which includes some security rules) perform static code analysis, but with different focuses and rule sets. They can be run alongside other linters.
+- **Task Automation (12):** [:term:`Nox`](nox-documentation) orchestrates the execution of [:term:`pip-audit`](pip-audit-documentation) and [:term:`Bandit`](bandit-bandit-documentation) within dedicated sessions.
+- **CI Orchestration (13):** The CI pipeline mandates running the security checks defined in the Task Automation layer. [:term:`SonarCloud`](sonarcloud-documentation) is integrated at this layer as an optional service.
 - **Pre-commit Hooks (18):** While comprehensive security checks are not mandated here, fast subsets could potentially be added in the future.
