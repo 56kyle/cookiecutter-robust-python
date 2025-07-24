@@ -27,9 +27,9 @@ This section evaluates tools that perform static analysis on code to identify po
 
 We evaluated the leading options for Python code linting and static analysis:
 
-### Option 1: `Flake8`{flake8-documentation}
+### Option 1: [:term:`Flake8`](flake8-documentation)
 
-- **Description:** A popular wrapper that bundles multiple checks: `PyFlakes`{pyflakes-documentation} (finds errors like unused variables, undefined names), `pycodestyle`{pycodestyle-documentation} (checks against PEP 8 style guide), and `mccabe`{mccabe-documentation} (checks code complexity). Highly extensible via plugins.
+- **Description:** A popular wrapper that bundles multiple checks: [:term:`PyFlakes`](pyflakes-documentation) (finds errors like unused variables, undefined names), [:term:`pycodestyle`](pycodestyle-documentation) (checks against PEP 8 style guide), and [:term:`mccabe`](mccabe-documentation) (checks code complexity). Highly extensible via plugins.
 - **Evaluation:**
 
   - **Static Analysis Capabilities:** Good basic coverage via bundled tools. Very high potential via a rich ecosystem of plugins (e.g., `flake8-bugbear` for common pitfalls, `flake8-annotations` for type hint checks, etc.) covering a wide range of issues.
@@ -38,14 +38,14 @@ We evaluated the leading options for Python code linting and static analysis:
   - **Configurable:** High. Configurable via `.flake8`, `setup.cfg`, or `pyproject.toml` (`[flake8]`). Default checks are standard, but many plugins require explicit configuration.
   - **Performance:** Moderate. As a Python tool wrapping other Python tools, performance is acceptable for many projects but noticeably slower than Rust-based alternatives, potentially impacting editor feedback speed or pre-commit hook viability on large codebases.
   - **OS Interoperability:** Excellent. Pure Python package, works reliably across Linux, macOS, and Windows.
-  - **Integration:** Excellent. A long-standing standard, deep integration across editors/IDEs, `pre-commit`{pre-commit-documentation} (official hook), `Nox`{nox-documentation}/[:term:`uv` run](uv-documentation), CI/CD platforms.
-  - **Tool Count:** Moderate. It's a wrapper, so requires installing `flake8`{flake8-documentation} itself plus desired plugins. Simpler than installing PyFlakes, pycodestyle, etc. separately. Often used alongside a formatter.
+  - **Integration:** Excellent. A long-standing standard, deep integration across editors/IDEs, [:term:`pre-commit`](pre-commit-documentation) (official hook), [:term:`Nox`](nox-documentation)/[:term:`uv` run](uv-documentation), CI/CD platforms.
+  - **Tool Count:** Moderate. It's a wrapper, so requires installing [:term:`flake8`](flake8-documentation) itself plus desired plugins. Simpler than installing PyFlakes, pycodestyle, etc. separately. Often used alongside a formatter.
   - **Maturity & Stability:** Very High. Mature, stable, widely adopted for many years.
-  - **Community & Documentation:** Very High. Large, active community, extensive documentation for both base `flake8`{flake8-documentation} and its plugins.
+  - **Community & Documentation:** Very High. Large, active community, extensive documentation for both base [:term:`flake8`](flake8-documentation) and its plugins.
 
 - **Conclusion:** A highly capable and extensible standard, widely supported. Its main practical drawback is performance compared to newer tools and the need to manage a collection of plugins for full coverage.
 
-### Option 2: `Pylint`{pylint-documentation}
+### Option 2: [:term:`Pylint`](pylint-documentation)
 
 - **Description:** A comprehensive static analysis tool with a very broad range of built-in checks covering errors, coding conventions, potential bugs, and refactoring suggestions. Known for being powerful but potentially verbose if not heavily configured.
 - **Evaluation:**
@@ -54,7 +54,7 @@ We evaluated the leading options for Python code linting and static analysis:
   - **Enforces Coding Standards:** Very High. Enforces PEP 8 but also many additional conventions and best practices based on static analysis. Can be highly customized to organizational standards.
   - **Informative & Actionable Feedback:** High. Reports with clear codes and detailed messages. Can be overwhelming due to volume of checks enabled by default. Tuning configuration to reduce noise is often required.
   - **Configurable:** Very High. Highly configurable via `.pylintrc`, `setup.cfg`, or `pyproject.toml` (`[tool.pylint]` - less common historically). Requires more effort to manage configurations than simpler linters due to its verbosity.
-  - **Performance:** Moderate to Low. Generally slower than `Flake8`{flake8-documentation}, and significantly slower than Rust-based alternatives. The depth of analysis comes with a performance cost. Can be impractical for fast feedback loops like pre-commit hooks on many projects.
+  - **Performance:** Moderate to Low. Generally slower than [:term:`Flake8`](flake8-documentation), and significantly slower than Rust-based alternatives. The depth of analysis comes with a performance cost. Can be impractical for fast feedback loops like pre-commit hooks on many projects.
   - **OS Interoperability:** Excellent. Pure Python package, works reliably across OSs.
   - **Integration:** High. Callable via CLI, integrates into Task Automation, CI/CD, and editors. Performance can limit its use in the fastest workflow stages.
   - **Tool Count:** Excellent. Aims to be a single tool for a vast array of checks, requiring minimal additional linters.
@@ -63,9 +63,9 @@ We evaluated the leading options for Python code linting and static analysis:
 
 - **Conclusion:** The most comprehensive static analyzer for Python. Offers great depth but requires significant configuration effort and suffers from performance issues that impact its usability in fast, iterative development stages. Best suited for thorough analysis in slower workflows like CI.
 
-### Option 3: `Prospector`{flake8-documentation}
+### Option 3: [:term:`Prospector`](flake8-documentation)
 
-- **Description:** A meta-tool that runs multiple other Python analysis tools (like `Flake8`{flake8-documentation}, `Pylint`{pylint-documentation}, `Bandit`{bandit-documentation}, `Mypy`{pyright-documentation}) and aggregates their output into a unified report.
+- **Description:** A meta-tool that runs multiple other Python analysis tools (like [:term:`Flake8`](flake8-documentation), [:term:`Pylint`](pylint-documentation), [:term:`Bandit`](bandit-documentation), [:term:`Mypy`](pyright-documentation)) and aggregates their output into a unified report.
 - **Evaluation:**
 
   - **Static Analysis Capabilities:** Varies (Delegated). Its capabilities are the sum of the tools it wraps.
@@ -81,47 +81,47 @@ We evaluated the leading options for Python code linting and static analysis:
 
 - **Conclusion:** Can simplify configuration profiles for a _combination_ of tools, but doesn't address underlying performance or OS interoperability issues of wrapped tools and adds installation/execution overhead. Less suitable for a template aiming for streamlined tooling with optimal performance per task. Using a single fast linter that consolidates rules is preferred.
 
-### Option 4: `Ruff`{ruff-documentation} (Linter)
+### Option 4: [:term:`Ruff`](ruff-documentation) (Linter)
 
-- **Description:** An extremely fast linter written in Rust. Re-implements hundreds of rules from various Python linters (`Flake8`{flake8-documentation} and its plugins, `Pylint`{pylint-documentation}, `isort`{isort-documentation}, `pydocstyle`{pydocstyle-documentation}, etc.) into a single, high-performance binary. Configurable primarily via `.ruff.toml` or `pyproject.toml` (`[tool.ruff]`).
+- **Description:** An extremely fast linter written in Rust. Re-implements hundreds of rules from various Python linters ([:term:`Flake8`](flake8-documentation) and its plugins, [:term:`Pylint`](pylint-documentation), [:term:`isort`](isort-documentation), [:term:`pydocstyle`](pydocstyle-documentation), etc.) into a single, high-performance binary. Configurable primarily via `.ruff.toml` or `pyproject.toml` (`[tool.ruff]`).
 - **Evaluation:**
-  - **Static Analysis Capabilities:** Very High (Consolidating). Re-implements a vast and growing set of rules covering error detection (like PyFlakes), style (like `pycodestyle`{flake8-documentation}, `pydocstyle`{pydocstyle-documentation}), code smells (`flake8-bugbear`{flake8-documentation}), complexity (`mccabe`{flake8-documentation}), unused code, and even some security rules (subset of `Bandit`{bandit-documentation}). Rapidly adding more rules, aiming for comprehensive coverage across major linters.
+  - **Static Analysis Capabilities:** Very High (Consolidating). Re-implements a vast and growing set of rules covering error detection (like PyFlakes), style (like [:term:`pycodestyle`](flake8-documentation), [:term:`pydocstyle`](pydocstyle-documentation)), code smells ([:term:`flake8-bugbear`](flake8-documentation)), complexity ([:term:`mccabe`](flake8-documentation)), unused code, and even some security rules (subset of [:term:`Bandit`](bandit-documentation)). Rapidly adding more rules, aiming for comprehensive coverage across major linters.
   - **Enforces Coding Standards:** Very High. Enforces a wide range of standards derived from multiple popular linters and best practices. Highly configurable rule selection via codes.
   - **Informative & Actionable Feedback:** High. Provides clear rule codes (often matching original tools) and messages. Supports auto-fixing for many issues. Auto-generates configuration suggestions based on other linters.
   - **Configurable:** High. Configurable via `.ruff.toml` or `pyproject.toml`. Powerful and flexible rule selection. Default set includes core checks, adding more rules (like Pylint conventions) is explicit.
   - **Performance:** Excellent. **Orders of magnitude faster** than Python-based linters. Transformative for developer workflow feedback loops (real-time checks in editors, pre-commit speed) and CI times.
   - **OS Interoperability:** Excellent. Rust binary, works natively and reliably across all major operating systems.
-  - **Integration:** Excellent. Rapidly gaining ecosystem integration. Native `pre-commit`{pre-commit-documentation} hook (highly recommended due to speed). Easily callable via CLI for `Nox`{nox-documentation}/[:term:`uv` run](uv-documentation), integrates into CI, strong and increasing editor/IDE support.
+  - **Integration:** Excellent. Rapidly gaining ecosystem integration. Native [:term:`pre-commit`](pre-commit-documentation) hook (highly recommended due to speed). Easily callable via CLI for [:term:`Nox`](nox-documentation)/[:term:`uv` run](uv-documentation), integrates into CI, strong and increasing editor/IDE support.
   - **Tool Count:** Excellent. **Consolidates the functionality of multiple separate linters** into a single binary and configuration file. Also includes formatting.
-  - **Maturity & Stability:** Very High (Linter). `Ruff`{ruff-documentation} as a linter is mature, stable, and very widely adopted. The project has a massive and active community.
+  - **Maturity & Stability:** Very High (Linter). [:term:`Ruff`](ruff-documentation) as a linter is mature, stable, and very widely adopted. The project has a massive and active community.
   - **Community & Documentation:** Very High (Exploding). Very active development, massive and rapidly growing user base, excellent and extensive documentation.
 
 ## Chosen Tool(s)
 
-- **`Ruff`{ruff-documentation}** as the primary **Code Linter**.
-- **`pydocstyle`{pydocstyle-documentation}** as a dedicated check for docstring quality (can be integrated into Ruff checks or run separately).
+- **[:term:`Ruff`](ruff-documentation)** as the primary **Code Linter**.
+- **[:term:`pydocstyle`](pydocstyle-documentation)** as a dedicated check for docstring quality (can be integrated into Ruff checks or run separately).
 
 ## Justification for the Choice
 
-**`Ruff`{ruff-documentation} (Linter)** is the clear and compelling choice for code linting and quality checks, providing a transformative improvement in developer workflow efficiency:
+**[:term:`Ruff`](ruff-documentation) (Linter)** is the clear and compelling choice for code linting and quality checks, providing a transformative improvement in developer workflow efficiency:
 
-1.  **Unmatched Performance:** `Ruff`{ruff-documentation}'s **exceptional speed** is its primary strength. Linting is a frequent task (editor checks, pre-commit, CI). Making this step orders of magnitude faster directly supports the **"Automated is better than manual"** principle and dramatically improves the **Developer Experience** by providing near-instant feedback (addressing **Performance**).
-2.  **Tool Consolidation:** `Ruff`{ruff-documentation} replaces the need for multiple separate linters and their plugins (like `Flake8`{flake8-documentation} with its common plugins, significant parts of `Pylint`{pylint-documentation}). This simplifies the project's dependencies and configuration (a single `.ruff.toml` or `pyproject.toml` section) which directly contributes to **Maintainability** (addressing **Tool Count**).
-3.  **Comprehensive Checks:** By reimplementing rules from various linters, `Ruff`{ruff-documentation} offers a **very broad range of static analysis capabilities** from errors to code smells and conventions. The rule set is comprehensive and constantly growing.
+1.  **Unmatched Performance:** [:term:`Ruff`](ruff-documentation)'s **exceptional speed** is its primary strength. Linting is a frequent task (editor checks, pre-commit, CI). Making this step orders of magnitude faster directly supports the **"Automated is better than manual"** principle and dramatically improves the **Developer Experience** by providing near-instant feedback (addressing **Performance**).
+2.  **Tool Consolidation:** [:term:`Ruff`](ruff-documentation) replaces the need for multiple separate linters and their plugins (like [:term:`Flake8`](flake8-documentation) with its common plugins, significant parts of [:term:`Pylint`](pylint-documentation)). This simplifies the project's dependencies and configuration (a single `.ruff.toml` or `pyproject.toml` section) which directly contributes to **Maintainability** (addressing **Tool Count**).
+3.  **Comprehensive Checks:** By reimplementing rules from various linters, [:term:`Ruff`](ruff-documentation) offers a **very broad range of static analysis capabilities** from errors to code smells and conventions. The rule set is comprehensive and constantly growing.
 4.  **Standards-Aligned:** It incorporates and enforces coding standards, including those derived from **PEP 8** and common best practices identified by analysis tools (addressing **Enforces Coding Standards** and **PEP Compliance** nuances).
 5.  **Robust & Cross-Platform:** As a Rust binary, it is **fully OS-interoperable** and reliable across development environments (addressing **OS Interoperability**).
-6.  **Seamless Integration:** `Ruff`{ruff-documentation}'s speed and standard CLI integrate **excellently** into automated workflows, making it uniquely suitable for fast `pre-commit`{pre-commit-documentation} hooks (Area 18), rapid Task Automation runs (`Nox`{nox-documentation} - Area 12), and efficient CI checks (Area 13) (addressing **Integration**).
-7.  **Unified with Formatting:** Choosing `Ruff`{ruff-documentation} for both formatting (03) and linting (04) provides a powerful, unified solution for code style and quality from a single tool with a single configuration file.
+6.  **Seamless Integration:** [:term:`Ruff`](ruff-documentation)'s speed and standard CLI integrate **excellently** into automated workflows, making it uniquely suitable for fast [:term:`pre-commit`](pre-commit-documentation) hooks (Area 18), rapid Task Automation runs ([:term:`Nox`](nox-documentation) - Area 12), and efficient CI checks (Area 13) (addressing **Integration**).
+7.  **Unified with Formatting:** Choosing [:term:`Ruff`](ruff-documentation) for both formatting (03) and linting (04) provides a powerful, unified solution for code style and quality from a single tool with a single configuration file.
 
-While `Pylint`{pylint-documentation} offers potentially deeper analysis in some niche areas and `Flake8`{flake8-documentation} has a mature plugin ecosystem, `Ruff`{ruff-documentation}'s overwhelming performance advantage and consolidation of common rules provide a better balance for a general-purpose, high-quality template prioritizing automated workflow efficiency. `Prospector`{prospector-documentation}, as a meta-tool, does not offer performance benefits and adds complexity.
+While [:term:`Pylint`](pylint-documentation) offers potentially deeper analysis in some niche areas and [:term:`Flake8`](flake8-documentation) has a mature plugin ecosystem, [:term:`Ruff`](ruff-documentation)'s overwhelming performance advantage and consolidation of common rules provide a better balance for a general-purpose, high-quality template prioritizing automated workflow efficiency. [:term:`Prospector`](prospector-documentation), as a meta-tool, does not offer performance benefits and adds complexity.
 
-We also include **`pydocstyle`{pydocstyle-documentation}** conceptually here (or within Topic 07 justification) as it specifically checks **PEP 257** compliance for docstrings, which is crucial for documentation generation quality. Its rules are included in `Ruff`{ruff-documentation}'s linting set ('D' codes), so running `Ruff`{ruff-documentation} with 'D' rules enabled covers this. We list it separately to highlight the specific focus on docstrings, noting `Ruff`{ruff-documentation} handles these checks.
+We also include **[:term:`pydocstyle`](pydocstyle-documentation)** conceptually here (or within Topic 07 justification) as it specifically checks **PEP 257** compliance for docstrings, which is crucial for documentation generation quality. Its rules are included in [:term:`Ruff`](ruff-documentation)'s linting set ('D' codes), so running [:term:`Ruff`](ruff-documentation) with 'D' rules enabled covers this. We list it separately to highlight the specific focus on docstrings, noting [:term:`Ruff`](ruff-documentation) handles these checks.
 
 ## Interactions with Other Topics
 
-- **Code Formatting (03):** `Ruff`{ruff-documentation} is also the chosen formatter, creating a single tool for style and quality.
+- **Code Formatting (03):** [:term:`Ruff`](ruff-documentation) is also the chosen formatter, creating a single tool for style and quality.
 - **pyproject.toml (01):** [:term:`Ruff`](ruff-documentation] configuration is primarily in a separate `.ruff.toml` file.
-- **Documentation (07):** Docstring quality checked by `pydocstyle`{pydocstyle-documentation} rules (within `Ruff`{ruff-documentation}) is important for API doc generation.
-- **Pre-commit Hooks (18):** `Ruff`{ruff-documentation}'s speed makes it an ideal tool for mandated pre-commit linting checks.
-- **Task Automation (12):** `Nox`{nox-documentation} sessions call `uv run ruff check` to run comprehensive linting checks.
-- **CI Orchestration (13):** Linting checks are run as part of the automated CI pipeline, triggered by `Nox`{nox-documentation}.
+- **Documentation (07):** Docstring quality checked by [:term:`pydocstyle`](pydocstyle-documentation) rules (within [:term:`Ruff`](ruff-documentation)) is important for API doc generation.
+- **Pre-commit Hooks (18):** [:term:`Ruff`](ruff-documentation)'s speed makes it an ideal tool for mandated pre-commit linting checks.
+- **Task Automation (12):** [:term:`Nox`](nox-documentation) sessions call `uv run ruff check` to run comprehensive linting checks.
+- **CI Orchestration (13):** Linting checks are run as part of the automated CI pipeline, triggered by [:term:`Nox`](nox-documentation).

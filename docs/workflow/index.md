@@ -8,18 +8,18 @@ This workflow is designed to be consistent whether you are developing locally, w
 
 ## Central Automation with Nox
 
-At the heart of the template's workflow automation is **`Nox`{nox-documentation}** ([Task Automation (12)](../topics/12_task-automation.md)). `Nox`{nox-documentation} provides a single, standard command-line interface (CLI) for executing _all_ common development tasks defined in the `noxfile.py` file.
+At the heart of the template's workflow automation is **[:term:`Nox`](nox-documentation)** ([Task Automation (12)](../topics/12_task-automation.md)). [:term:`Nox`](nox-documentation) provides a single, standard command-line interface (CLI) for executing _all_ common development tasks defined in the `noxfile.py` file.
 
 - To see available tasks: `uvx nox -l`
 - To run a task: `uvx nox -s <session_name>`
 
-Every significant automated process in this template – from linting and testing to building and publishing – is exposed as one or more `Nox`{nox-documentation} sessions. This simplifies the workflow by providing one tool (`uvx nox`) to remember and call for automation.
+Every significant automated process in this template – from linting and testing to building and publishing – is exposed as one or more [:term:`Nox`](nox-documentation) sessions. This simplifies the workflow by providing one tool (`uvx nox`) to remember and call for automation.
 
 ## The Local Development Loop
 
 Here's how the template facilitates your day-to-day coding work:
 
-1.  **Project Setup & Dependencies:** After cloning/generating the project, set up the virtual environment and install dependencies using **`uv`{uv-documentation}** ([Dependency Management (02)](../topics/02_dependency-management.md)):
+1.  **Project Setup & Dependencies:** After cloning/generating the project, set up the virtual environment and install dependencies using **[:term:`uv`](uv-documentation)** ([Dependency Management (02)](../topics/02_dependency-management.md)):
 
     ```bash
     uv sync
@@ -35,9 +35,9 @@ Here's how the template facilitates your day-to-day coding work:
     git commit
     ```
 
-    The **`pre-commit`{pre-commit-documentation}** framework ([Pre-commit Hooks (18)](../topics/18_pre-commit-hooks.md)) automatically runs configured hooks (like `Ruff`{ruff-documentation} formatter/linter with autofixes) on your staged files before the commit is finalized. This catches basic errors and style violations instantly.
+    The **[:term:`pre-commit`](pre-commit-documentation)** framework ([Pre-commit Hooks (18)](../topics/18_pre-commit-hooks.md)) automatically runs configured hooks (like [:term:`Ruff`](ruff-documentation) formatter/linter with autofixes) on your staged files before the commit is finalized. This catches basic errors and style violations instantly.
 
-3.  **On-Demand Local Checks:** For more comprehensive checks (full linting, type checking, security scans, running the test suite) _before_ pushing or for dedicated development cycles, use **`Nox`{nox-documentation}**:
+3.  **On-Demand Local Checks:** For more comprehensive checks (full linting, type checking, security scans, running the test suite) _before_ pushing or for dedicated development cycles, use **[:term:`Nox`](nox-documentation)**:
 
     ```bash
     uvx nox -s check # Runs linters, type checker, security scans (Topic 04, 05, 08)
@@ -45,9 +45,9 @@ Here's how the template facilitates your day-to-day coding work:
     # ... run other specific tasks
     ```
 
-    `Nox`{nox-documentation} handles running these tools within the correct, consistent environments using [:term:`uv` run](uv-documentation).
+    [:term:`Nox`](nox-documentation) handles running these tools within the correct, consistent environments using [:term:`uv` run](uv-documentation).
 
-4.  **Local Container Development (Optional):** If your project involves multiple services or you prefer an encapsulated environment, use **Dev Containers** ([Containerized Development Environments (17)](../topics/17_dev-containers.md)) for a consistent development environment, and **`Docker Compose`{docker-documentation}** ([Container Orchestration (Local) (15)](../topics/15_compose-local.md)) to orchestrate local multi-service stacks.
+4.  **Local Container Development (Optional):** If your project involves multiple services or you prefer an encapsulated environment, use **Dev Containers** ([Containerized Development Environments (17)](../topics/17_dev-containers.md)) for a consistent development environment, and **[:term:`Docker Compose`](docker-documentation)** ([Container Orchestration (Local) (15)](../topics/15_compose-local.md)) to orchestrate local multi-service stacks.
     ```bash
     # From project root with Docker/Podman running:
     # (Inside VS Code Dev Container or with compose installed)
@@ -62,7 +62,7 @@ The workflow extends seamlessly to automation platforms using the Task Automatio
 1.  **Continuous Integration (CI):** Triggered by pushes or pull requests. The CI configuration ([CI Orchestration (13)](../topics/13_ci_orchestration.md)) is a thin layer that:
 
     - Sets up the necessary Python version(s) and environment.
-    - Installs `uv`{uv-documentation} and `Nox`{nox-documentation}.
+    - Installs [:term:`uv`](uv-documentation) and [:term:`Nox`](nox-documentation).
     - Runs key Task Automation commands: `uvx nox -s check`, `uvx nox -s test`.
     - Collects reports ([JUnit XML](junit-documentation), [Cobertura XML](cobertura-documentation)).
     - Reports status back to the version control platform.
@@ -76,7 +76,7 @@ The workflow extends seamlessly to automation platforms using the Task Automatio
 
 ## Release Management
 
-When preparing a project release (often following Conventional Commits practice), use **`Commitizen`{commitizen-documentation}** ([Task Automation (12)](../topics/12_task-automation.md)) via `Nox`{nox-documentation}:
+When preparing a project release (often following Conventional Commits practice), use **[:term:`Commitizen`](commitizen-documentation)** ([Task Automation (12)](../topics/12_task-automation.md)) via [:term:`Nox`](nox-documentation):
 
 ```bash
 # Example: bump version based on commit history, create tag
@@ -87,8 +87,8 @@ This automates version string updates, tag creation, and changelog generation, o
 
 ## Production Deployment
 
-The artifacts produced by the CI/CD workflow (standard packages and container images) are inputs for production deployment. The template's outputs are compatible with standard production orchestration tools and platforms ([Deployment to Production Orchestrators (16)](../topics/16_prod-deploy-guidance.md)) like Kubernetes (managed via `Helm`{helm-documentation} or `Argo CD`{argocd-documentation}) or serverless platforms. The template itself does not include specific production infrastructure configuration but ensures its outputs can be consumed by these systems.
+The artifacts produced by the CI/CD workflow (standard packages and container images) are inputs for production deployment. The template's outputs are compatible with standard production orchestration tools and platforms ([Deployment to Production Orchestrators (16)](../topics/16_prod-deploy-guidance.md)) like Kubernetes (managed via [:term:`Helm`](helm-documentation) or [:term:`Argo CD`](argocd-documentation)) or serverless platforms. The template itself does not include specific production infrastructure configuration but ensures its outputs can be consumed by these systems.
 
 ---
 
-This integrated workflow provides a comprehensive development lifecycle, from coding to deployment, leveraging automation, standards, and reliable tools orchestrated by `Nox`{nox-documentation} to provide a consistent and efficient experience across environments.
+This integrated workflow provides a comprehensive development lifecycle, from coding to deployment, leveraging automation, standards, and reliable tools orchestrated by [:term:`Nox`](nox-documentation) to provide a consistent and efficient experience across environments.
