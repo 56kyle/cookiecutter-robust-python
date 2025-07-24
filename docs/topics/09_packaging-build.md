@@ -14,7 +14,7 @@ This section evaluates the tools and approaches for creating standard Python dis
 ## Evaluation Criteria
 
 - **PEP Compliance (Build System & Metadata):** Strict adherence to PEP 517 (build frontends/backends) and PEP 621 (metadata in pyproject.toml). Adherence to PEP 427 (Wheel specification).
-- **Standard Artifacts:** Does it produce standard `.sdist` and `.whl` files consumable by tools like :pip-documentation:`pip` and :twine-documentation:`twine`?
+- **Standard Artifacts:** Does it produce standard `.sdist` and `.whl` files consumable by tools like [pip](pip-documentation) and :twine-documentation:`twine`?
 - **OS Interoperability (Build Process):** Does the tool and its backend enable building packages reliably across Linux, macOS, and Windows, particularly for projects with native extensions?
 - **Support for Native Extensions:** How well does it support including and compiling code written in other languages (e.g., Rust, C, C++) into the built wheel?
 - **Reproducible Builds:** Does the build process ensure the same inputs reliably produce the same outputs (within acceptable build system variations)? Relies on PEP 518 (build requires isolation).
