@@ -12,8 +12,8 @@ Make sure you have these installed:
 
 - **Python 3.9+** (or your chosen template version).
 - **Git**.
-- **uv**: Our chosen dependency manager. Install it [officially](https://docs.astral.sh/uv/installation/).
-- **Docker or Podman**: If you plan to work with containers (most web apps will need this). Install [Docker](https://docs.docker.com/engine/install/) or [Podman](https://podman.io/docs/installation/).
+- **uv**: Our chosen dependency manager. Install it {uv-install}`officially<>`.
+- **Docker or Podman**: If you plan to work with containers (most web apps will need this). Install {docker-install}`Docker<>` or {podman-install}`Podman<>`.
 
 ## 2. Create Your Project
 
