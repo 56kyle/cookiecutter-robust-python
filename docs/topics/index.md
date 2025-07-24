@@ -44,7 +44,7 @@ Reading these topics provides a deep understanding of the template's design choi
 Many topics involve key concepts and tool categories that interact across different areas:
 
 - **`pyproject.toml`:** The central configuration file used by many tools, defining project metadata, build system, dependencies, and tool-specific settings ([Topic 01](01_project-structure.md)).
-- **Command-Line Interface (CLI):** Most tools selected have strong CLIs, crucial for integration into automation ([Criteria](../criteria.md)).
+- **Command-Line Interface (CLI):** Most tools selected have strong CLIs, crucial for integration into automation ([Criteria](criteria.md)).
 - **Standard Virtual Environments:** Python's built-in way to isolate project dependencies ([Topic 02](02_dependency-management.md)).
 - **Container Images (`Dockerfile`, Docker/Podman):** Standard format and tools for creating portable application environments ([Topic 11](11_container-build.md)).
 - **Layered Workflow:** The template organizes automation into distinct layers: Pre-commit (fast local checks), Task Automation (on-demand/comprehensive local runs), and CI/CD (automated verification/deployment) (Topics [12](12_task-automation.md), [13](13_ci-orchestration.md), [14](14_cd-orchestration.md), [18](18_pre-commit-hooks.md)).
