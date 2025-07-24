@@ -48,7 +48,7 @@ Your project uses [:term:`uv`](uv-documentation) to manage dependencies, environ
   # Manual activation: source .venv/bin/activate (Linux/macOS), .venv\Scripts\activate.bat (Windows cmd)
   ```
 
-Refer to the [uv documentation](uv-documentation) for more advanced usage.
+Refer to the [:term:`uv documentation`](uv-documentation) for more advanced usage.
 
 ## Code Quality Checks
 
@@ -130,7 +130,7 @@ Use [:term:`Commitizen`](commitizen-documentation) ([Topic 12](topics/12_task-au
   ```bash
   uvx nox -s release -- [major|minor|patch] # e.g., uvx nox -s release -- minor
   ```
-  Follow the prompts. Requires following [Conventional Commits](conventional-commits-documentation). Pushing the resulting tag often triggers the CD pipeline.
+  Follow the prompts. Requires following [:term:`Conventional Commits`](conventional-commits-documentation). Pushing the resulting tag often triggers the CD pipeline.
 
 ## Advanced Usage & Customization
 

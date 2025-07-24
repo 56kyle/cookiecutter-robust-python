@@ -26,7 +26,7 @@ Here's how the template facilitates your day-to-day coding work:
     # Use uv add/remove to manage dependencies
     ```
 
-    Your environment is isolated using standard virtual environments ([`venv`](venv-documentation)/[`virtualenv`](virtualenv-documentation)).
+    Your environment is isolated using standard virtual environments ([:term:`venv`](venv-documentation)/[:term:`virtualenv`](virtualenv-documentation)).
 
 2.  **Code, Stage, and Commit:** As you write code, static analysis tools are often integrated into your editor via Language Server Protocol (LSP) for real-time feedback (using configurations like `pyrightconfig.json` ([Pyright (05)](../topics/05_type-checking.md)) and `.ruff.toml` ([Ruff (03, 04)](../topics/03_code-formatting.md))). When you're ready to commit changes:
 
@@ -45,7 +45,7 @@ Here's how the template facilitates your day-to-day coding work:
     # ... run other specific tasks
     ```
 
-    [:term:`Nox`](nox-documentation) handles running these tools within the correct, consistent environments using [:term:`uv` run](uv-documentation).
+    [:term:`Nox`](nox-documentation) handles running these tools within the correct, consistent environments using [:term:`uv run`](uv-documentation).
 
 4.  **Local Container Development (Optional):** If your project involves multiple services or you prefer an encapsulated environment, use **Dev Containers** ([Containerized Development Environments (17)](../topics/17_dev-containers.md)) for a consistent development environment, and **[:term:`Docker Compose`](docker-documentation)** ([Container Orchestration (Local) (15)](../topics/15_compose-local.md)) to orchestrate local multi-service stacks.
     ```bash
@@ -64,13 +64,13 @@ The workflow extends seamlessly to automation platforms using the Task Automatio
     - Sets up the necessary Python version(s) and environment.
     - Installs [:term:`uv`](uv-documentation) and [:term:`Nox`](nox-documentation).
     - Runs key Task Automation commands: `uvx nox -s check`, `uvx nox -s test`.
-    - Collects reports ([JUnit XML](junit-documentation), [Cobertura XML](cobertura-documentation)).
+    - Collects reports ([:term:`JUnit XML`](junit-documentation), [:term:`Cobertura XML`](cobertura-documentation)).
     - Reports status back to the version control platform.
       This process runs tests and checks reliably across the matrix of Python versions defined in the `noxfile.py` and potentially operating systems supported by the CI platform.
 
 2.  **Continuous Deployment / Delivery (CD):** Triggered by events like successful CI runs on the main branch or Git tags. The CD configuration ([CD Orchestration (14)](../topics/14_cd_orchestration.md)) is also a thin orchestration layer:
     - Sets up the environment.
-    - Manages secure credentials ([API tokens](pypi-trusted-publishers-documentation) for PyPI, registry secrets).
+    - Manages secure credentials ([:term:`API tokens`](pypi-trusted-publishers-documentation) for PyPI, registry secrets).
     - Runs Task Automation commands to build artifacts: `uvx nox -s build:package` ([Packaging Build (09)](../topics/09_packaging-build.md)), `uvx nox -s build:container` ([Container Build (11)](../topics/11_container-build.md)).
     - Runs Task Automation commands to publish artifacts: `uvx nox -s publish` ([Packaging Publishing (10)](../topics/10_packaging-publish.md)), or uses Docker CLI to push container images.
 

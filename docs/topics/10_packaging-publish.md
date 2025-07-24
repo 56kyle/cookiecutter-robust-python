@@ -8,7 +8,7 @@ This section evaluates tools and approaches for uploading Python distribution pa
 - Handle authentication with the package index securely.
 - Integrate seamlessly into automated workflows (Task Automation, CI/CD).
 - Ensure the publishing process is OS-interoperable.
-- Produce packages compatible with installation by standard tools like [:py:mod:`pip`](pip-documentation). (Addressed in Area 09's Build Process).
+- Produce packages compatible with installation by standard tools like [:term:`pip`](pip-documentation). (Addressed in Area 09's Build Process).
 
 ## Evaluation Criteria
 
