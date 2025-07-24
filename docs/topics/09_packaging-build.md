@@ -14,7 +14,7 @@ This section evaluates the tools and approaches for creating standard Python dis
 ## Evaluation Criteria
 
 - **PEP Compliance (Build System & Metadata):** Strict adherence to PEP 517 (build frontends/backends) and PEP 621 (metadata in pyproject.toml). Adherence to PEP 427 (Wheel specification).
-- **Standard Artifacts:** Does it produce standard `.sdist` and `.whl` files consumable by tools like [:term:`pip`](pip-documentation) and [:term:`twine`](twine-documentation)?
+- **Standard Artifacts:** Does it produce standard `.sdist` and `.whl` files consumable by tools like `pip`{pip} and `twine`{twine}?
 - **OS Interoperability (Build Process):** Does the tool and its backend enable building packages reliably across Linux, macOS, and Windows, particularly for projects with native extensions?
 - **Support for Native Extensions:** How well does it support including and compiling code written in other languages (e.g., Rust, C, C++) into the built wheel?
 - **Reproducible Builds:** Does the build process ensure the same inputs reliably produce the same outputs (within acceptable build system variations)? Relies on PEP 518 (build requires isolation).
@@ -26,7 +26,7 @@ This section evaluates the tools and approaches for creating standard Python dis
 
 Python packaging involves a **Frontend** (what the user calls to start the build) and a **Backend** (the tool configured in `pyproject.toml` that implements the PEP 517 build logic). We evaluate options for both roles.
 
-### Frontend Option: [:term:`build`](build-documentation)
+### Frontend Option: `build`{build}
 
 - **Description:** The recommended standard frontend from PyPA for building packages. You run `python -m build` in your project directory. It reads `pyproject.toml`, determines the backend(s), installs build dependencies in isolated environments, and invokes the backend's PEP 517 hooks (`build_wheel`, `build_sdist`).
 - **Evaluation:**
@@ -38,13 +38,13 @@ Python packaging involves a **Frontend** (what the user calls to start the build
   - **Reproducible Builds:** High (Isolation). Enforces isolation for build dependencies (PEP 518), contributing significantly to reproducibility. Ultimate reproducibility depends on the backend and pinning build requirements.
   - **Ease of Configuration:** Excellent. Simple command (`python -m build`). Configuration _of the build itself_ depends on the backend's config in `pyproject.toml`.
   - **Performance:** High (Orchestration). Adds minimal overhead; performance depends on the invoked backend.
-  - **Integration:** Excellent. Simple CLI easily callable from Task Automation ([:term:`Nox`](nox-documentation)) and CI. Works with any PEP 517 backend.
+  - **Integration:** Excellent. Simple CLI easily callable from Task Automation (`Nox`{nox}) and CI. Works with any PEP 517 backend.
   - **Maturity & Stability:** High. PyPA recommended, stable, gaining widespread adoption.
   - **Community & Documentation:** High.
 
 - **Conclusion:** The ideal, standard frontend for building. It should be the tool invoked by the Task Automation layer.
 
-### Frontend Option: Dependency Managers (e.g., [:term:`uv`](uv-documentation) build, [:term:`PDM`](pdm-documentation) build, [:term:`Poetry`](poetry-documentation) build, [:term:`Hatch`](hatch-documentation) build)
+### Frontend Option: Dependency Managers (e.g., `uv`{uv} build, `PDM`{pdm} build, `Poetry`{poetry} build, `Hatch`{hatch} build)
 
 - **Description:** Modern dependency managers often provide their own `build` command that acts as a PEP 517 frontend, wrapping calls to the specified backend using their internal environment management.
 - **Evaluation:**
@@ -57,9 +57,9 @@ Python packaging involves a **Frontend** (what the user calls to start the build
   - **Performance:** Varies. Performance is usually tied to their core manager's implementation, can be fast (e.g., `uv build`).
   - **Integration:** Excellent. Integrates within their manager's ecosystem. Callable from Task Automation. Can be simpler than `python -m build` if using that manager's environment setup.
   - **Maturity & Stability:** Varies (depends on manager maturity). High for PDM/Poetry/Hatch, Moderate for uv (but rapidly stabilizing build command).
-- **Conclusion:** Using the `build` command from your chosen dependency manager can provide a slightly more integrated experience within that manager's ecosystem. It fulfills the frontend role equivalently to `python -m build` but requires the manager itself to be installed. For this template, as [:term:`uv`](uv-documentation) is the chosen manager and has a native `uv build` command, using this simplifies the dependency stack slightly over needing the separate `build` tool.
+- **Conclusion:** Using the `build` command from your chosen dependency manager can provide a slightly more integrated experience within that manager's ecosystem. It fulfills the frontend role equivalently to `python -m build` but requires the manager itself to be installed. For this template, as `uv`{uv} is the chosen manager and has a native `uv build` command, using this simplifies the dependency stack slightly over needing the separate `build` tool.
 
-### Backend Option 1: [:term:`setuptools`](setuptools-documentation)
+### Backend Option 1: `setuptools`{setuptools}
 
 - **Description:** The most common and historically widely used PEP 517 build backend. Configured using the standard `[project]` metadata (PEP 621) and `[build-system]` entrypoint. Written in Python. Supports building C extensions.
 - **Evaluation:**
@@ -76,7 +76,7 @@ Python packaging involves a **Frontend** (what the user calls to start the build
 
 - **Conclusion:** The standard, robust backend for most pure Python or simple native extension projects. Relies on external compiler toolchains which makes _cross-platform_ native building the main complexity.
 
-### Backend Option 2: [:term:`flit`](flit-documentation)
+### Backend Option 2: `flit`{flit}
 
 - **Description:** A simpler PEP 517 build backend focused exclusively on **pure Python** packages. Reads metadata solely from the standard `[project]` table (PEP 621). Written in Python. Does NOT support native extensions.
 - **Evaluation:**
@@ -93,24 +93,24 @@ Python packaging involves a **Frontend** (what the user calls to start the build
 
 - **Conclusion:** Excellent for its pure-Python niche, offering maximum simplicity. Unsuitable for a template that includes the option for native extensions.
 
-### Backend Option 3: Modern Manager Backends (e.g., [:term:`pdm-backend`](pdm-documentation), [:term:`hatchling`](hatch-documentation), [:term:`poetry-core`](poetry-documentation))
+### Backend Option 3: Modern Manager Backends (e.g., `pdm-backend`{pdm}, `hatchling`{hatch}, `poetry-core`{poetry})
 
 - **Description:** The PEP 517 backends bundled with or part of the modern project managers (PDM, Hatch, Poetry). Read metadata and configuration from their respective sections (mostly in `pyproject.toml`).
 - **Evaluation:**
 
-  - **PEP Compliance:** Varies (Metadata). [:term:`pdm-backend`](pdm-documentation) and [:term:`hatchling`](hatch-documentation) adhere strongly to PEP 621. [:term:`poetry-core`](poetry-documentation) uses its custom format for primary metadata (PEP 621 not for deps). All implement PEP 517 hooks.
+  - **PEP Compliance:** Varies (Metadata). `pdm-backend`{pdm} and `hatchling`{hatch} adhere strongly to PEP 621. `poetry-core`{poetry} uses its custom format for primary metadata (PEP 621 not for deps). All implement PEP 517 hooks.
   - **Standard Artifacts:** Excellent.
-  - **OS Interoperability (Build):** Moderate to High. Like setuptools, native compilation relies on external toolchains, but backends like [:term:`hatchling`](hatch-documentation) offer configurable hooks to assist with complex builds.
-  - **Support for Native Extensions:** Varies. [:term:`hatchling`](hatch-documentation) has robust hooks, [:term:`pdm-backend`](pdm-documentation) good via scripts, [:term:`poetry-core`](poetry-documentation) less focused here.
+  - **OS Interoperability (Build):** Moderate to High. Like setuptools, native compilation relies on external toolchains, but backends like `hatchling`{hatch} offer configurable hooks to assist with complex builds.
+  - **Support for Native Extensions:** Varies. `hatchling`{hatch} has robust hooks, `pdm-backend`{pdm} good via scripts, `poetry-core`{poetry} less focused here.
   - **Reproducible Builds:** High. Works with frontend isolation. Reproducibility depends on backend implementation and external toolchains for native.
   - **Ease of Configuration:** Varies (depends on backend's config format and build hook complexity).
   - **Performance:** High. Python execution, depends on backend implementation.
   - **Maturity & Stability:** High. Part of mature manager projects.
   - **Community & Documentation:** High.
 
-- **Conclusion:** Provides tight integration if using their manager as primary tool. [:term:`hatchling`](hatchling-documentation) is notable for build hooks. Still rely on external compilers for native.
+- **Conclusion:** Provides tight integration if using their manager as primary tool. `hatchling`{hatchling} is notable for build hooks. Still rely on external compilers for native.
 
-### Backend Option 4: [:term:`Maturin`](maturin-documentation)
+### Backend Option 4: `Maturin`{maturin}
 
 - **Description:** A PEP 517 build backend specialized for building Python packages with **Rust** extensions. Designed to simplify complex, cross-platform native compilation into wheels (`manylinux`, Windows, macOS) by managing toolchains (like Zig) for the user. Reads metadata from `pyproject.toml` (PEP 621) and uses `[tool.maturin]`. Written in Rust/Python.
 - **Evaluation:**
@@ -129,27 +129,27 @@ Python packaging involves a **Frontend** (what the user calls to start the build
 
 ## Chosen Tool(s)
 
-- Primary Frontend: **[:term:`uv`](uv-documentation)** (`uv build`).
-- Backend for Pure Python: **[:term:`setuptools`](setuptools-documentation)** (`setuptools.build_meta`).
-- Backend for Rust Extensions: **[:term:`Maturin`](maturin-documentation)** (`maturin`).
+- Primary Frontend: **`uv`{uv}** (`uv build`).
+- Backend for Pure Python: **`setuptools`{setuptools}** (`setuptools.build_meta`).
+- Backend for Rust Extensions: **`Maturin`{maturin}** (`maturin`).
 
 ## Justification for the Choice
 
 This template provides flexibility for generating either pure Python projects or those with Rust extensions, managed via a Cookiecutter prompt. Therefore, the build process needs to support both cases robustly:
 
-1.  **Standard Frontend:** Using **[:term:`uv`](uv-documentation)**'s native `uv build` command as the primary frontend is the logical choice, as [:term:`uv`](uv-documentation) is already the core Dependency Manager (02) and Task Automation orchestrator (12) in this template. It is a **PEP 517 compliant frontend**, leveraging [:term:`uv`](uv-documentation)'s performance and environment management. This simplifies the required tooling compared to needing the separate `build` command globally.
-2.  **Pure Python Backend:** For projects without native extensions, **[:term:`setuptools`](setuptools-documentation)** is chosen as the backend (`setuptools.build_meta`). [:term:`setuptools`](setuptools-documentation) is the **most common, mature, and widely compatible** backend in the ecosystem. Crucially, when used as a PEP 517 backend with `pyproject.toml`, it adheres to **PEP 621** for standard metadata, aligning with our non-negotiable standard format requirement. It provides excellent support for including pure Python code, data files, and defining entry points reliably across OSs. [:term:`flit`](flit-documentation) was considered for pure-Python simplicity but doesn't add significant benefit over [:term:`setuptools`](setuptools-documentation)'s standard approach with PEP 621 and lacks native extension support if that were ever added later to the project manually.
-3.  **Rust Extension Backend:** For projects with Rust extensions, **[:term:`Maturin`](maturin-documentation)** is selected as the backend. [:term:`Maturin`](maturin-documentation) is the **"Best Tool for the Job"** specifically for Rust extensions, uniquely simplifying **cross-platform native compilation** and wheel building. It handles the complex process of ensuring the compiled Rust code is correctly embedded into standard, distributable Python wheels (`.whl` files compatible with PyPI and different operating systems). It also adheres to **PEP 621** metadata and **PEP 517** build processes.
+1.  **Standard Frontend:** Using **`uv`{uv}**'s native `uv build` command as the primary frontend is the logical choice, as `uv`{uv} is already the core Dependency Manager (02) and Task Automation orchestrator (12) in this template. It is a **PEP 517 compliant frontend**, leveraging `uv`{uv}'s performance and environment management. This simplifies the required tooling compared to needing the separate `build` command globally.
+2.  **Pure Python Backend:** For projects without native extensions, **`setuptools`{setuptools}** is chosen as the backend (`setuptools.build_meta`). `setuptools`{setuptools} is the **most common, mature, and widely compatible** backend in the ecosystem. Crucially, when used as a PEP 517 backend with `pyproject.toml`, it adheres to **PEP 621** for standard metadata, aligning with our non-negotiable standard format requirement. It provides excellent support for including pure Python code, data files, and defining entry points reliably across OSs. `flit`{flit} was considered for pure-Python simplicity but doesn't add significant benefit over `setuptools`{setuptools}'s standard approach with PEP 621 and lacks native extension support if that were ever added later to the project manually.
+3.  **Rust Extension Backend:** For projects with Rust extensions, **`Maturin`{maturin}** is selected as the backend. `Maturin`{maturin} is the **"Best Tool for the Job"** specifically for Rust extensions, uniquely simplifying **cross-platform native compilation** and wheel building. It handles the complex process of ensuring the compiled Rust code is correctly embedded into standard, distributable Python wheels (`.whl` files compatible with PyPI and different operating systems). It also adheres to **PEP 621** metadata and **PEP 517** build processes.
 
 The template's `pyproject.toml` will be conditionally generated based on the `add_rust_extension` prompt in `cookiecutter.json`, setting the `[build-system].build-backend` accordingly to either `setuptools.build_meta` or `maturin` and listing the required backend (`setuptools` or `maturin`) in `[build-system].requires`.
 
-This approach ensures that the generated project uses a standard, robust, and PEP-compliant build process tailored to its specific content (pure Python vs. Rust) and easily invoked via [:term:`uv`](uv-documentation)'s build command orchestrated by [:term:`Nox`](nox-documentation).
+This approach ensures that the generated project uses a standard, robust, and PEP-compliant build process tailored to its specific content (pure Python vs. Rust) and easily invoked via `uv`{uv}'s build command orchestrated by `Nox`{nox}.
 
 ## Interactions with Other Topics
 
 - **pyproject.toml (01):** Defines project metadata (`[project]`) used by the chosen backends (both read PEP 621). Crucially configures the `[build-system]` table specifying the chosen backend (`setuptools` or `maturin`) and their dependencies.
-- **Dependency Management (02):** [:term:`uv`](uv-documentation) is the frontend (`uv build`). It also installs the build backend dependencies listed in `[build-system].requires`.
-- **Task Automation (12):** [:term:`Nox`](nox-documentation) sessions call `uv build` to automate the build process.
+- **Dependency Management (02):** `uv`{uv} is the frontend (`uv build`). It also installs the build backend dependencies listed in `[build-system].requires`.
+- **Task Automation (12):** `Nox`{nox} sessions call `uv build` to automate the build process.
 - **Packaging Publish (10):** The output of the build process (files in `dist/`) are the inputs for the publishing step.
 - **Container Build (11):** The application's built package (`.whl` or `.tar.gz`) is often copied and installed _inside_ the production Docker image.
 - **CI Orchestration (13) & CD Orchestration (14):** CI pipelines verify the build process, and CD pipelines trigger the build (via Nox calling `uv build`) and subsequent publishing steps.
