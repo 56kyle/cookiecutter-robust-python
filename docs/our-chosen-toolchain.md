@@ -46,7 +46,7 @@ Here is the breakdown of the chosen tool(s) for each defined area:
 
 - **06: Testing and Coverage:**
 
-  - **Chosen:** {pytest}`pytest<>` + {coveragepy-coverage}`coverage.py<>` (via {pytest-pytest-cov}`pytest-cov<>`).
+  - **Chosen:** {pytest}`pytest<>` + {coverage.py}`coverage.py<>` (via {pytest-pytest-cov}`pytest-cov<>`).
   - **Why:** The standard, feature-rich combination for modern Python testing, offering excellent DX for writing tests and robust, standard coverage reporting. ([Details](topics/06_testing-coverage.md))
 
 - **07: Documentation Generation and Building:**

@@ -26,17 +26,17 @@ This section evaluates tools for writing, running, and measuring test effectiven
 
 We evaluated the primary testing framework and coverage tools:
 
-### Option 1: {mod}`unittest` (+ {coveragepy}`coverage.py<>`)
+### Option 1: {mod}`unittest` (+ {coverage-py}`coverage.py<>`)
 
-- **Description:** {unittest}`unittest<>` is Python's built-in testing framework, inspired by JUnit. Tests are written in classes inheriting from `unittest.TestCase`. {coveragepy}`coverage.py<>` is the standard standalone tool for measuring code coverage.
+- **Description:** {unittest}`unittest<>` is Python's built-in testing framework, inspired by JUnit. Tests are written in classes inheriting from `unittest.TestCase`. {coverage-py}`coverage.py<>` is the standard standalone tool for measuring code coverage.
 - **Evaluation:**
 
   - **Ease of Use:** Moderate. Requires significant boilerplate (class definitions, inheritance, specific method names, explicit `setUp`/`tearDown` methods). Writing simple tests is more verbose than alternatives.
   - **Feature-Rich:** Moderate. Provides core testing features but lacks the advanced features and extensive plugin ecosystem of {pytest}`pytest<>` (e.g., simple functional fixtures, powerful parametrization decorators built-in).
-  - **Performance:** Moderate. Test execution can be slower than {pytest}`pytest<>` for large test suites due to its architecture (creating a class instance per test method). {coveragepy}`coverage.py<>` performance is generally good.
-  - **OS Interoperability:** Excellent. Both are foundational Python tools, highly robust across OSs. {unittest}`unittest<>` is standard library, {coveragepy}`coverage.py<>` is pure Python.
+  - **Performance:** Moderate. Test execution can be slower than {pytest}`pytest<>` for large test suites due to its architecture (creating a class instance per test method). {coverage-py}`coverage.py<>` performance is generally good.
+  - **OS Interoperability:** Excellent. Both are foundational Python tools, highly robust across OSs. {unittest}`unittest<>` is standard library, {coverage-py}`coverage.py<>` is pure Python.
   - **Integration:** High (Individual). Both have CLIs easily called from Task Automation/CI. Integrating them _together_ requires explicitly wrapping `unittest` execution with `coverage run -m unittest` or using less standardized plugins compared to the {pytest-pytest-cov}`pytest<>` ecosystem. Generating standard reports like JUnit XML also often requires extra steps or third-party runners for {unittest}`unittest<>`.
-  - **Reporting:** Moderate (Test) / Excellent (Coverage). {unittest}`unittest<>` provides basic terminal output. {coveragepy}`coverage.py<>` provides excellent, standard reports (text, HTML, XML).
+  - **Reporting:** Moderate (Test) / Excellent (Coverage). {unittest}`unittest<>` provides basic terminal output. {coverage-py}`coverage.py<>` provides excellent, standard reports (text, HTML, XML).
   - **Maturity & Stability:** Very High. Both are extremely mature, stable, battle-tested.
   - **Community & Documentation:** Very High. Widely adopted, vast documentation.
 
@@ -53,13 +53,13 @@ We evaluated the primary testing framework and coverage tools:
   - **OS Interoperability:** Excellent. Pure Python package, works reliably across OSs.
   - **Integration:** Excellent. Widely supported, integrates seamlessly into editors/IDEs, {pre-commit}`pre-commit<>`, Task Automation, CI/CD. Designed for external execution via CLI.
   - **Reporting:** Excellent. Provides clear terminal output. Standard support for generating JUnit XML reports (`--junitxml=...`), which is essential for CI platform integration.
-  - **Coverage Reporting:** Poor (Not built-in). Requires an external tool (like {coveragepy}`coverage.py<>`) and integration mechanism.
+  - **Coverage Reporting:** Poor (Not built-in). Requires an external tool (like {coverage-py}`coverage.py<>`) and integration mechanism.
   - **Maturity & Stability:** Very High. Mature, stable, widely adopted standard for modern Python testing.
   - **Community & Documentation:** Very High. Massive, active community, extensive documentation.
 
 - **Conclusion:** The de facto standard for modern Python testing. Excels at ease of use, features, performance, and integration for the testing framework itself. Lacks built-in coverage, requiring integration with another tool.
 
-### Option 3: {coveragepy}`coverage.py<>`
+### Option 3: {coverage-py}`coverage.py<>`
 
 - **Description:** The standard standalone tool for measuring code coverage in Python. Monitors code execution and reports on lines/branches executed.
 - **Evaluation:** (Evaluated primarily as an engine, its integration is key).
@@ -76,13 +76,13 @@ We evaluated the primary testing framework and coverage tools:
 
 ### Option 4: {pytest-pytest-cov}`pytest-cov<>`
 
-- **Description:** The official {pytest}`pytest<>` plugin that integrates {coveragepy}`coverage.py<>` seamlessly into the {pytest}`pytest<>` workflow.
+- **Description:** The official {pytest}`pytest<>` plugin that integrates {coverage-py}`coverage.py<>` seamlessly into the {pytest}`pytest<>` workflow.
 - **Evaluation:** (Evaluated as the integration bridge).
 
-  - **Integration with Testing & Coverage:** Excellent. Provides seamless, standard integration by adding `--cov` flags to the `pytest` command. Orchestrates running {coveragepy}`coverage.py<>` around the {pytest-pytest-cov}`pytest<>` run.
-  - **Accurate & Detailed Reporting:** Excellent. Leverages {coveragepy}`coverage.py<>`'s full reporting capabilities via {pytest-pytest-cov}`pytest<>` command-line arguments and config files.
-  - **Performance:** High (Combined). Adds minimal overhead; combined performance is driven by {pytest-pytest-cov}`pytest<>` and {coveragepy-coverage}`coverage.py<>` execution.
-  - **OS Interoperability:** Excellent. Pure Python plugin, inherits compatibility from {pytest-pytest-cov}`pytest<>` and {coveragepy-coverage}`coverage.py<>`.
+  - **Integration with Testing & Coverage:** Excellent. Provides seamless, standard integration by adding `--cov` flags to the `pytest` command. Orchestrates running {coverage-py}`coverage.py<>` around the {pytest-pytest-cov}`pytest<>` run.
+  - **Accurate & Detailed Reporting:** Excellent. Leverages {coverage-py}`coverage.py<>`'s full reporting capabilities via {pytest-pytest-cov}`pytest<>` command-line arguments and config files.
+  - **Performance:** High (Combined). Adds minimal overhead; combined performance is driven by {pytest-pytest-cov}`pytest<>` and {coverage.py}`coverage.py<>` execution.
+  - **OS Interoperability:** Excellent. Pure Python plugin, inherits compatibility from {pytest-pytest-cov}`pytest<>` and {coverage.py}`coverage.py<>`.
   - **Callable for Workflow:** Excellent. Simply adds flags to the standard `pytest` command, easily used in Task Automation and CI.
   - **Maturity & Stability:** Very High. The standard, mature, and stable plugin for {pytest-pytest-cov}`pytest<>` coverage integration.
   - **Community & Documentation:** Very High. Essential part of the {pytest-pytest-cov}`pytest<>` ecosystem.
@@ -104,27 +104,27 @@ We evaluated the primary testing framework and coverage tools:
 ## Chosen Tool(s)
 
 - Primary Test Framework: **{pytest}`pytest<>`**.
-- Primary Coverage Engine: **{coveragepy}`coverage.py<>`**.
+- Primary Coverage Engine: **{coverage-py}`coverage.py<>`**.
 - Integration Plugin: **{pytest-pytest-cov}`pytest-cov<>`**.
 - Matrix Orchestration (for full matrix): **{nox}`Nox<>`** (invoking {pytest-pytest-cov}`pytest<>` across matrix) or optionally **{tox}`Tox<>`** (invoked by {nox}`Nox<>` for specific needs).
 
 ## Justification for the Choice
 
-The combination of **{pytest}`pytest<>`**, **{coveragepy-coverage}`coverage.py<>`**, and **{pytest-pytest-cov}`pytest-cov<>`** is the best fit for providing robust testing and coverage capabilities in this template, complemented by **{nox}`Nox<>`** for matrix execution:
+The combination of **{pytest}`pytest<>`**, **{coverage.py}`coverage.py<>`**, and **{pytest-pytest-cov}`pytest-cov<>`** is the best fit for providing robust testing and coverage capabilities in this template, complemented by **{nox}`Nox<>`** for matrix execution:
 
 1.  **Developer Experience:** {pytest-pytest-cov}`pytest<>` offers significantly **easier test writing and organization** compared to {unittest}`unittest<>`, with powerful features like fixtures and parametrization that improve test maintainability and expressiveness (addressing **Ease of Use** and **Feature-Rich**). This aligns with the **"Obvious way to do it"** for writing tests.
-2.  **Standards and Integration:** {pytest-pytest-cov}`pytest<>` is the de facto standard modern Python testing framework, and {coveragepy-coverage}`coverage.py<>` is the universal coverage engine. **{pytest-pytest-cov}`pytest-cov<>`** provides **seamless, standard integration** between them via a simple command-line flag (`--cov`), making combined testing and coverage easy to run and automate (addressing **Integration**).
-3.  **Reporting:** This combination provides **excellent standard reporting**, including JUnit XML from {pytest-pytest-cov}`pytest<>` and Cobertura XML/HTML from {coveragepy-coverage}`coverage.py<>`, which are essential for integration into CI/CD platforms (Area 13, 14) (addressing **Reporting**).
+2.  **Standards and Integration:** {pytest-pytest-cov}`pytest<>` is the de facto standard modern Python testing framework, and {coverage.py}`coverage.py<>` is the universal coverage engine. **{pytest-pytest-cov}`pytest-cov<>`** provides **seamless, standard integration** between them via a simple command-line flag (`--cov`), making combined testing and coverage easy to run and automate (addressing **Integration**).
+3.  **Reporting:** This combination provides **excellent standard reporting**, including JUnit XML from {pytest-pytest-cov}`pytest<>` and Cobertura XML/HTML from {coverage.py}`coverage.py<>`, which are essential for integration into CI/CD platforms (Area 13, 14) (addressing **Reporting**).
 4.  **Performance & OS Interoperability:** All chosen tools are **performant** for their tasks and **highly OS-interoperable**, working reliably across development and CI environments (addressing **Performance** and **OS Interoperability**).
 5.  **Matrix Testing:** While {pytest-pytest-cov}`pytest<>` itself isn't a matrix orchestrator, **{nox}`Nox<>`** (Area 12) is explicitly designed to run sessions (like our test session) across different Python versions and environments using `uv`, effectively providing the necessary matrix testing capability within the template's primary automation layer. For complex scenarios or community conventions, {nox}`Nox<>` can easily **invoke {tox}`Tox<>`**.
 
 {unittest}`unittest<>` was discounted due to its comparative verbosity, lack of features, and less streamlined integration for testing+coverage. {tox}`Tox<>` is better suited as a matrix _runner_ called by {nox}`Nox<>` than the primary testing _framework_ itself.
 
-By choosing this combination, the template leverages the strengths of each tool – {pytest-pytest-cov}`pytest<>` for writing tests, {coveragepy-coverage}`coverage.py<>` for coverage, {pytest-pytest-cov}`pytest-cov<>` for integration, and {nox}`Nox<>` for orchestration – to provide a robust, modern, and well-integrated testing and coverage solution.
+By choosing this combination, the template leverages the strengths of each tool – {pytest-pytest-cov}`pytest<>` for writing tests, {coverage.py}`coverage.py<>` for coverage, {pytest-pytest-cov}`pytest-cov<>` for integration, and {nox}`Nox<>` for orchestration – to provide a robust, modern, and well-integrated testing and coverage solution.
 
 ## Interactions with Other Topics
 
-- **pyproject.toml (01):** {pytest-pytest-cov}`pytest<>` and {coveragepy-coverage}`coverage.py<>` are configured via `pyproject.toml` (`[tool.pytest]`, `[tool.coverage]`) or separate config files (`.coveragerc`). Testing dependencies are managed via {uv}`uv<>` (Area 02).
+- **pyproject.toml (01):** {pytest-pytest-cov}`pytest<>` and {coverage.py}`coverage.py<>` are configured via `pyproject.toml` (`[tool.pytest]`, `[tool.coverage]`) or separate config files (`.coveragerc`). Testing dependencies are managed via {uv}`uv<>` (Area 02).
 - **Task Automation (12):** {nox}`Nox<>` sessions are defined to run the test suite (`uv run pytest --cov...`). This session is run across the matrix of Python versions defined in the `noxfile.py`. {nox}`Nox<>` also orchestrates {tox}`Tox<>` if needed.
 - **CI Orchestration (13):** The CI pipeline runs the test sessions defined in {nox}`Nox<>` (`nox -s test`), leveraging the CI platform's matrix capabilities or relying on Nox's internal matrixing (`-p` flag). Test reports (JUnit XML) and coverage reports (Cobertura XML) are artifacts collected by CI.
-- **Dev Containers (17):** {pytest-pytest-cov}`pytest<>`, {coveragepy-coverage}`coverage.py<>`, {pytest-pytest-cov}`pytest-cov<>` are installed and used within the development container for local testing.
+- **Dev Containers (17):** {pytest-pytest-cov}`pytest<>`, {coverage.py}`coverage.py<>`, {pytest-pytest-cov}`pytest-cov<>` are installed and used within the development container for local testing.

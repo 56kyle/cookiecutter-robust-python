@@ -68,7 +68,7 @@ extlinks = {
     "cobertura": ("https://cobertura.github.io/cobertura/xml.html%s", None),
     "commitizen": ("https://commitizen-tools.github.io/commitizen/%s", None),
     "conventional-commits": ("https://www.conventionalcommits.org/en/v1.0.0/%s", None),
-    "coverage.py": ("https://coverage.readthedocs.io/%s", None),
+    "coverage-py": ("https://coverage.readthedocs.io/%s", None),
     "cruft": ("https://cruft.github.io/cruft/%s", None),
     "docker-compose": ("https://docs.docker.com/compose/%s", None),
     "docker": ("https://docs.docker.com/%s", None),
