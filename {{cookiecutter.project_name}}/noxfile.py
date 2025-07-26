@@ -171,7 +171,7 @@ def tests_rust(session: Session) -> None:
 
 
 {% endif -%}
-@nox.session(python=DEFAULT_PYTHON_VERSION, name="docs-build", tags=[DOCS, BUILD])
+@nox.session(python=DEFAULT_PYTHON_VERSION, name="build-docs", tags=[DOCS, BUILD])
 def docs_build(session: Session) -> None:
     """Build the project documentation (Sphinx)."""
     session.log("Installing documentation dependencies...")

@@ -28,7 +28,7 @@ IDEMPOTENT_NOX_SESSIONS: list[str] = [
     "format-python",
     *TYPE_CHECK_NOX_SESSIONS,
     *TESTS_NOX_SESSIONS,
-    "docs-build",
+    "build-docs",
     "build-python",
     "build-container",
     "tox",
