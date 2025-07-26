@@ -11,6 +11,9 @@ Any advice, support, PR's, etc. are welcome and would be greatly appreciated.
 
 As it stands this project is getting rather close to being ready, but not quite yet. Mainly I want to ensure the github actions pipeline is steady, but once that is done it should be alright for use.
 
+# Example Output
+For an example of this template's output, please visit the [demo](https://github.com/56kyle/robust-python-demo) which is kept up to date with the current state of this template.
+
 # Why does this project exist?
 
 Unfortunately, the [Hypermodern Python Cookiecutter] is no longer maintained nor modern.

@@ -52,3 +52,7 @@ def get_parser() -> argparse.ArgumentParser:
     parser.add_argument("-u", "--user", dest="github_user", help="GitHub user name.")
     parser.add_argument("-n", "--name", dest="repo_name", help="Name of the repo.")
     return parser
+
+
+if __name__ == "__main__":
+    main()
