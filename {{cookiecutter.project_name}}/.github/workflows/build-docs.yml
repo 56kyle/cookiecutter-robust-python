@@ -52,4 +52,3 @@ jobs:
         with:
           name: html-docs
           path: docs/_build/html/
-          retention-days: 5
