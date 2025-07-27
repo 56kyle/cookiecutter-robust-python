@@ -2,7 +2,7 @@
 
 Thank you for considering contributing to the `cookiecutter-robust-python` template! We welcome contributions that help improve the template, keep its tooling current, and enhance its documentation.
 
-By participating in this project, you are expected to uphold our [Code of Conduct](CODE_OF_CONDUCT.md).
+By participating in this project, you are expected to uphold our [Code of Conduct].
 
 ## How to Contribute
 
@@ -38,3 +38,7 @@ If your contribution involves updating a major tool version or suggesting a diff
 For questions or discussion about contributions, open an issue or a discussion on the [GitHub repository](https://github.com/56kyle/cookiecutter-robust-python).
 
 ---
+
+<!-- github-only -->
+
+[code of conduct]: CODE_OF_CONDUCT.md
