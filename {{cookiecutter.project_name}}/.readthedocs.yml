@@ -7,11 +7,7 @@ build:
 
 python:
   install:
-    # This is required for ReadTheDocs to consider it a Python project and install dependencies.
-    - method: pip
-      path: .
-      extra_requirements:
-        - docs
+    - requirements: docs/requirements.txt
 
 sphinx:
   configuration: docs/conf.py
