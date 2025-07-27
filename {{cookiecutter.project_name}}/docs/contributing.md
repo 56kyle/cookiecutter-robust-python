@@ -2,7 +2,7 @@
 
 ```{include} ../CONTRIBUTING.md
 ---
-start-after: # Contributing to {{cookiecutter.package_name}}
+start-after: # Contributing to {{cookiecutter.project_name}}
 end-before: <!-- github-only -->
 ---
 
