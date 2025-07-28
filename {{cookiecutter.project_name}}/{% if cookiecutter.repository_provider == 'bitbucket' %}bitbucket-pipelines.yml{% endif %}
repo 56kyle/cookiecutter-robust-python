@@ -1,0 +1,383 @@
+# bitbucket-pipelines.yml
+# See https://support.atlassian.com/bitbucket-cloud/docs/get-started-with-bitbucket-pipelines/
+
+image: ghcr.io/astral-sh/uv:latest-python3.13-bookworm-slim
+
+definitions:
+  caches:
+    uv: .uv-cache
+    pip: .cache/pip
+
+  # Shared configuration for uv
+  services:
+    docker:
+      memory: 2048
+
+pipelines:
+  # Default pipeline for pushes to any branch
+  default:
+    - step:
+        name: Python Quality Checks
+        caches:
+          - uv
+          - pip
+        script:
+          - export UV_CACHE_DIR=.uv-cache
+          - export UV_LINK_MODE=copy
+          - uv --version
+          - uvx nox -s format-python
+          - uvx nox -s lint-python
+          - uvx nox -s typecheck
+          - uv cache prune --ci
+        after-script:
+          - echo "Python quality checks completed"
+
+{% if cookiecutter.add_rust_extension == 'y' -%}
+    - step:
+        name: Rust Quality Checks
+        image: rust:latest
+        script:
+          - rustup component add rustfmt clippy
+          - curl -LsSf https://astral.sh/uv/install.sh | sh
+          - export PATH="$PATH:/root/.cargo/bin"
+          - uvx nox -s format-rust
+          - uvx nox -s lint-rust
+        after-script:
+          - echo "Rust quality checks completed"
+{%- endif %}
+
+    - step:
+        name: Security Checks
+        caches:
+          - uv
+          - pip
+        script:
+          - export UV_CACHE_DIR=.uv-cache
+          - export UV_LINK_MODE=copy
+          - uvx nox -s security-python
+          - uv cache prune --ci
+        after-script:
+          - echo "Security checks completed"
+
+    # Parallel test execution across Python versions
+    - parallel:
+        steps:
+          - step:
+              name: Test Python 3.9
+              image: ghcr.io/astral-sh/uv:latest-python3.9-bookworm-slim
+              caches:
+                - uv
+                - pip
+              script:
+                - export UV_CACHE_DIR=.uv-cache
+                - export UV_LINK_MODE=copy
+                - uvx nox -s tests-python-39
+                - uv cache prune --ci
+              artifacts:
+                - tests/results/*.xml
+                - coverage.xml
+
+          - step:
+              name: Test Python 3.10
+              image: ghcr.io/astral-sh/uv:latest-python3.10-bookworm-slim
+              caches:
+                - uv
+                - pip
+              script:
+                - export UV_CACHE_DIR=.uv-cache
+                - export UV_LINK_MODE=copy
+                - uvx nox -s tests-python-310
+                - uv cache prune --ci
+              artifacts:
+                - tests/results/*.xml
+                - coverage.xml
+
+          - step:
+              name: Test Python 3.11
+              image: ghcr.io/astral-sh/uv:latest-python3.11-bookworm-slim
+              caches:
+                - uv
+                - pip
+              script:
+                - export UV_CACHE_DIR=.uv-cache
+                - export UV_LINK_MODE=copy
+                - uvx nox -s tests-python-311
+                - uv cache prune --ci
+              artifacts:
+                - tests/results/*.xml
+                - coverage.xml
+
+          - step:
+              name: Test Python 3.12
+              image: ghcr.io/astral-sh/uv:latest-python3.12-bookworm-slim
+              caches:
+                - uv
+                - pip
+              script:
+                - export UV_CACHE_DIR=.uv-cache
+                - export UV_LINK_MODE=copy
+                - uvx nox -s tests-python-312
+                - uv cache prune --ci
+              artifacts:
+                - tests/results/*.xml
+                - coverage.xml
+
+          - step:
+              name: Test Python 3.13
+              image: ghcr.io/astral-sh/uv:latest-python3.13-bookworm-slim
+              caches:
+                - uv
+                - pip
+              script:
+                - export UV_CACHE_DIR=.uv-cache
+                - export UV_LINK_MODE=copy
+                - uvx nox -s tests-python-313
+                - uv cache prune --ci
+              artifacts:
+                - tests/results/*.xml
+                - coverage.xml
+
+{% if cookiecutter.add_rust_extension == 'y' -%}
+          - step:
+              name: Test Rust
+              image: rust:latest
+              script:
+                - curl -LsSf https://astral.sh/uv/install.sh | sh
+                - export PATH="$PATH:/root/.cargo/bin"
+                - uvx nox -s test-rust
+{%- endif %}
+
+  # Pipeline for main/master branch
+  branches:
+    main:
+      - step:
+          name: Python Quality Checks
+          caches:
+            - uv
+            - pip
+          script:
+            - export UV_CACHE_DIR=.uv-cache
+            - export UV_LINK_MODE=copy
+            - uv --version
+            - uvx nox -s format-python
+            - uvx nox -s lint-python
+            - uvx nox -s typecheck
+            - uv cache prune --ci
+
+{% if cookiecutter.add_rust_extension == 'y' -%}
+      - step:
+          name: Rust Quality Checks
+          image: rust:latest
+          script:
+            - rustup component add rustfmt clippy
+            - curl -LsSf https://astral.sh/uv/install.sh | sh
+            - export PATH="$PATH:/root/.cargo/bin"
+            - uvx nox -s format-rust
+            - uvx nox -s lint-rust
+{%- endif %}
+
+      - step:
+          name: Security Checks
+          caches:
+            - uv
+            - pip
+          script:
+            - export UV_CACHE_DIR=.uv-cache
+            - export UV_LINK_MODE=copy
+            - uvx nox -s security-python
+            - uv cache prune --ci
+
+      # Parallel test execution
+      - parallel:
+          steps:
+            - step:
+                name: Test Python 3.9
+                image: ghcr.io/astral-sh/uv:latest-python3.9-bookworm-slim
+                caches:
+                  - uv
+                  - pip
+                script:
+                  - export UV_CACHE_DIR=.uv-cache
+                  - export UV_LINK_MODE=copy
+                  - uvx nox -s tests-python-39
+                  - uv cache prune --ci
+                artifacts:
+                  - tests/results/*.xml
+                  - coverage.xml
+
+            - step:
+                name: Test Python 3.10
+                image: ghcr.io/astral-sh/uv:latest-python3.10-bookworm-slim
+                caches:
+                  - uv
+                  - pip
+                script:
+                  - export UV_CACHE_DIR=.uv-cache
+                  - export UV_LINK_MODE=copy
+                  - uvx nox -s tests-python-310
+                  - uv cache prune --ci
+                artifacts:
+                  - tests/results/*.xml
+                  - coverage.xml
+
+            - step:
+                name: Test Python 3.11
+                image: ghcr.io/astral-sh/uv:latest-python3.11-bookworm-slim
+                caches:
+                  - uv
+                  - pip
+                script:
+                  - export UV_CACHE_DIR=.uv-cache
+                  - export UV_LINK_MODE=copy
+                  - uvx nox -s tests-python-311
+                  - uv cache prune --ci
+                artifacts:
+                  - tests/results/*.xml
+                  - coverage.xml
+
+            - step:
+                name: Test Python 3.12
+                image: ghcr.io/astral-sh/uv:latest-python3.12-bookworm-slim
+                caches:
+                  - uv
+                  - pip
+                script:
+                  - export UV_CACHE_DIR=.uv-cache
+                  - export UV_LINK_MODE=copy
+                  - uvx nox -s tests-python-312
+                  - uv cache prune --ci
+                artifacts:
+                  - tests/results/*.xml
+                  - coverage.xml
+
+            - step:
+                name: Test Python 3.13
+                image: ghcr.io/astral-sh/uv:latest-python3.13-bookworm-slim
+                caches:
+                  - uv
+                  - pip
+                script:
+                  - export UV_CACHE_DIR=.uv-cache
+                  - export UV_LINK_MODE=copy
+                  - uvx nox -s tests-python-313
+                  - uv cache prune --ci
+                artifacts:
+                  - tests/results/*.xml
+                  - coverage.xml
+
+{% if cookiecutter.add_rust_extension == 'y' -%}
+            - step:
+                name: Test Rust
+                image: rust:latest
+                script:
+                  - curl -LsSf https://astral.sh/uv/install.sh | sh
+                  - export PATH="$PATH:/root/.cargo/bin"
+                  - uvx nox -s test-rust
+{%- endif %}
+
+      - step:
+          name: Build Package
+          caches:
+            - uv
+            - pip
+          script:
+            - export UV_CACHE_DIR=.uv-cache
+            - export UV_LINK_MODE=copy
+            - uvx nox -s build-python
+            - uv cache prune --ci
+          artifacts:
+            - dist/**
+
+  # Pipeline for pull requests
+  pull-requests:
+    '**':
+      - step:
+          name: Python Quality Checks
+          caches:
+            - uv
+            - pip
+          script:
+            - export UV_CACHE_DIR=.uv-cache
+            - export UV_LINK_MODE=copy
+            - uv --version
+            - uvx nox -s format-python
+            - uvx nox -s lint-python
+            - uvx nox -s typecheck
+            - uv cache prune --ci
+
+{% if cookiecutter.add_rust_extension == 'y' -%}
+      - step:
+          name: Rust Quality Checks
+          image: rust:latest
+          script:
+            - rustup component add rustfmt clippy
+            - curl -LsSf https://astral.sh/uv/install.sh | sh
+            - export PATH="$PATH:/root/.cargo/bin"
+            - uvx nox -s format-rust
+            - uvx nox -s lint-rust
+{%- endif %}
+
+      - step:
+          name: Security Checks
+          caches:
+            - uv
+            - pip
+          script:
+            - export UV_CACHE_DIR=.uv-cache
+            - export UV_LINK_MODE=copy
+            - uvx nox -s security-python
+            - uv cache prune --ci
+
+      # Parallel test execution for PRs (reduced matrix for speed)
+      - parallel:
+          steps:
+            - step:
+                name: Test Python 3.9
+                image: ghcr.io/astral-sh/uv:latest-python3.9-bookworm-slim
+                caches:
+                  - uv
+                  - pip
+                script:
+                  - export UV_CACHE_DIR=.uv-cache
+                  - export UV_LINK_MODE=copy
+                  - uvx nox -s tests-python-39
+                  - uv cache prune --ci
+
+            - step:
+                name: Test Python 3.13
+                image: ghcr.io/astral-sh/uv:latest-python3.13-bookworm-slim
+                caches:
+                  - uv
+                  - pip
+                script:
+                  - export UV_CACHE_DIR=.uv-cache
+                  - export UV_LINK_MODE=copy
+                  - uvx nox -s tests-python-313
+                  - uv cache prune --ci
+
+{% if cookiecutter.add_rust_extension == 'y' -%}
+            - step:
+                name: Test Rust
+                image: rust:latest
+                script:
+                  - curl -LsSf https://astral.sh/uv/install.sh | sh
+                  - export PATH="$PATH:/root/.cargo/bin"
+                  - uvx nox -s test-rust
+{%- endif %}
+
+  # Pipeline for tags (releases)
+  tags:
+    'v*':
+      - step:
+          name: Build and Release
+          caches:
+            - uv
+            - pip
+          script:
+            - export UV_CACHE_DIR=.uv-cache
+            - export UV_LINK_MODE=copy
+            - uvx nox -s build-python
+            - uvx nox -s publish-python
+            - uv cache prune --ci
+          artifacts:
+            - dist/**
