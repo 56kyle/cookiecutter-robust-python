@@ -2,13 +2,13 @@
 
 Thank you for your interest in contributing to `{{ cookiecutter.package_name }}`! We welcome bug reports, feature requests, and code contributions that help improve this project.
 
-By participating in this project, you are expected to uphold our [Code of Conduct](CODE_OF_CONDUCT.md).
+By participating in this project, you are expected to uphold our [Code of Conduct][code-of-conduct].
 
 ## How to Contribute
 
 ### Reporting Bugs
 
-If you find a bug, please open an issue on our [issue tracker](https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/issues) with:
+If you find a bug, please open an issue on our [issue tracker][issues] with:
 
 - A clear description of the bug
 - Steps to reproduce the issue
@@ -34,7 +34,7 @@ We welcome pull requests! For significant changes, it's best to open an issue fi
 ### Prerequisites
 
 - Python {{ cookiecutter.min_python_version }}+ (this project supports Python {{ cookiecutter.min_python_version }}-{{ cookiecutter.max_python_version }})
-- [uv](https://docs.astral.sh/uv/) for dependency management
+- [uv][uv-documentation] for dependency management
 - Git for version control
 
 ### Setting Up Your Development Environment
@@ -113,12 +113,12 @@ We welcome pull requests! For significant changes, it's best to open an issue fi
 
 This project follows these standards:
 
-- **Code formatting:** [Ruff](https://docs.astral.sh/ruff/) (automatically applied by pre-commit)
+- **Code formatting:** [Ruff][ruff-documentation] (automatically applied by pre-commit)
 - **Linting:** Ruff with comprehensive rule set
-- **Type checking:** [Pyright](https://github.com/microsoft/pyright)
-- **Security:** [Bandit](https://bandit.readthedocs.io/) for security linting
-- **Commit messages:** [Conventional Commits](https://www.conventionalcommits.org/) format preferred
-- **Testing:** [pytest](https://docs.pytest.org/) with good coverage
+- **Type checking:** [Pyright][pyright-documentation]
+- **Security:** [Bandit][bandit-documentation] for security linting
+- **Commit messages:** [Conventional Commits][conventional-commits] format preferred
+- **Testing:** [pytest][pytest-documentation] with good coverage
 
 ### Testing Guidelines
 
@@ -180,7 +180,7 @@ uvx nox -t ci               # All CI checks
 
 ## Getting Help
 
-- Check existing [issues](https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/issues) and [discussions](https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/discussions)
+- Check existing [issues][issues] and [discussions][discussions]
 - Open a new issue for bugs or feature requests
 - Start a discussion for questions or ideas
 
@@ -190,4 +190,16 @@ Contributors will be recognized in our release notes and documentation. Thank yo
 
 ---
 
-*This project was generated from the [cookiecutter-robust-python](https://github.com/56kyle/cookiecutter-robust-python) template.*
+*This project was generated from the [cookiecutter-robust-python][cookiecutter-robust-python] template.*
+
+<!-- Reference Links -->
+[code-of-conduct]: CODE_OF_CONDUCT.md
+[issues]: https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/issues
+[discussions]: https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/discussions
+[uv-documentation]: https://docs.astral.sh/uv/
+[ruff-documentation]: https://docs.astral.sh/ruff/
+[pyright-documentation]: https://github.com/microsoft/pyright
+[bandit-documentation]: https://bandit.readthedocs.io/
+[conventional-commits]: https://www.conventionalcommits.org/
+[pytest-documentation]: https://docs.pytest.org/
+[cookiecutter-robust-python]: https://github.com/56kyle/cookiecutter-robust-python
