@@ -29,7 +29,8 @@ CRATES_FOLDER: Path = REPO_ROOT / "rust"
 
 PROJECT_NAME: str = "{{cookiecutter.project_name}}"
 PACKAGE_NAME: str = "{{cookiecutter.package_name}}"
-GITHUB_USER: str = "{{cookiecutter.github_user}}"
+REPOSITORY_HOST: str = "{{cookiecutter.repository_host}}"
+REPOSITORY_PATH: str = "{{cookiecutter.repository_path}}"
 
 ENV: str = "env"
 FORMAT: str = "format"

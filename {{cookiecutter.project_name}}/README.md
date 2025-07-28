@@ -4,7 +4,7 @@
 
 ---
 
-**[📚 View Documentation](https://{{ cookiecutter.project_name.replace('_', '-') }}.readthedocs.io/)** | **[🐛 Report a Bug](https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/issues)** | **[✨ Request a Feature](https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/issues)**
+**[📚 View Documentation](https://{{ cookiecutter.project_name.replace('_', '-') }}.readthedocs.io/)** | **[🐛 Report a Bug](https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}/issues)** | **[✨ Request a Feature](https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}/issues)**
 
 ---
 
@@ -22,7 +22,7 @@ To set up `{{ cookiecutter.package_name }}` for local development:
 
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}.git
+    git clone https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}.git
     cd {{ cookiecutter.project_name }}
     ```
 2.  Install dependencies using [:term:`uv`](uv-documentation):
