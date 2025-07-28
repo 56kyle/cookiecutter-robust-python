@@ -10,7 +10,7 @@ on:
       - "tests/**/*.py"
       - "noxfile.py"
       - "pyproject.toml"
-      - ".bandit"
+      - "bandit.yml"
       - ".ruff.toml"
       - ".github/workflows/security-python.yml"
   push:
@@ -22,7 +22,7 @@ on:
       - "tests/**/*.py"
       - "noxfile.py"
       - "pyproject.toml"
-      - ".bandit"
+      - "bandit.yml"
       - ".ruff.toml"
       - ".github/workflows/security-python.yml"
 
