@@ -45,11 +45,11 @@ stages:
   after_script:
     - uv cache prune --ci
 
-# Python Quality Checks Jobs
-format-python:
+# Python Quality Checks Job
+quality-python:
   <<: *quality-job
   script:
-    - uvx nox -s format-python
+    - uvx nox -t quality
   changes:
     - "src/**/*.py"
     - "tests/**/*.py"
@@ -57,19 +57,7 @@ format-python:
     - "pyproject.toml"
     - ".ruff.toml"
     - ".pydocstyle"
-    - ".gitlab-ci.yml"
-
-lint-python:
-  <<: *quality-job
-  script:
-    - uvx nox -s lint-python
-  changes:
-    - "src/**/*.py"
-    - "tests/**/*.py"
-    - "noxfile.py"
-    - "pyproject.toml"
-    - ".ruff.toml"
-    - ".pydocstyle"
+    - "pyrightconfig.json"
     - ".gitlab-ci.yml"
 
 typecheck-python:
