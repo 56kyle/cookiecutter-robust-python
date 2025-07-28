@@ -24,6 +24,9 @@ stages:
     key:
       files:
         - pyproject.toml
+        - uv.lock
+        - requirements*.txt
+        - "**/requirements*.txt"
     paths:
       - $UV_CACHE_DIR
       - $PIP_CACHE_DIR
