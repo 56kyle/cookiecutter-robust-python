@@ -39,9 +39,7 @@ pipelines:
           - export UV_CACHE_DIR=.uv-cache
           - export UV_LINK_MODE=copy
           - uv --version
-          - uvx nox -s format-python
-          - uvx nox -s lint-python
-          - uvx nox -s typecheck
+          - uvx nox -t quality
           - uv cache prune --ci
         after-script:
           - echo "Python quality checks completed"
