@@ -5,8 +5,22 @@ image: ghcr.io/astral-sh/uv:latest-python3.13-bookworm-slim
 
 definitions:
   caches:
-    uv: .uv-cache
-    pip: .cache/pip
+    uv-deps:
+      key:
+        files:
+          - pyproject.toml
+          - uv.lock
+          - requirements*.txt
+          - "**/requirements*.txt"
+      path: .uv-cache
+    pip-deps:
+      key:
+        files:
+          - pyproject.toml
+          - uv.lock
+          - requirements*.txt
+          - "**/requirements*.txt"
+      path: .cache/pip
 
   # Shared configuration for uv
   services:
@@ -19,8 +33,8 @@ pipelines:
     - step:
         name: Python Quality Checks
         caches:
-          - uv
-          - pip
+          - uv-deps
+          - pip-deps
         script:
           - export UV_CACHE_DIR=.uv-cache
           - export UV_LINK_MODE=copy
@@ -49,8 +63,8 @@ pipelines:
     - step:
         name: Security Checks
         caches:
-          - uv
-          - pip
+          - uv-deps
+          - pip-deps
         script:
           - export UV_CACHE_DIR=.uv-cache
           - export UV_LINK_MODE=copy
@@ -216,8 +230,8 @@ pipelines:
       - step:
           name: Python Quality Checks
           caches:
-            - uv
-            - pip
+            - uv-deps
+            - pip-deps
           script:
             - export UV_CACHE_DIR=.uv-cache
             - export UV_LINK_MODE=copy
@@ -240,8 +254,8 @@ pipelines:
       - step:
           name: Security Checks
           caches:
-            - uv
-            - pip
+            - uv-deps
+            - pip-deps
           script:
             - export UV_CACHE_DIR=.uv-cache
             - export UV_LINK_MODE=copy
@@ -255,8 +269,8 @@ pipelines:
                 name: Typecheck Python 3.9
                 image: ghcr.io/astral-sh/uv:latest-python3.9-bookworm-slim
                 caches:
-                  - uv
-                  - pip
+                  - uv-deps
+                  - pip-deps
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
@@ -267,8 +281,8 @@ pipelines:
                 name: Typecheck Python 3.10
                 image: ghcr.io/astral-sh/uv:latest-python3.10-bookworm-slim
                 caches:
-                  - uv
-                  - pip  
+                  - uv-deps
+                  - pip-deps  
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
@@ -279,8 +293,8 @@ pipelines:
                 name: Typecheck Python 3.11
                 image: ghcr.io/astral-sh/uv:latest-python3.11-bookworm-slim
                 caches:
-                  - uv
-                  - pip
+                  - uv-deps
+                  - pip-deps
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
@@ -291,8 +305,8 @@ pipelines:
                 name: Typecheck Python 3.12
                 image: ghcr.io/astral-sh/uv:latest-python3.12-bookworm-slim
                 caches:
-                  - uv
-                  - pip
+                  - uv-deps
+                  - pip-deps
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
@@ -303,8 +317,8 @@ pipelines:
                 name: Typecheck Python 3.13
                 image: ghcr.io/astral-sh/uv:latest-python3.13-bookworm-slim
                 caches:
-                  - uv
-                  - pip
+                  - uv-deps
+                  - pip-deps
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
@@ -318,8 +332,8 @@ pipelines:
                 name: Test Python 3.9
                 image: ghcr.io/astral-sh/uv:latest-python3.9-bookworm-slim
                 caches:
-                  - uv
-                  - pip
+                  - uv-deps
+                  - pip-deps
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
@@ -333,8 +347,8 @@ pipelines:
                 name: Test Python 3.10
                 image: ghcr.io/astral-sh/uv:latest-python3.10-bookworm-slim
                 caches:
-                  - uv
-                  - pip
+                  - uv-deps
+                  - pip-deps
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
@@ -348,8 +362,8 @@ pipelines:
                 name: Test Python 3.11
                 image: ghcr.io/astral-sh/uv:latest-python3.11-bookworm-slim
                 caches:
-                  - uv
-                  - pip
+                  - uv-deps
+                  - pip-deps
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
@@ -363,8 +377,8 @@ pipelines:
                 name: Test Python 3.12
                 image: ghcr.io/astral-sh/uv:latest-python3.12-bookworm-slim
                 caches:
-                  - uv
-                  - pip
+                  - uv-deps
+                  - pip-deps
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
@@ -378,8 +392,8 @@ pipelines:
                 name: Test Python 3.13
                 image: ghcr.io/astral-sh/uv:latest-python3.13-bookworm-slim
                 caches:
-                  - uv
-                  - pip
+                  - uv-deps
+                  - pip-deps
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
@@ -402,8 +416,8 @@ pipelines:
       - step:
           name: Build Package
           caches:
-            - uv
-            - pip
+            - uv-deps
+            - pip-deps
           script:
             - export UV_CACHE_DIR=.uv-cache
             - export UV_LINK_MODE=copy
@@ -418,8 +432,8 @@ pipelines:
       - step:
           name: Python Quality Checks
           caches:
-            - uv
-            - pip
+            - uv-deps
+            - pip-deps
           script:
             - export UV_CACHE_DIR=.uv-cache
             - export UV_LINK_MODE=copy
@@ -442,8 +456,8 @@ pipelines:
       - step:
           name: Security Checks
           caches:
-            - uv
-            - pip
+            - uv-deps
+            - pip-deps
           script:
             - export UV_CACHE_DIR=.uv-cache
             - export UV_LINK_MODE=copy
@@ -457,8 +471,8 @@ pipelines:
                 name: Test Python 3.9
                 image: ghcr.io/astral-sh/uv:latest-python3.9-bookworm-slim
                 caches:
-                  - uv
-                  - pip
+                  - uv-deps
+                  - pip-deps
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
@@ -469,8 +483,8 @@ pipelines:
                 name: Test Python 3.13
                 image: ghcr.io/astral-sh/uv:latest-python3.13-bookworm-slim
                 caches:
-                  - uv
-                  - pip
+                  - uv-deps
+                  - pip-deps
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
@@ -493,8 +507,8 @@ pipelines:
       - step:
           name: Build and Release
           caches:
-            - uv
-            - pip
+            - uv-deps
+            - pip-deps
           script:
             - export UV_CACHE_DIR=.uv-cache
             - export UV_LINK_MODE=copy
