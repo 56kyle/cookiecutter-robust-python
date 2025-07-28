@@ -222,9 +222,7 @@ pipelines:
             - export UV_CACHE_DIR=.uv-cache
             - export UV_LINK_MODE=copy
             - uv --version
-            - uvx nox -s format-python
-            - uvx nox -s lint-python
-            - uvx nox -s typecheck
+            - uvx nox -t quality
             - uv cache prune --ci
 
 {% if cookiecutter.add_rust_extension == 'y' -%}
@@ -249,6 +247,69 @@ pipelines:
             - export UV_LINK_MODE=copy
             - uvx nox -s security-python
             - uv cache prune --ci
+
+      # Parallel typecheck execution across Python versions  
+      - parallel:
+          steps:
+            - step:
+                name: Typecheck Python 3.9
+                image: ghcr.io/astral-sh/uv:latest-python3.9-bookworm-slim
+                caches:
+                  - uv
+                  - pip
+                script:
+                  - export UV_CACHE_DIR=.uv-cache
+                  - export UV_LINK_MODE=copy
+                  - uvx nox -s typecheck-3.9
+                  - uv cache prune --ci
+
+            - step:
+                name: Typecheck Python 3.10
+                image: ghcr.io/astral-sh/uv:latest-python3.10-bookworm-slim
+                caches:
+                  - uv
+                  - pip  
+                script:
+                  - export UV_CACHE_DIR=.uv-cache
+                  - export UV_LINK_MODE=copy
+                  - uvx nox -s typecheck-3.10
+                  - uv cache prune --ci
+
+            - step:
+                name: Typecheck Python 3.11
+                image: ghcr.io/astral-sh/uv:latest-python3.11-bookworm-slim
+                caches:
+                  - uv
+                  - pip
+                script:
+                  - export UV_CACHE_DIR=.uv-cache
+                  - export UV_LINK_MODE=copy
+                  - uvx nox -s typecheck-3.11
+                  - uv cache prune --ci
+
+            - step:
+                name: Typecheck Python 3.12
+                image: ghcr.io/astral-sh/uv:latest-python3.12-bookworm-slim
+                caches:
+                  - uv
+                  - pip
+                script:
+                  - export UV_CACHE_DIR=.uv-cache
+                  - export UV_LINK_MODE=copy
+                  - uvx nox -s typecheck-3.12
+                  - uv cache prune --ci
+
+            - step:
+                name: Typecheck Python 3.13
+                image: ghcr.io/astral-sh/uv:latest-python3.13-bookworm-slim
+                caches:
+                  - uv
+                  - pip
+                script:
+                  - export UV_CACHE_DIR=.uv-cache
+                  - export UV_LINK_MODE=copy
+                  - uvx nox -s typecheck-3.13
+                  - uv cache prune --ci
 
       # Parallel test execution
       - parallel:
@@ -363,9 +424,7 @@ pipelines:
             - export UV_CACHE_DIR=.uv-cache
             - export UV_LINK_MODE=copy
             - uv --version
-            - uvx nox -s format-python
-            - uvx nox -s lint-python
-            - uvx nox -s typecheck
+            - uvx nox -t quality
             - uv cache prune --ci
 
 {% if cookiecutter.add_rust_extension == 'y' -%}
