@@ -1,52 +1,49 @@
-name: Test Rust
+name: Test Rust Code
 
 on:
   pull_request:
     paths:
-      - crates/**
-      - examples/**
-      - Cargo.toml
-      - .github/workflows/test-rust.yml
+      - "rust/**/*.rs"
+      - "Cargo.toml"
+      - "noxfile.py"
+      - ".github/workflows/test-rust.yml"
   push:
     branches:
       - main
       - master
     paths:
-      - crates/**
-      - examples/**
-      - Cargo.toml
-      - .github/workflows/test-rust.yml
+      - "rust/**/*.rs"
+      - "Cargo.toml"
+      - "noxfile.py"
+      - ".github/workflows/test-rust.yml"
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
-
-env:
-  RUSTFLAGS: -C debuginfo=0  # Do not produce debug symbols to keep memory usage down
-  RUST_BACKTRACE: 1
+  workflow_dispatch:
 
 jobs:
-  test:
+  test-rust:
+    name: Run Rust Tests on ${{ matrix.os }}
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        include:
+          - { os: "ubuntu-latest" }
+          - { os: "macos-latest" }
+          - { os: "windows-latest" }
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Set up Rust
         run: rustup show
 
-      - name: Cache Rust
-        uses: Swatinem/rust-cache@v2
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
         with:
-          save-if: ${{ github.ref_name == 'main' }}
+          python-version-file: ".github/workflows/.python-version"
 
-      - name: Compile tests
-        run: cargo test --all-features --no-run
-
-      - name: Run tests
-        if: github.ref_name != 'main'
-        run: cargo test --all-features
+      - name: Run Rust tests
+        run: uvx nox -s test-rust
