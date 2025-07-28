@@ -59,7 +59,7 @@ If your project defines command-line entry points in `pyproject.toml`:
 # {{ cookiecutter.project_name }} do-something --input file.txt
 ```
 
-For detailed API documentation and CLI command references, see the **[Documentation](https://{{ cookiecutter.project_name.replace('_', '-') }}.readthedocs.io/)**.
+For detailed API documentation and CLI command references, see the **[Documentation][documentation]**.
 
 ## Development Workflow
 
@@ -87,4 +87,15 @@ Distributed under the terms of the **{{ cookiecutter.license }}** license. See [
 
 ---
 
-**This project was generated from the [cookiecutter-robust-python template](https://github.com/56kyle/cookiecutter-robust-python).**
+**This project was generated from the [cookiecutter-robust-python template][cookiecutter-robust-python].**
+
+<!-- Reference Links -->
+[cookiecutter-robust-python]: https://github.com/56kyle/cookiecutter-robust-python
+
+{% if cookiecutter.repository_provider == 'github' %}
+[documentation]: https://{{ cookiecutter.repository_path.split('/')[0] }}.github.io/{{ cookiecutter.project_name.replace('_', '-') }}/
+{% elif cookiecutter.repository_provider == 'gitlab' %}
+[documentation]: https://{{ cookiecutter.repository_path.replace('/', '.') }}.gitlab.io/{{ cookiecutter.project_name.replace('_', '-') }}/
+{% else %}
+[documentation]: https://{{ cookiecutter.project_name.replace('_', '-') }}.readthedocs.io/
+{% endif %}
