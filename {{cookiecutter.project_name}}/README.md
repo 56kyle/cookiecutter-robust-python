@@ -77,7 +77,7 @@ Explore the `noxfile.py` and the project documentation for detailed information 
 
 (This section should guide contributions *to this specific generated project*, not the template. It should refer to the project's `CODE_OF_CONDUCT.md` and link to a `CONTRIBUTING.md` specific to the project, if you choose to generate one.)
 
-Report bugs or suggest features via the [issue tracker](https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/issues).
+Report bugs or suggest features via the [issue tracker](https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}/issues).
 
 See [CONTRIBUTING.md](#) for contribution guidelines.
 
