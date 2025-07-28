@@ -41,7 +41,7 @@ We welcome pull requests! For significant changes, it's best to open an issue fi
 
 1. **Fork and clone the repository:**
    ```bash
-   git clone https://github.com/{{ cookiecutter.github_user }}/{{ cookiecutter.project_name.replace('_', '-') }}.git
+   git clone https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}.git
    cd {{ cookiecutter.project_name }}
    ```
 
@@ -180,7 +180,7 @@ uvx nox -t ci               # All CI checks
 
 ## Getting Help
 
-- Check existing [issues][issues] and [discussions][discussions]
+- Check existing [issues][issues]{% if cookiecutter.repository_provider == 'github' %} and [discussions][discussions]{% endif %}
 - Open a new issue for bugs or feature requests
 - Start a discussion for questions or ideas
 
@@ -194,8 +194,8 @@ Contributors will be recognized in our release notes and documentation. Thank yo
 
 <!-- Reference Links -->
 [code-of-conduct]: CODE_OF_CONDUCT.md
-[issues]: https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/issues
-[discussions]: https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/discussions
+[issues]: https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}/issues
+{% if cookiecutter.repository_provider == 'github' %}[discussions]: https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}/discussions{% endif %}
 [uv-documentation]: https://docs.astral.sh/uv/
 [ruff-documentation]: https://docs.astral.sh/ruff/
 [pyright-documentation]: https://github.com/microsoft/pyright
