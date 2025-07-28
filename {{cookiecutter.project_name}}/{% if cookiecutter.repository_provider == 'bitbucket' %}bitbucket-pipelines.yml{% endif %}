@@ -134,11 +134,12 @@ pipelines:
                 - uvx nox -s typecheck-3.13
                 - uv cache prune --ci
 
-    # Parallel test execution across Python versions
+    # Parallel test execution across Python versions and platforms
     - parallel:
         steps:
+          # Linux testing across all Python versions
           - step:
-              name: Test Python 3.9
+              name: Test Python 3.9 (Linux)
               image: ghcr.io/astral-sh/uv:latest-python3.9-bookworm-slim
               caches:
                 - uv
@@ -146,14 +147,14 @@ pipelines:
               script:
                 - export UV_CACHE_DIR=.uv-cache
                 - export UV_LINK_MODE=copy
-                - uvx nox -s tests-python-39
+                - uvx nox -s tests-python-3.9
                 - uv cache prune --ci
               artifacts:
                 - tests/results/*.xml
                 - coverage.xml
 
           - step:
-              name: Test Python 3.10
+              name: Test Python 3.10 (Linux)
               image: ghcr.io/astral-sh/uv:latest-python3.10-bookworm-slim
               caches:
                 - uv
@@ -161,14 +162,14 @@ pipelines:
               script:
                 - export UV_CACHE_DIR=.uv-cache
                 - export UV_LINK_MODE=copy
-                - uvx nox -s tests-python-310
+                - uvx nox -s tests-python-3.10
                 - uv cache prune --ci
               artifacts:
                 - tests/results/*.xml
                 - coverage.xml
 
           - step:
-              name: Test Python 3.11
+              name: Test Python 3.11 (Linux)
               image: ghcr.io/astral-sh/uv:latest-python3.11-bookworm-slim
               caches:
                 - uv
@@ -176,14 +177,14 @@ pipelines:
               script:
                 - export UV_CACHE_DIR=.uv-cache
                 - export UV_LINK_MODE=copy
-                - uvx nox -s tests-python-311
+                - uvx nox -s tests-python-3.11
                 - uv cache prune --ci
               artifacts:
                 - tests/results/*.xml
                 - coverage.xml
 
           - step:
-              name: Test Python 3.12
+              name: Test Python 3.12 (Linux)
               image: ghcr.io/astral-sh/uv:latest-python3.12-bookworm-slim
               caches:
                 - uv
@@ -191,14 +192,14 @@ pipelines:
               script:
                 - export UV_CACHE_DIR=.uv-cache
                 - export UV_LINK_MODE=copy
-                - uvx nox -s tests-python-312
+                - uvx nox -s tests-python-3.12
                 - uv cache prune --ci
               artifacts:
                 - tests/results/*.xml
                 - coverage.xml
 
           - step:
-              name: Test Python 3.13
+              name: Test Python 3.13 (Linux)
               image: ghcr.io/astral-sh/uv:latest-python3.13-bookworm-slim
               caches:
                 - uv
@@ -206,7 +207,35 @@ pipelines:
               script:
                 - export UV_CACHE_DIR=.uv-cache
                 - export UV_LINK_MODE=copy
-                - uvx nox -s tests-python-313
+                - uvx nox -s tests-python-3.13
+                - uv cache prune --ci
+              artifacts:
+                - tests/results/*.xml
+                - coverage.xml
+
+          # Cross-platform testing with latest Python
+          - step:
+              name: Test Python 3.13 (macOS)
+              runs-on: macos
+              script:
+                - export UV_CACHE_DIR=.uv-cache
+                - export UV_LINK_MODE=copy
+                - curl -LsSf https://astral.sh/uv/install.sh | sh
+                - export PATH="$PATH:$HOME/.cargo/bin"
+                - uvx nox -s tests-python-3.13
+                - uv cache prune --ci
+              artifacts:
+                - tests/results/*.xml
+                - coverage.xml
+
+          - step:
+              name: Test Python 3.13 (Windows)
+              runs-on: windows
+              script:
+                - set UV_CACHE_DIR=.uv-cache
+                - set UV_LINK_MODE=copy
+                - powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+                - uvx nox -s tests-python-3.13
                 - uv cache prune --ci
               artifacts:
                 - tests/results/*.xml
@@ -323,11 +352,12 @@ pipelines:
                   - uvx nox -s typecheck-3.13
                   - uv cache prune --ci
 
-      # Parallel test execution
+      # Parallel test execution across Python versions and platforms
       - parallel:
           steps:
+            # Linux testing across all Python versions
             - step:
-                name: Test Python 3.9
+                name: Test Python 3.9 (Linux)
                 image: ghcr.io/astral-sh/uv:latest-python3.9-bookworm-slim
                 caches:
                   - uv-deps
@@ -335,14 +365,14 @@ pipelines:
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
-                  - uvx nox -s tests-python-39
+                  - uvx nox -s tests-python-3.9
                   - uv cache prune --ci
                 artifacts:
                   - tests/results/*.xml
                   - coverage.xml
 
             - step:
-                name: Test Python 3.10
+                name: Test Python 3.10 (Linux)
                 image: ghcr.io/astral-sh/uv:latest-python3.10-bookworm-slim
                 caches:
                   - uv-deps
@@ -350,14 +380,14 @@ pipelines:
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
-                  - uvx nox -s tests-python-310
+                  - uvx nox -s tests-python-3.10
                   - uv cache prune --ci
                 artifacts:
                   - tests/results/*.xml
                   - coverage.xml
 
             - step:
-                name: Test Python 3.11
+                name: Test Python 3.11 (Linux)
                 image: ghcr.io/astral-sh/uv:latest-python3.11-bookworm-slim
                 caches:
                   - uv-deps
@@ -365,14 +395,14 @@ pipelines:
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
-                  - uvx nox -s tests-python-311
+                  - uvx nox -s tests-python-3.11
                   - uv cache prune --ci
                 artifacts:
                   - tests/results/*.xml
                   - coverage.xml
 
             - step:
-                name: Test Python 3.12
+                name: Test Python 3.12 (Linux)
                 image: ghcr.io/astral-sh/uv:latest-python3.12-bookworm-slim
                 caches:
                   - uv-deps
@@ -380,14 +410,14 @@ pipelines:
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
-                  - uvx nox -s tests-python-312
+                  - uvx nox -s tests-python-3.12
                   - uv cache prune --ci
                 artifacts:
                   - tests/results/*.xml
                   - coverage.xml
 
             - step:
-                name: Test Python 3.13
+                name: Test Python 3.13 (Linux)
                 image: ghcr.io/astral-sh/uv:latest-python3.13-bookworm-slim
                 caches:
                   - uv-deps
@@ -395,7 +425,35 @@ pipelines:
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
-                  - uvx nox -s tests-python-313
+                  - uvx nox -s tests-python-3.13
+                  - uv cache prune --ci
+                artifacts:
+                  - tests/results/*.xml
+                  - coverage.xml
+
+            # Cross-platform testing with latest Python
+            - step:
+                name: Test Python 3.13 (macOS)
+                runs-on: macos
+                script:
+                  - export UV_CACHE_DIR=.uv-cache
+                  - export UV_LINK_MODE=copy
+                  - curl -LsSf https://astral.sh/uv/install.sh | sh
+                  - export PATH="$PATH:$HOME/.cargo/bin"
+                  - uvx nox -s tests-python-3.13
+                  - uv cache prune --ci
+                artifacts:
+                  - tests/results/*.xml
+                  - coverage.xml
+
+            - step:
+                name: Test Python 3.13 (Windows)
+                runs-on: windows
+                script:
+                  - set UV_CACHE_DIR=.uv-cache
+                  - set UV_LINK_MODE=copy
+                  - powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+                  - uvx nox -s tests-python-3.13
                   - uv cache prune --ci
                 artifacts:
                   - tests/results/*.xml
@@ -466,7 +524,7 @@ pipelines:
       - parallel:
           steps:
             - step:
-                name: Test Python 3.9
+                name: Test Python 3.9 (Linux)
                 image: ghcr.io/astral-sh/uv:latest-python3.9-bookworm-slim
                 caches:
                   - uv-deps
@@ -474,11 +532,11 @@ pipelines:
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
-                  - uvx nox -s tests-python-39
+                  - uvx nox -s tests-python-3.9
                   - uv cache prune --ci
 
             - step:
-                name: Test Python 3.13
+                name: Test Python 3.13 (Linux)
                 image: ghcr.io/astral-sh/uv:latest-python3.13-bookworm-slim
                 caches:
                   - uv-deps
@@ -486,7 +544,29 @@ pipelines:
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy
-                  - uvx nox -s tests-python-313
+                  - uvx nox -s tests-python-3.13
+                  - uv cache prune --ci
+
+            # Cross-platform testing with latest Python
+            - step:
+                name: Test Python 3.13 (macOS)
+                runs-on: macos
+                script:
+                  - export UV_CACHE_DIR=.uv-cache
+                  - export UV_LINK_MODE=copy
+                  - curl -LsSf https://astral.sh/uv/install.sh | sh
+                  - export PATH="$PATH:$HOME/.cargo/bin"
+                  - uvx nox -s tests-python-3.13
+                  - uv cache prune --ci
+
+            - step:
+                name: Test Python 3.13 (Windows)
+                runs-on: windows
+                script:
+                  - set UV_CACHE_DIR=.uv-cache
+                  - set UV_LINK_MODE=copy
+                  - powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+                  - uvx nox -s tests-python-3.13
                   - uv cache prune --ci
 
 {% if cookiecutter.add_rust_extension == 'y' -%}
@@ -503,7 +583,7 @@ pipelines:
   tags:
     'v*':
       - step:
-          name: Build and Release
+          name: Build Package
           caches:
             - uv-deps
             - pip-deps
@@ -511,7 +591,32 @@ pipelines:
             - export UV_CACHE_DIR=.uv-cache
             - export UV_LINK_MODE=copy
             - uvx nox -s build-python
-            - uvx nox -s publish-python
             - uv cache prune --ci
           artifacts:
             - dist/**
+
+      - step:
+          name: Publish to TestPyPI
+          deployment: test
+          caches:
+            - uv-deps
+            - pip-deps
+          script:
+            - export UV_CACHE_DIR=.uv-cache
+            - export UV_LINK_MODE=copy
+            - export PYPI_URL=https://test.pypi.org/legacy/
+            - uvx nox -s publish-python
+            - uv cache prune --ci
+
+      - step:
+          name: Publish to Production PyPI
+          deployment: production
+          trigger: manual
+          caches:
+            - uv-deps
+            - pip-deps
+          script:
+            - export UV_CACHE_DIR=.uv-cache
+            - export UV_LINK_MODE=copy
+            - uvx nox -s publish-python
+            - uv cache prune --ci
