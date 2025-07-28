@@ -12,6 +12,7 @@ variables:
 # Define stages
 stages:
   - quality
+  - typecheck
   - test
   - security
   - build
@@ -61,9 +62,19 @@ quality-python:
     - ".gitlab-ci.yml"
 
 typecheck-python:
-  <<: *quality-job
+  stage: typecheck
+  <<: *uv-cache
+  <<: *on-merge-requests-and-main
+  parallel:
+    matrix:
+      - PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+  image: ghcr.io/astral-sh/uv:latest-python$PYTHON_VERSION-bookworm-slim
+  before_script:
+    - uv --version
   script:
-    - uvx nox -s typecheck
+    - uvx nox -s typecheck-$PYTHON_VERSION
+  after_script:
+    - uv cache prune --ci
   changes:
     - "src/**/*.py"
     - "tests/**/*.py"
