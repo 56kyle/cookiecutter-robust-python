@@ -92,10 +92,4 @@ Distributed under the terms of the **{{ cookiecutter.license }}** license. See [
 <!-- Reference Links -->
 [cookiecutter-robust-python]: https://github.com/56kyle/cookiecutter-robust-python
 
-{% if cookiecutter.repository_provider == 'github' %}
-[documentation]: https://{{ cookiecutter.repository_path.split('/')[0] }}.github.io/{{ cookiecutter.project_name.replace('_', '-') }}/
-{% elif cookiecutter.repository_provider == 'gitlab' %}
-[documentation]: https://{{ cookiecutter.repository_path.replace('/', '.') }}.gitlab.io/{{ cookiecutter.project_name.replace('_', '-') }}/
-{% else %}
 [documentation]: https://{{ cookiecutter.project_name.replace('_', '-') }}.readthedocs.io/
-{% endif %}
