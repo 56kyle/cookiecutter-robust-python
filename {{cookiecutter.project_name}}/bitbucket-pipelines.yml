@@ -1,3 +1,4 @@
+#file: noinspection InvalidFileLocation
 # bitbucket-pipelines.yml
 # See https://support.atlassian.com/bitbucket-cloud/docs/get-started-with-bitbucket-pipelines/
 # This is currently untested serves as a best guess for an equivalent pipeline

@@ -1,6 +1,23 @@
 #!/usr/bin/env python
 import json
+import shutil
+import stat
 from pathlib import Path
+from typing import Any
+from typing import Callable
+
+
+REMOVE_PATHS: list[str] = [
+    "{% if cookiecutter.platform_provider != github %}.github{% endif %}",
+    "{% if cookiecutter.platform_provider != gitlab %}.gitlab-ci.yml{% endif %}",
+    "{% if cookiecutter.platform_provider != bitbucket %}.bitbucket-pipelines.yml{% endif %}",
+]
+
+
+def post_gen_project() -> None:
+    """Run post-generation tasks."""
+    reindent_cookiecutter_json()
+    remove_undesired_files()
 
 
 def reindent_cookiecutter_json():
@@ -18,6 +35,31 @@ def reindent_cookiecutter_json():
     with path.open(mode="w") as io:
         json.dump(data, io, sort_keys=True, indent=2)
         io.write("\n")
+
+
+def remove_undesired_files() -> None:
+    """Removes any files that are not desired in the generated project based on the cookiecutter.json.
+
+    This is done to avoid issues that tend to arise when the name of the template file contains a conditional.
+    """
+    for path in REMOVE_PATHS:
+        if path == "":
+            continue
+
+        path: Path = Path.cwd() / path
+        if path.is_dir():
+            shutil.rmtree(path, onerror=remove_readonly)
+        else:
+            path.unlink()
+
+
+def remove_readonly(func: Callable[[str], Any], path: str, _: Any) -> None:
+    """Clears the readonly bit and attempts to call the provided function.
+
+    This is passed to shutil.rmtree as the onerror kwarg.
+    """
+    Path(path).chmod(stat.S_IWRITE)
+    func(path)
 
 
 if __name__ == "__main__":
