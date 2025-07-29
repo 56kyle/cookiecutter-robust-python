@@ -29,7 +29,8 @@ CRATES_FOLDER: Path = REPO_ROOT / "rust"
 
 PROJECT_NAME: str = "{{cookiecutter.project_name}}"
 PACKAGE_NAME: str = "{{cookiecutter.package_name}}"
-GITHUB_USER: str = "{{cookiecutter.github_user}}"
+REPOSITORY_HOST: str = "{{cookiecutter.repository_host}}"
+REPOSITORY_PATH: str = "{{cookiecutter.repository_path}}"
 
 ENV: str = "env"
 FORMAT: str = "format"
@@ -42,7 +43,7 @@ PERF: str = "perf"
 DOCS: str = "docs"
 BUILD: str = "build"
 RELEASE: str = "release"
-CI: str = "ci"
+QUALITY: str = "quality"
 PYTHON: str = "python"
 RUST: str = "rust"
 
@@ -59,7 +60,16 @@ def setup_venv(session: Session) -> None:
     session.run("python", SCRIPTS_FOLDER / "setup-venv.py", REPO_ROOT, "-p", PYTHON_VERSIONS[0], external=True)
 
 
-@nox.session(python=DEFAULT_PYTHON_VERSION, name="pre-commit", tags=[CI])
+@nox.session(python=False, name="setup-remote")
+def setup_remote(session: Session) -> None:
+    """Set up the remote repository for the current project."""
+    command: list[str] = [
+        "python", SCRIPTS_FOLDER / "setup-remote.py", REPO_ROOT, "--host", REPOSITORY_HOST, "--path", REPOSITORY_PATH
+    ]
+    session.run(*command, external=True)
+
+
+@nox.session(python=DEFAULT_PYTHON_VERSION, name="pre-commit", tags=[QUALITY])
 def precommit(session: Session) -> None:
     """Lint using pre-commit."""
     args: list[str] = session.posargs or ["run", "--all-files", "--show-diff-on-failure"]
@@ -72,7 +82,7 @@ def precommit(session: Session) -> None:
         activate_virtualenv_in_precommit_hooks(session)
 
 
-@nox.session(python=False, name="format-python", tags=[FORMAT, PYTHON])
+@nox.session(python=False, name="format-python", tags=[FORMAT, PYTHON, QUALITY])
 def format_python(session: Session) -> None:
     """Run Python code formatter (Ruff format)."""
     session.log(f"Running Ruff formatter check with py{session.python}.")
@@ -90,7 +100,7 @@ def format_rust(session: Session) -> None:
 
 
 {% endif -%}
-@nox.session(python=False, name="lint-python", tags=[LINT, PYTHON])
+@nox.session(python=False, name="lint-python", tags=[LINT, PYTHON, QUALITY])
 def lint_python(session: Session) -> None:
     """Run Python code linters (Ruff check, Pydocstyle rules)."""
     session.log(f"Running Ruff check with py{session.python}.")
@@ -108,7 +118,7 @@ def lint_rust(session: Session) -> None:
 
 
 {% endif -%}
-@nox.session(python=PYTHON_VERSIONS, name="typecheck", tags=[TYPE, PYTHON, CI])
+@nox.session(python=PYTHON_VERSIONS, name="typecheck", tags=[TYPE, PYTHON])
 def typecheck(session: Session) -> None:
     """Run static type checking (Pyright) on Python code."""
     session.log("Installing type checking dependencies...")
@@ -118,7 +128,7 @@ def typecheck(session: Session) -> None:
     session.run("pyright", "--pythonversion", session.python)
 
 
-@nox.session(python=False, name="security-python", tags=[SECURITY, PYTHON, CI])
+@nox.session(python=False, name="security-python", tags=[SECURITY, PYTHON])
 def security_python(session: Session) -> None:
     """Run code security checks (Bandit) on Python code."""
     session.log(f"Running Bandit static security analysis with py{session.python}.")
@@ -129,7 +139,7 @@ def security_python(session: Session) -> None:
 
 
 {% if cookiecutter.add_rust_extension == 'y' -%}
-@nox.session(python=False, name="security-rust", tags=[SECURITY, RUST, CI])
+@nox.session(python=False, name="security-rust", tags=[SECURITY, RUST])
 def security_rust(session: Session) -> None:
     """Run code security checks (cargo audit)."""
     session.log("Installing security dependencies...")
@@ -138,7 +148,7 @@ def security_rust(session: Session) -> None:
 
 
 {% endif -%}
-@nox.session(python=PYTHON_VERSIONS, name="tests-python", tags=[TEST, PYTHON, CI])
+@nox.session(python=PYTHON_VERSIONS, name="tests-python", tags=[TEST, PYTHON])
 def tests_python(session: Session) -> None:
     """Run the Python test suite (pytest with coverage)."""
     session.log("Installing test dependencies...")

@@ -16,4 +16,4 @@ update_changelog_on_bump = true
 release = true
 release_asset_path = "dist/*"
 release_asset_descriptions = { "*.tar.gz" = "Source distribution", "*.whl" = "Python Wheel" }
-base_url = "https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}"
+base_url = "https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}"

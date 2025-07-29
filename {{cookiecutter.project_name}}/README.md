@@ -4,7 +4,7 @@
 
 ---
 
-**[📚 View Documentation](https://{{ cookiecutter.project_name.replace('_', '-') }}.readthedocs.io/)** | **[🐛 Report a Bug](https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/issues)** | **[✨ Request a Feature](https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/issues)**
+**[📚 View Documentation](https://{{ cookiecutter.project_name.replace('_', '-') }}.readthedocs.io/)** | **[🐛 Report a Bug](https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}/issues)** | **[✨ Request a Feature](https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}/issues)**
 
 ---
 
@@ -22,7 +22,7 @@ To set up `{{ cookiecutter.package_name }}` for local development:
 
 1.  Clone the repository:
     ```bash
-    git clone https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}.git
+    git clone https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}.git
     cd {{ cookiecutter.project_name }}
     ```
 2.  Install dependencies using [:term:`uv`](uv-documentation):
@@ -59,7 +59,7 @@ If your project defines command-line entry points in `pyproject.toml`:
 # {{ cookiecutter.project_name }} do-something --input file.txt
 ```
 
-For detailed API documentation and CLI command references, see the **[Documentation](https://{{ cookiecutter.project_name.replace('_', '-') }}.readthedocs.io/)**.
+For detailed API documentation and CLI command references, see the **[Documentation][documentation]**.
 
 ## Development Workflow
 
@@ -77,7 +77,7 @@ Explore the `noxfile.py` and the project documentation for detailed information 
 
 (This section should guide contributions *to this specific generated project*, not the template. It should refer to the project's `CODE_OF_CONDUCT.md` and link to a `CONTRIBUTING.md` specific to the project, if you choose to generate one.)
 
-Report bugs or suggest features via the [issue tracker](https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}/issues).
+Report bugs or suggest features via the [issue tracker](https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}/issues).
 
 See [CONTRIBUTING.md](#) for contribution guidelines.
 
@@ -87,4 +87,9 @@ Distributed under the terms of the **{{ cookiecutter.license }}** license. See [
 
 ---
 
-**This project was generated from the [cookiecutter-robust-python template](https://github.com/56kyle/cookiecutter-robust-python).**
+**This project was generated from the [cookiecutter-robust-python template][cookiecutter-robust-python].**
+
+<!-- Reference Links -->
+[cookiecutter-robust-python]: https://github.com/56kyle/cookiecutter-robust-python
+
+[documentation]: https://{{ cookiecutter.project_name.replace('_', '-') }}.readthedocs.io/

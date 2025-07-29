@@ -49,6 +49,7 @@ def setup_release(increment: Optional[str] = None) -> None:
     bump_version(increment=increment)
 
     commands: list[list[str]] = [
+        ["uv", "sync", "--all-groups"],
         ["git", "add", "."],
         ["git", "commit", "-m", f"bump: version {current_version} → {new_version}", "--no-verify"]
     ]

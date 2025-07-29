@@ -47,8 +47,8 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}"
-Repository = "https://github.com/{{ cookiecutter.github_user | lower | replace(' ', '-') }}/{{ cookiecutter.project_name.replace('_', '-') }}"
+Homepage = "https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}"
+Repository = "https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}"
 
 [[tool.uv.index]]
 name = "testpypi"

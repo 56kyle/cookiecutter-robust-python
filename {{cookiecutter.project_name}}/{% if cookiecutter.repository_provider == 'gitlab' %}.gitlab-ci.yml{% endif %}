@@ -1,0 +1,323 @@
+# .gitlab-ci.yml
+# See https://docs.gitlab.com/ee/ci/yaml/
+# This is currently untested and serves as a best guess for what might be an equivalent pipeline
+
+# Global settings
+image: ghcr.io/astral-sh/uv:latest-python3.13-bookworm-slim
+
+variables:
+  UV_CACHE_DIR: .uv-cache
+  UV_LINK_MODE: copy
+  PIP_CACHE_DIR: $CI_PROJECT_DIR/.cache/pip
+
+# Define stages
+stages:
+  - quality
+  - typecheck
+  - test
+  - security
+  - build
+  - release
+
+# Global cache configuration for uv
+.uv-cache: &uv-cache
+  cache:
+    key:
+      files:
+        - pyproject.toml
+        - uv.lock
+        - requirements*.txt
+        - "**/requirements*.txt"
+    paths:
+      - $UV_CACHE_DIR
+      - $PIP_CACHE_DIR
+    policy: pull-push
+
+# Shared rules for when to run jobs
+.on-merge-requests-and-main: &on-merge-requests-and-main
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "web"
+
+# Base job template for Python quality checks
+.quality-job: &quality-job
+  stage: quality
+  <<: *uv-cache
+  <<: *on-merge-requests-and-main
+  before_script:
+    - uv --version
+  after_script:
+    - uv cache prune --ci
+
+# Python Quality Checks Job
+quality-python:
+  <<: *quality-job
+  script:
+    - uvx nox -t quality
+  changes:
+    - "src/**/*.py"
+    - "tests/**/*.py"
+    - "noxfile.py"
+    - "pyproject.toml"
+    - ".ruff.toml"
+    - "pyrightconfig.json"
+    - ".gitlab-ci.yml"
+
+typecheck-python:
+  stage: typecheck
+  <<: *uv-cache
+  <<: *on-merge-requests-and-main
+  parallel:
+    matrix:
+      - PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+  image: ghcr.io/astral-sh/uv:latest-python$PYTHON_VERSION-bookworm-slim
+  before_script:
+    - uv --version
+  script:
+    - uvx nox -s typecheck-$PYTHON_VERSION
+  after_script:
+    - uv cache prune --ci
+  changes:
+    - "src/**/*.py"
+    - "tests/**/*.py"
+    - "noxfile.py"
+    - "pyproject.toml"
+    - "pyrightconfig.json"
+    - ".gitlab-ci.yml"
+
+# Security Checks
+security-python:
+  stage: security
+  <<: *uv-cache
+  <<: *on-merge-requests-and-main
+  script:
+    - uvx nox -s security-python
+  after_script:
+    - uv cache prune --ci
+  allow_failure: true
+  changes:
+    - "src/**/*.py"
+    - "tests/**/*.py"
+    - "noxfile.py"
+    - "pyproject.toml"
+    - "bandit.yml"
+    - ".gitlab-ci.yml"
+
+# Python Tests - Using GitLab Matrix Strategy
+test-python:
+  stage: test
+  <<: *uv-cache
+  <<: *on-merge-requests-and-main
+  parallel:
+    matrix:
+      - PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
+  image: ghcr.io/astral-sh/uv:latest-python$PYTHON_VERSION-bookworm-slim
+  script:
+    - uvx nox -s tests-python-${PYTHON_VERSION//.}
+  after_script:
+    - uv cache prune --ci
+  artifacts:
+    reports:
+      junit: tests/results/*.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - tests/results/
+      - coverage.xml
+    expire_in: 5 days
+  changes:
+    - "src/**/*.py"
+    - "tests/**/*.py"
+    - "noxfile.py"
+    - "pyproject.toml"
+    - ".coveragerc"
+    - ".gitlab-ci.yml"
+
+# Cross-platform testing with macOS (GitLab.com SaaS runners)
+test-python-macos:
+  stage: test
+  <<: *on-merge-requests-and-main
+  tags:
+    - saas-macos-medium-m1
+  before_script:
+    - curl -LsSf https://astral.sh/uv/install.sh | sh
+    - export PATH="$PATH:$HOME/.cargo/bin"
+  script:
+    - uvx nox -s tests-python-3.13
+  artifacts:
+    reports:
+      junit: tests/results/*.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - tests/results/
+      - coverage.xml
+    expire_in: 5 days
+  changes:
+    - "src/**/*.py"
+    - "tests/**/*.py"
+    - "noxfile.py"
+    - "pyproject.toml"
+    - ".coveragerc"
+    - ".gitlab-ci.yml"
+
+# Cross-platform testing with Windows (GitLab.com SaaS runners)
+test-python-windows:
+  stage: test
+  <<: *on-merge-requests-and-main
+  tags:
+    - saas-windows-medium-amd64
+  before_script:
+    - powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+    - $env:PATH += ";$env:USERPROFILE\.cargo\bin"
+  script:
+    - uvx nox -s tests-python-3.13
+  artifacts:
+    reports:
+      junit: tests/results/*.xml
+      coverage_report:
+        coverage_format: cobertura
+        path: coverage.xml
+    paths:
+      - tests/results/
+      - coverage.xml
+    expire_in: 5 days
+  changes:
+    - "src/**/*.py"
+    - "tests/**/*.py"
+    - "noxfile.py"
+    - "pyproject.toml"
+    - ".coveragerc"
+    - ".gitlab-ci.yml"
+
+{% if cookiecutter.add_rust_extension == 'y' -%}
+# Rust-specific jobs (conditional on rust extension flag)
+.rust-job: &rust-job
+  image: rust:latest
+  stage: quality
+  <<: *on-merge-requests-and-main
+  changes:
+    - "rust/**/*.rs"
+    - "Cargo.toml"
+    - ".gitlab-ci.yml"
+
+format-rust:
+  <<: *rust-job
+  before_script:
+    - rustup component add rustfmt
+    - curl -LsSf https://astral.sh/uv/install.sh | sh
+    - export PATH="$PATH:/root/.cargo/bin"
+  script:
+    - uvx nox -s format-rust
+
+lint-rust:
+  <<: *rust-job
+  before_script:
+    - rustup component add clippy
+    - curl -LsSf https://astral.sh/uv/install.sh | sh
+    - export PATH="$PATH:/root/.cargo/bin"
+  script:
+    - uvx nox -s lint-rust
+
+test-rust:
+  <<: *rust-job
+  stage: test
+  before_script:
+    - curl -LsSf https://astral.sh/uv/install.sh | sh
+    - export PATH="$PATH:/root/.cargo/bin"
+  script:
+    - uvx nox -s test-rust
+{%- endif %}
+
+# Build Stage
+build-python:
+  stage: build
+  <<: *uv-cache
+  script:
+    - uvx nox -s build-python
+  after_script:
+    - uv cache prune --ci
+  artifacts:
+    paths:
+      - dist/
+    expire_in: 30 days
+  rules:
+    - if: $CI_COMMIT_TAG
+    - if: $CI_COMMIT_BRANCH == "main"
+    - if: $CI_PIPELINE_SOURCE == "web"
+
+# Documentation build validation (ReadTheDocs handles hosting)
+build-docs:
+  stage: build
+  <<: *uv-cache
+  script:
+    - uvx nox -s build-docs
+  after_script:
+    - uv cache prune --ci
+  artifacts:
+    paths:
+      - docs/_build/html/
+    expire_in: 5 days
+  <<: *on-merge-requests-and-main
+  changes:
+    - "docs/**/*"
+    - "src/**/*.py"
+    - "noxfile.py"
+    - "pyproject.toml"
+    - ".gitlab-ci.yml"
+
+# Documentation build (GitLab Pages - fallback/mirror)
+pages:
+  stage: build
+  <<: *uv-cache
+  script:
+    - uvx nox -s build-docs
+    - mv docs/_build/html public
+  after_script:
+    - uv cache prune --ci
+  artifacts:
+    paths:
+      - public
+    expire_in: 30 days
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main"
+  changes:
+    - "docs/**/*"
+    - "src/**/*.py"
+    - "noxfile.py"
+    - "pyproject.toml"
+
+# Test Release Job (TestPyPI)
+test-release-python:
+  stage: release
+  <<: *uv-cache
+  script:
+    - export PYPI_URL=https://test.pypi.org/legacy/
+    - uvx nox -s publish-python
+  after_script:
+    - uv cache prune --ci
+  rules:
+    - if: $CI_COMMIT_TAG
+  environment:
+    name: test
+    url: https://test.pypi.org/project/{{ cookiecutter.package_name }}/
+
+# Production Release Job (PyPI)
+release-python:
+  stage: release
+  <<: *uv-cache
+  script:
+    - uvx nox -s publish-python
+  after_script:
+    - uv cache prune --ci
+  rules:
+    - if: $CI_COMMIT_TAG
+  environment:
+    name: production
+    url: https://pypi.org/project/{{ cookiecutter.package_name }}/
+  needs:
+    - test-release-python
+  when: manual

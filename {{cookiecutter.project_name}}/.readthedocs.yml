@@ -4,5 +4,11 @@ build:
   os: ubuntu-22.04
   tools:
     python: "3.13"
+
+python:
+  install:
+    - requirements: docs/requirements.txt
+    - path: .
+
 sphinx:
   configuration: docs/conf.py
