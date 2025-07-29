@@ -60,6 +60,15 @@ def setup_venv(session: Session) -> None:
     session.run("python", SCRIPTS_FOLDER / "setup-venv.py", REPO_ROOT, "-p", PYTHON_VERSIONS[0], external=True)
 
 
+@nox.session(python=False, name="setup-remote")
+def setup_remote(session: Session) -> None:
+    """Set up the remote repository for the current project."""
+    command: list[str] = [
+        "python", SCRIPTS_FOLDER / "setup-remote.py", REPO_ROOT, "--host", REPOSITORY_HOST, "--path", REPOSITORY_PATH
+    ]
+    session.run(*command, external=True)
+
+
 @nox.session(python=DEFAULT_PYTHON_VERSION, name="pre-commit", tags=[QUALITY])
 def precommit(session: Session) -> None:
     """Lint using pre-commit."""
