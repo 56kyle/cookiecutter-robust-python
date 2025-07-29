@@ -1,5 +1,6 @@
 # bitbucket-pipelines.yml
 # See https://support.atlassian.com/bitbucket-cloud/docs/get-started-with-bitbucket-pipelines/
+# This is currently untested serves as a best guess for an equivalent pipeline
 
 image: ghcr.io/astral-sh/uv:latest-python3.13-bookworm-slim
 
@@ -71,7 +72,7 @@ pipelines:
         after-script:
           - echo "Security checks completed"
 
-    # Parallel typecheck execution across Python versions  
+    # Parallel typecheck execution across Python versions
     - parallel:
         steps:
           - step:
@@ -91,7 +92,7 @@ pipelines:
               image: ghcr.io/astral-sh/uv:latest-python3.10-bookworm-slim
               caches:
                 - uv
-                - pip  
+                - pip
               script:
                 - export UV_CACHE_DIR=.uv-cache
                 - export UV_LINK_MODE=copy
@@ -289,7 +290,7 @@ pipelines:
             - uvx nox -s security-python
             - uv cache prune --ci
 
-      # Parallel typecheck execution across Python versions  
+      # Parallel typecheck execution across Python versions
       - parallel:
           steps:
             - step:
@@ -309,7 +310,7 @@ pipelines:
                 image: ghcr.io/astral-sh/uv:latest-python3.10-bookworm-slim
                 caches:
                   - uv-deps
-                  - pip-deps  
+                  - pip-deps
                 script:
                   - export UV_CACHE_DIR=.uv-cache
                   - export UV_LINK_MODE=copy

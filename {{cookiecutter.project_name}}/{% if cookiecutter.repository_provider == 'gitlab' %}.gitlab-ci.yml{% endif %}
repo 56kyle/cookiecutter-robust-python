@@ -1,5 +1,6 @@
 # .gitlab-ci.yml
 # See https://docs.gitlab.com/ee/ci/yaml/
+# This is currently untested and serves as a best guess for what might be an equivalent pipeline
 
 # Global settings
 image: ghcr.io/astral-sh/uv:latest-python3.13-bookworm-slim
