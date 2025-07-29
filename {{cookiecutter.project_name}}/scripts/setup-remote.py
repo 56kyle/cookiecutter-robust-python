@@ -15,15 +15,15 @@ def main() -> None:
     """Parses command line input and passes it through to setup_git."""
     parser: argparse.ArgumentParser = get_parser()
     args: argparse.Namespace = parser.parse_args()
-    setup_remote(path=args.path, github_user=args.github_user, repo_name=args.repo_name)
+    setup_remote(path=args.path, repository_host=args.repository_host, repository_path=args.repository_path)
 
 
-def setup_remote(path: Path, github_user: str, repo_name: str) -> None:
+def setup_remote(path: Path, repository_host: str, repository_path: str) -> None:
     """Set up the provided cookiecutter-robust-python project's git repo."""
     commands: list[list[str]] = [
         ["git", "fetch", "origin"],
-        ["git", "remote", "add", "origin", f"https://github.com/{github_user}/{repo_name}.git"],
-        ["git", "remote", "set-url", "origin", f"https://github.com/{github_user}/{repo_name}.git"],
+        ["git", "remote", "add", "origin", f"https://{repository_host}/{repository_path}.git"],
+        ["git", "remote", "set-url", "origin", f"https://{repository_host}/{repository_path}.git"],
         ["git", "pull"],
         ["git", "checkout", "main"],
         ["git", "push", "-u", "origin", "main"],
@@ -40,7 +40,7 @@ def get_parser() -> argparse.ArgumentParser:
     """Creates the argument parser for setup-git."""
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
         prog="setup-git",
-        usage="python ./scripts/setup-remote.py . -u 56kyle -n robust-python-demo",
+        usage="python ./scripts/setup-remote.py . -h github.com -p 56kyle/robust-python-demo",
         description="Set up the provided cookiecutter-robust-python project's remote repo connection.",
     )
     parser.add_argument(
@@ -49,8 +49,8 @@ def get_parser() -> argparse.ArgumentParser:
         metavar="PATH",
         help="Path to the repo's root directory (must already exist).",
     )
-    parser.add_argument("-u", "--user", dest="github_user", help="GitHub user name.")
-    parser.add_argument("-n", "--name", dest="repo_name", help="Name of the repo.")
+    parser.add_argument("-h", "--host", dest="repository_host", help="Repository host (e.g., github.com, gitlab.com).")
+    parser.add_argument("-p", "--path", dest="repository_path", help="Repository path (e.g., user/repo, group/subgroup/repo).")
     return parser
 
 

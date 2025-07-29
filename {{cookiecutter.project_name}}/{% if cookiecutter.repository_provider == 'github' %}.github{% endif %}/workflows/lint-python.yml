@@ -1,7 +1,7 @@
-# .github/workflows/security-python.yml
+# .github/workflows/lint-python.yml
 # See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions
 
-name: Check Python Code Security
+name: Lint Python Code
 
 on:
   pull_request:
@@ -10,9 +10,8 @@ on:
       - "tests/**/*.py"
       - "noxfile.py"
       - "pyproject.toml"
-      - ".bandit"
       - ".ruff.toml"
-      - ".github/workflows/security-python.yml"
+      - ".github/workflows/lint-python.yml"
   push:
     branches:
       - main
@@ -22,22 +21,21 @@ on:
       - "tests/**/*.py"
       - "noxfile.py"
       - "pyproject.toml"
-      - ".bandit"
       - ".ruff.toml"
-      - ".github/workflows/security-python.yml"
+      - ".github/workflows/lint-python.yml"
 
   workflow_dispatch:
 
 jobs:
-  security-python:
-    name: Run Python Code Security Checks
+  lint-python:
+    name: Run Python Linting Checks
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Install uv
+      - name: Set up uv
         uses: astral-sh/setup-uv@v6
 
       - name: Set up Python
@@ -45,5 +43,5 @@ jobs:
         with:
           python-version-file: ".github/workflows/.python-version"
 
-      - name: Run Python code security analysis
-        run: uvx nox -s security-python
+      - name: Run Python quality checks
+        run: uvx nox -t quality

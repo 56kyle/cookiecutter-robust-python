@@ -1,0 +1,49 @@
+name: Test Rust Code
+
+on:
+  pull_request:
+    paths:
+      - "rust/**/*.rs"
+      - "Cargo.toml"
+      - "noxfile.py"
+      - ".github/workflows/test-rust.yml"
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - "rust/**/*.rs"
+      - "Cargo.toml"
+      - "noxfile.py"
+      - ".github/workflows/test-rust.yml"
+
+  workflow_dispatch:
+
+jobs:
+  test-rust:
+    name: Run Rust Tests on ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - { os: "ubuntu-latest" }
+          - { os: "macos-latest" }
+          - { os: "windows-latest" }
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        run: rustup show
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".github/workflows/.python-version"
+
+      - name: Run Rust tests
+        run: uvx nox -s test-rust

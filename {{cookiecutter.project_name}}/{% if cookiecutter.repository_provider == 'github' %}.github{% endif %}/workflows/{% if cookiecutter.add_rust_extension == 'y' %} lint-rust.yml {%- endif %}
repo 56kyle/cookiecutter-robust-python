@@ -1,0 +1,48 @@
+
+name: Lint Rust Code
+
+on:
+  pull_request:
+    paths:
+      - "rust/**/*.rs"
+      - "Cargo.toml"
+      - "noxfile.py"
+      - ".github/workflows/lint-rust.yml"
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - "rust/**/*.rs"
+      - "Cargo.toml"
+      - "noxfile.py"
+      - ".github/workflows/lint-rust.yml"
+
+  workflow_dispatch:
+
+jobs:
+  lint-rust:
+    name: Run Rust Linting Checks
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        run: |
+          rustup component add rustfmt clippy
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".github/workflows/.python-version"
+
+      - name: Run Rust format check
+        run: uvx nox -s format-rust
+
+      - name: Run Rust lint check
+        run: uvx nox -s lint-rust

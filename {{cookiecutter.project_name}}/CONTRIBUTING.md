@@ -1,44 +1,205 @@
-# Contributing to cookiecutter-robust-python
+# Contributing to {{ cookiecutter.project_name }}
 
-Thank you for considering contributing to the `cookiecutter-robust-python` template! We welcome contributions that help improve the template, keep its tooling current, and enhance its documentation.
+Thank you for your interest in contributing to `{{ cookiecutter.package_name }}`! We welcome bug reports, feature requests, and code contributions that help improve this project.
 
-By participating in this project, you are expected to uphold our [Code of Conduct].
+By participating in this project, you are expected to uphold our [Code of Conduct][code-of-conduct].
 
 ## How to Contribute
 
-There are several ways to contribute:
+### Reporting Bugs
 
-1.  **Reporting Bugs:** If you find an issue with the template itself (e.g., it doesn't generate correctly, the generated project's workflow doesn't work on a specific OS, a tool is misconfigured), please open an issue on the [issue tracker](https://github.com/56kyle/cookiecutter-robust-python/issues). Provide clear steps to reproduce the bug.
-2.  **Suggesting Enhancements:** Have an idea for a new feature, a different tool choice you think is better, or an improvement to the template structure or documentation? Open an issue on the [issue tracker](https://github.com/56kyle/cookiecutter-robust-python/issues) to discuss your suggestion. Clearly articulate the proposed change and the rationale behind it, ideally referencing the template's philosophy and criteria ([Template Philosophy](https://56kyle.github.io/cookiecutter-robust-python/philosophy.html), [Criteria for Tool Selection](https://56kyle.github.io/cookiecutter-robust-python/criteria.html)).
-3.  **Submitting Code Contributions:** Ready to contribute code (e.g., fix a bug, implement a suggested enhancement, update a tool version)? Please fork the repository and submit a Pull Request.
+If you find a bug, please open an issue on our [issue tracker][issues] with:
 
-## Setting Up Your Development Environment
+- A clear description of the bug
+- Steps to reproduce the issue
+- Expected vs. actual behavior
+- Your environment details (Python version, OS, etc.)
+- Relevant error messages or logs
 
-Refer to the **[Getting Started: Contributing to the Template](https://56kyle.github.io/cookiecutter-robust-python/getting-started-template-contributing.html)** section in the template documentation for instructions on cloning the repository, installing template development dependencies (using uv), setting up the template's pre-commit hooks, and running template checks/tests.
+### Suggesting Features
 
-## Contribution Workflow
+For feature requests, please open an issue with:
 
-1.  **Fork** the repository and **clone** your fork.
-2.  Create a **new branch** for your contribution based on the main branch. Use a descriptive name (e.g., `fix/ci-workflow-on-windows`, `feat/update-uv-version`).
-3.  Set up your development environment following the [Getting Started](https://56kyle.github.io/cookiecutter-robust-python/getting-started-template-contributing.html) guide (clone, `uv sync`, `uvx nox -s pre-commit -- install`).
-4.  Make your **code or documentation changes**.
-5.  Ensure your changes adhere to the template's **code quality standards** (configured in the template's `.pre-commit-config.yaml`, `.ruff.toml`, etc.). The pre-commit hooks will help with this. Run `uvx nox -s lint`, `uvx nox -s check` in the template repository for more comprehensive checks.
-6.  Ensure your changes **do not break existing functionality**. Run the template's test suite: `uvx nox -s test`. Ideally, add tests for new functionality or bug fixes.
-7.  Ensure the **template documentation builds correctly** with your changes: `uvx nox -s docs`.
-8.  Write clear, concise **commit messages** following the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) specification where possible, especially for significant changes (fixes, features, chore updates, etc.).
-9.  **Push** your branch to your fork.
-10. **Open a Pull Request** from your branch to the main branch of the main template repository. Provide a clear description of your changes. Link to any relevant issues.
+- A clear description of the proposed feature
+- The problem it would solve or use case it would address
+- Any relevant examples or mockups
+- Consideration of potential alternatives
 
-## Updating Tool Evaluations
+### Contributing Code
 
-If your contribution involves updating a major tool version or suggesting a different tool entirely, you **must** update the relevant sections in the template's documentation (`docs/topics/` files) to reflect the changes in configuration, behavior, or re-justify the choice based on the current state of the tools and criteria. This is crucial for keeping the documentation accurate and useful over time.
+We welcome pull requests! For significant changes, it's best to open an issue first to discuss the approach.
 
-## Communication
+## Development Setup
 
-For questions or discussion about contributions, open an issue or a discussion on the [GitHub repository](https://github.com/56kyle/cookiecutter-robust-python).
+### Prerequisites
+
+- Python {{ cookiecutter.min_python_version }}+ (this project supports Python {{ cookiecutter.min_python_version }}-{{ cookiecutter.max_python_version }})
+- [uv][uv-documentation] for dependency management
+- Git for version control
+
+### Setting Up Your Development Environment
+
+1. **Fork and clone the repository:**
+   ```bash
+   git clone https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}.git
+   cd {{ cookiecutter.project_name }}
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   uv sync
+   ```
+
+3. **Set up pre-commit hooks:**
+   ```bash
+   uvx nox -s pre-commit -- install
+   ```
+
+4. **Verify your setup:**
+   ```bash
+   uvx nox -l  # List available development tasks
+   ```
+
+## Development Workflow
+
+### Making Changes
+
+1. **Create a feature branch:**
+   ```bash
+   git checkout -b feature/your-feature-name
+   # or
+   git checkout -b fix/your-bug-fix
+   ```
+
+2. **Make your changes** following our coding standards (see below)
+
+3. **Test your changes:**
+   ```bash
+   # Run the full test suite
+   uvx nox -s tests-python
+
+   # Run tests for a specific Python version
+   uvx nox -s tests-python-{{ cookiecutter.max_python_version.replace('.', '') }}
+
+   # Run a specific test file
+   uvx nox -s tests-python -- tests/unit_tests/test_specific.py
+   ```
+
+4. **Check code quality:**
+   ```bash
+   # Format code
+   uvx nox -s format-python
+
+   # Lint code
+   uvx nox -s lint-python
+
+   # Type check
+   uvx nox -s typecheck
+
+   # Security checks
+   uvx nox -s security-python
+
+   # Or run all checks at once
+   uvx nox -t ci
+   ```
+
+5. **Update documentation if needed:**
+   ```bash
+   # Build docs locally
+   uvx nox -s build-docs
+   ```
+
+### Coding Standards
+
+This project follows these standards:
+
+- **Code formatting:** [Ruff][ruff-documentation] (automatically applied by pre-commit)
+- **Linting:** Ruff with comprehensive rule set
+- **Type checking:** [Pyright][pyright-documentation]
+- **Security:** [Bandit][bandit-documentation] for security linting
+- **Commit messages:** [Conventional Commits][conventional-commits] format preferred
+- **Testing:** [pytest][pytest-documentation] with good coverage
+
+### Testing Guidelines
+
+- Write tests for new functionality in the appropriate test directory:
+  - `tests/unit_tests/` - Fast, isolated unit tests
+  - `tests/integration_tests/` - Tests that involve multiple components
+  - `tests/acceptance_tests/` - End-to-end behavior tests
+- Aim for good test coverage (check with `uvx nox -s coverage`)
+- Use descriptive test names and docstrings
+- Mock external dependencies appropriately
+
+## Submitting Changes
+
+### Pull Request Process
+
+1. **Push your branch** to your fork
+2. **Open a pull request** with:
+   - Clear title describing the change
+   - Description explaining what and why
+   - Link to any relevant issues
+   - Note any breaking changes
+
+3. **Ensure CI passes** - all automated checks must pass
+4. **Respond to review feedback** if requested
+5. **Squash commits** if requested before merge
+
+### Pull Request Guidelines
+
+- Keep changes focused and atomic
+- Update documentation for user-facing changes
+- Add tests for new functionality
+- Follow the existing code style
+- Ensure all CI checks pass
+
+## Development Tasks Reference
+
+Common Nox sessions for development:
+
+```bash
+# Code quality
+uvx nox -s format-python    # Format with Ruff
+uvx nox -s lint-python      # Lint with Ruff
+uvx nox -s typecheck        # Type check with Pyright
+uvx nox -s security-python  # Security checks
+
+# Testing
+uvx nox -s tests-python     # Run full test suite
+uvx nox -s coverage         # Generate coverage report
+
+# Documentation
+uvx nox -s build-docs       # Build documentation
+
+# Building
+uvx nox -s build-python     # Build package
+
+# Run everything CI runs
+uvx nox -t ci               # All CI checks
+```
+
+## Getting Help
+
+- Check existing [issues][issues]{% if cookiecutter.repository_provider == 'github' %} and [discussions][discussions]{% endif %}
+- Open a new issue for bugs or feature requests
+- Start a discussion for questions or ideas
+
+## Recognition
+
+Contributors will be recognized in our release notes and documentation. Thank you for helping make this project better!
 
 ---
 
-<!-- github-only -->
+*This project was generated from the [cookiecutter-robust-python][cookiecutter-robust-python] template.*
 
-[code of conduct]: CODE_OF_CONDUCT.md
+<!-- Reference Links -->
+[code-of-conduct]: CODE_OF_CONDUCT.md
+[issues]: https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}/issues
+{% if cookiecutter.repository_provider == 'github' %}[discussions]: https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}/discussions{% endif %}
+[uv-documentation]: https://docs.astral.sh/uv/
+[ruff-documentation]: https://docs.astral.sh/ruff/
+[pyright-documentation]: https://github.com/microsoft/pyright
+[bandit-documentation]: https://bandit.readthedocs.io/
+[conventional-commits]: https://www.conventionalcommits.org/
+[pytest-documentation]: https://docs.pytest.org/
+[cookiecutter-robust-python]: https://github.com/56kyle/cookiecutter-robust-python
