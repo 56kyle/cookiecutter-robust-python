@@ -40,6 +40,52 @@ stages:
     - if: $CI_COMMIT_BRANCH == "main"
     - if: $CI_PIPELINE_SOURCE == "web"
 
+# File pattern anchors for different job types
+.python-quality-files: &python-quality-files
+  - "src/**/*.py"
+  - "tests/**/*.py"
+  - "noxfile.py"
+  - "pyproject.toml"
+  - ".ruff.toml"
+  - "pyrightconfig.json"
+  - ".gitlab-ci.yml"
+
+.python-typecheck-files: &python-typecheck-files
+  - "src/**/*.py"
+  - "tests/**/*.py"
+  - "noxfile.py"
+  - "pyproject.toml"
+  - "pyrightconfig.json"
+  - ".gitlab-ci.yml"
+
+.python-security-files: &python-security-files
+  - "src/**/*.py"
+  - "tests/**/*.py"
+  - "noxfile.py"
+  - "pyproject.toml"
+  - "bandit.yml"
+  - ".gitlab-ci.yml"
+
+.python-test-files: &python-test-files
+  - "src/**/*.py"
+  - "tests/**/*.py"
+  - "noxfile.py"
+  - "pyproject.toml"
+  - ".coveragerc"
+  - ".gitlab-ci.yml"
+
+.docs-files: &docs-files
+  - "docs/**/*"
+  - "src/**/*.py"
+  - "noxfile.py"
+  - "pyproject.toml"
+  - ".gitlab-ci.yml"
+
+.rust-files: &rust-files
+  - "rust/**/*.rs"
+  - "Cargo.toml"
+  - ".gitlab-ci.yml"
+
 # Base job template for Python quality checks
 .quality-job: &quality-job
   stage: quality
@@ -55,19 +101,17 @@ quality-python:
   <<: *quality-job
   script:
     - uvx nox -t quality
-  changes:
-    - "src/**/*.py"
-    - "tests/**/*.py"
-    - "noxfile.py"
-    - "pyproject.toml"
-    - ".ruff.toml"
-    - "pyrightconfig.json"
-    - ".gitlab-ci.yml"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes: *python-quality-files
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes: *python-quality-files
+    - if: $CI_PIPELINE_SOURCE == "web"
+      changes: *python-quality-files
 
 typecheck-python:
   stage: typecheck
   <<: *uv-cache
-  <<: *on-merge-requests-and-main
   parallel:
     matrix:
       - PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
@@ -78,37 +122,35 @@ typecheck-python:
     - uvx nox -s typecheck-$PYTHON_VERSION
   after_script:
     - uv cache prune --ci
-  changes:
-    - "src/**/*.py"
-    - "tests/**/*.py"
-    - "noxfile.py"
-    - "pyproject.toml"
-    - "pyrightconfig.json"
-    - ".gitlab-ci.yml"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes: *python-typecheck-files
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes: *python-typecheck-files
+    - if: $CI_PIPELINE_SOURCE == "web"
+      changes: *python-typecheck-files
 
 # Security Checks
 security-python:
   stage: security
   <<: *uv-cache
-  <<: *on-merge-requests-and-main
   script:
     - uvx nox -s security-python
   after_script:
     - uv cache prune --ci
   allow_failure: true
-  changes:
-    - "src/**/*.py"
-    - "tests/**/*.py"
-    - "noxfile.py"
-    - "pyproject.toml"
-    - "bandit.yml"
-    - ".gitlab-ci.yml"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes: *python-security-files
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes: *python-security-files
+    - if: $CI_PIPELINE_SOURCE == "web"
+      changes: *python-security-files
 
 # Python Tests - Using GitLab Matrix Strategy
 test-python:
   stage: test
   <<: *uv-cache
-  <<: *on-merge-requests-and-main
   parallel:
     matrix:
       - PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
@@ -127,18 +169,17 @@ test-python:
       - tests/results/
       - coverage.xml
     expire_in: 5 days
-  changes:
-    - "src/**/*.py"
-    - "tests/**/*.py"
-    - "noxfile.py"
-    - "pyproject.toml"
-    - ".coveragerc"
-    - ".gitlab-ci.yml"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes: *python-test-files
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes: *python-test-files
+    - if: $CI_PIPELINE_SOURCE == "web"
+      changes: *python-test-files
 
 # Cross-platform testing with macOS (GitLab.com SaaS runners)
 test-python-macos:
   stage: test
-  <<: *on-merge-requests-and-main
   tags:
     - saas-macos-medium-m1
   before_script:
@@ -156,18 +197,17 @@ test-python-macos:
       - tests/results/
       - coverage.xml
     expire_in: 5 days
-  changes:
-    - "src/**/*.py"
-    - "tests/**/*.py"
-    - "noxfile.py"
-    - "pyproject.toml"
-    - ".coveragerc"
-    - ".gitlab-ci.yml"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes: *python-test-files
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes: *python-test-files
+    - if: $CI_PIPELINE_SOURCE == "web"
+      changes: *python-test-files
 
 # Cross-platform testing with Windows (GitLab.com SaaS runners)
 test-python-windows:
   stage: test
-  <<: *on-merge-requests-and-main
   tags:
     - saas-windows-medium-amd64
   before_script:
@@ -185,24 +225,26 @@ test-python-windows:
       - tests/results/
       - coverage.xml
     expire_in: 5 days
-  changes:
-    - "src/**/*.py"
-    - "tests/**/*.py"
-    - "noxfile.py"
-    - "pyproject.toml"
-    - ".coveragerc"
-    - ".gitlab-ci.yml"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes: *python-test-files
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes: *python-test-files
+    - if: $CI_PIPELINE_SOURCE == "web"
+      changes: *python-test-files
 
 {% if cookiecutter.add_rust_extension == 'y' -%}
 # Rust-specific jobs (conditional on rust extension flag)
 .rust-job: &rust-job
   image: rust:latest
   stage: quality
-  <<: *on-merge-requests-and-main
-  changes:
-    - "rust/**/*.rs"
-    - "Cargo.toml"
-    - ".gitlab-ci.yml"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes: *rust-files
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes: *rust-files
+    - if: $CI_PIPELINE_SOURCE == "web"
+      changes: *rust-files
 
 format-rust:
   <<: *rust-job
@@ -261,13 +303,13 @@ build-docs:
     paths:
       - docs/_build/html/
     expire_in: 5 days
-  <<: *on-merge-requests-and-main
-  changes:
-    - "docs/**/*"
-    - "src/**/*.py"
-    - "noxfile.py"
-    - "pyproject.toml"
-    - ".gitlab-ci.yml"
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      changes: *docs-files
+    - if: $CI_COMMIT_BRANCH == "main"
+      changes: *docs-files
+    - if: $CI_PIPELINE_SOURCE == "web"
+      changes: *docs-files
 
 # Documentation build (GitLab Pages - fallback/mirror)
 pages:
@@ -284,11 +326,7 @@ pages:
     expire_in: 30 days
   rules:
     - if: $CI_COMMIT_BRANCH == "main"
-  changes:
-    - "docs/**/*"
-    - "src/**/*.py"
-    - "noxfile.py"
-    - "pyproject.toml"
+      changes: *docs-files
 
 # Test Release Job (TestPyPI)
 test-release-python:
