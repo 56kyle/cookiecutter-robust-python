@@ -42,7 +42,7 @@ def lint_from_demo(
             git("checkout", "HEAD", "--", path)
         git("add", ".")
         git("commit", "-m", "meta: lint-from-demo", "--no-verify")
-    retrocookie(instance_path=demo_path, commits=["HEAD"], branch="temp/lint-from-demo")
+    retrocookie(instance_path=demo_path, commits=["develop..temp/lint-from-demo"])
 
 
 if __name__ == '__main__':
