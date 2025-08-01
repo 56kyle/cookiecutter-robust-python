@@ -12,9 +12,8 @@ from util import in_new_demo
 
 # These still may need linted, but retrocookie shouldn't be used on them
 IGNORED_FILES: list[str] = [
-    "{{cookiecutter.project_name}}/pyproject.toml",
-    "{{cookiecutter.project_name}}/uv.lock",
-    ""
+    "pyproject.toml",
+    "uv.lock",
 ]
 
 
