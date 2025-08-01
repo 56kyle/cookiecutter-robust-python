@@ -37,7 +37,7 @@ def lint_from_demo(
         git("checkout", "develop")
         git("branch", "-D", "temp/lint-from-demo", ignore_error=True)
         git("checkout", "-b", "temp/lint-from-demo", "develop")
-        pre_commit.main.main(["run", "--all-files", "--hook-stage=manual", "--show-diff-on-failure"])
+        pre_commit.main.main(["run", "--all-files", "--show-diff-on-failure"])
 
         for path in IGNORED_FILES:
             git("checkout", "HEAD", "--", path)
