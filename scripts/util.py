@@ -10,6 +10,9 @@ from pathlib import Path
 from typing import Any
 from typing import Callable
 from typing import Generator
+from typing import Literal
+from typing import Optional
+from typing import overload
 
 import cruft
 import typer
@@ -35,12 +38,24 @@ def remove_readonly(func: Callable[[str], Any], path: str, _: Any) -> None:
     func(path)
 
 
-def run_command(command: str, *args: str) -> subprocess.CompletedProcess:
+@overload
+def run_command(command: str, *args: str, ignore_error: Literal[True]) -> Optional[subprocess.CompletedProcess]:
+    ...
+
+
+@overload
+def run_command(command: str, *args: str, ignore_error: Literal[False] = ...) -> subprocess.CompletedProcess:
+    ...
+
+
+def run_command(command: str, *args: str, ignore_error: bool = False) -> Optional[subprocess.CompletedProcess]:
     """Runs the provided command in a subprocess."""
     try:
         process = subprocess.run([command, *args], check=True, capture_output=True, text=True)
         return process
     except subprocess.CalledProcessError as error:
+        if ignore_error:
+            return None
         print(error.stdout, end="")
         print(error.stderr, end="", file=sys.stderr)
         raise
