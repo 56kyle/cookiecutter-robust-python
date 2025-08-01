@@ -65,17 +65,17 @@ For detailed API documentation and CLI command references, see the **[Documentat
 
 This project uses a robust set of tools for development, testing, and quality assurance. All significant automated tasks are run via [:term:`Nox`](nox-documentation), orchestrated by the central `noxfile.py`.
 
-*   **Run all checks (lint, typecheck, security):** `uvx nox -s check`
-*   **Run test suite with coverage:** `uvx nox -s test`
-*   **Build documentation:** `uvx nox -s docs`
-*   **Build package:** `uvx nox -s build`
-*   **See all available tasks:** `uvx nox -l`
+- **Run all checks (lint, typecheck, security):** `uvx nox -s check`
+- **Run test suite with coverage:** `uvx nox -s test`
+- **Build documentation:** `uvx nox -s docs`
+- **Build package:** `uvx nox -s build`
+- **See all available tasks:** `uvx nox -l`
 
 Explore the `noxfile.py` and the project documentation for detailed information on the automated workflow.
 
 ## Contributing
 
-(This section should guide contributions *to this specific generated project*, not the template. It should refer to the project's `CODE_OF_CONDUCT.md` and link to a `CONTRIBUTING.md` specific to the project, if you choose to generate one.)
+(This section should guide contributions _to this specific generated project_, not the template. It should refer to the project's `CODE_OF_CONDUCT.md` and link to a `CONTRIBUTING.md` specific to the project, if you choose to generate one.)
 
 Report bugs or suggest features via the [issue tracker](https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}/issues).
 
@@ -90,6 +90,6 @@ Distributed under the terms of the **{{ cookiecutter.license }}** license. See [
 **This project was generated from the [cookiecutter-robust-python template][cookiecutter-robust-python].**
 
 <!-- Reference Links -->
-[cookiecutter-robust-python]: https://github.com/56kyle/cookiecutter-robust-python
 
+[cookiecutter-robust-python]: https://github.com/56kyle/cookiecutter-robust-python
 [documentation]: https://{{ cookiecutter.project_name.replace('_', '-') }}.readthedocs.io/

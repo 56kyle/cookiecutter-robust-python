@@ -166,7 +166,7 @@ def tests_python(session: Session) -> None:
         "--cov-report=term",
         "--cov-report=xml",
         f"--junitxml={junitxml_file}",
-        "tests/"
+        "tests/",
     )
 
 

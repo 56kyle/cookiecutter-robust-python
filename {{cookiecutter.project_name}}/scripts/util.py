@@ -58,9 +58,7 @@ def remove_readonly(func: Callable[[str], Any], path: str, _: Any) -> None:
 def get_package_version() -> str:
     """Gets the package version."""
     result: subprocess.CompletedProcess = subprocess.run(
-        ["uvx", "--from", "commitizen", "cz", "version", "-p"],
-        cwd=REPO_FOLDER,
-        capture_output=True
+        ["uvx", "--from", "commitizen", "cz", "version", "-p"], cwd=REPO_FOLDER, capture_output=True
     )
     return result.stdout.decode("utf-8").strip()
 
@@ -98,9 +96,7 @@ def get_latest_tag() -> Optional[str]:
     find_last: list[str] = ["grep", "-v", '"${GITHUB_REF_NAME}"']
     echo_none: list[str] = ["echo", "''"]
     result: subprocess.CompletedProcess = subprocess.run(
-        [*sort_tags, "|", *find_last, "|", "tail", "-n1", "||", *echo_none],
-        cwd=REPO_FOLDER,
-        capture_output=True
+        [*sort_tags, "|", *find_last, "|", "tail", "-n1", "||", *echo_none], cwd=REPO_FOLDER, capture_output=True
     )
     tag: str = result.stdout.decode("utf-8").strip()
     if tag == "":
@@ -121,14 +117,17 @@ def get_latest_release_notes() -> str:
         )
     rev_range: str = "" if latest_tag is None else f"{latest_tag}..{latest_version}"
     command: list[str] = [
-        "uvx", "--from", "commitizen", "cz", "changelog", rev_range, "--dry-run", "--unreleased-version", latest_version
+        "uvx",
+        "--from",
+        "commitizen",
+        "cz",
+        "changelog",
+        rev_range,
+        "--dry-run",
+        "--unreleased-version",
+        latest_version,
     ]
-    result: subprocess.CompletedProcess = subprocess.run(
-        command,
-        cwd=REPO_FOLDER,
-        capture_output=True,
-        check=True
-    )
+    result: subprocess.CompletedProcess = subprocess.run(command, cwd=REPO_FOLDER, capture_output=True, check=True)
     return result.stdout.decode("utf-8")
 
 

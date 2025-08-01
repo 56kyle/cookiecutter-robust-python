@@ -33,7 +33,6 @@ jobs:
         id: current_version
         run: echo "CURRENT_VERSION=v$(uvx --from commitizen cz version -p)" >> $GITHUB_OUTPUT
 
-
   build_and_testpypi:
     name: Build & Publish to TestPyPI
     runs-on: ubuntu-latest
