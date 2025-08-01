@@ -66,25 +66,14 @@ uv: partial[subprocess.CompletedProcess] = partial(run_command, "uv")
 
 def require_clean_and_up_to_date_repo() -> None:
     """Checks if the repo is clean and up to date with any important branches."""
-    if not is_repo_clean_and_up_to_date():
-        typer.secho("The repo is either not clean or is not up to date.", fg="red")
-        raise typer.Exit(code=1)
-
-
-def is_repo_clean_and_up_to_date() -> bool:
-    """Checks if the repo is clean and up to date with any important branches."""
-    try:
-        git("fetch")
-        git("status", "--porcelain")
-        if not is_branch_synced_with_remote("develop"):
-            raise ValueError("develop is not synced with origin/develop")
-        if not is_branch_synced_with_remote("main"):
-            raise ValueError("main is not synced with origin/main")
-        if not is_ancestor("main", "develop"):
-            raise ValueError("main is not an ancestor of develop")
-        return True
-    except subprocess.CalledProcessError:
-        return False
+    git("fetch")
+    git("status", "--porcelain")
+    if not is_branch_synced_with_remote("develop"):
+        raise ValueError("develop is not synced with origin/develop")
+    if not is_branch_synced_with_remote("main"):
+        raise ValueError("main is not synced with origin/main")
+    if not is_ancestor("main", "develop"):
+        raise ValueError("main is not an ancestor of develop")
 
 
 def is_branch_synced_with_remote(branch: str) -> bool:
