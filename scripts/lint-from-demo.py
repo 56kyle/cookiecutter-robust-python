@@ -33,6 +33,7 @@ def lint_from_demo(
         no_cache=no_cache
     ) as demo_path:
         git("status", "--porcelain")
+        git("checkout", "develop")
         git("branch", "-D", "temp/lint-from-demo", ignore_error=True)
         git("checkout", "-b", "temp/lint-from-demo", "develop")
         pre_commit.main.main(["run", "--all-files", "--hook-stage=manual", "--show-diff-on-failure"])
