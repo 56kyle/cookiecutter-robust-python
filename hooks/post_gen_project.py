@@ -8,9 +8,9 @@ from typing import Callable
 
 
 REMOVE_PATHS: list[str] = [
-    "{% if cookiecutter.platform_provider != github %}.github{% endif %}",
-    "{% if cookiecutter.platform_provider != gitlab %}.gitlab-ci.yml{% endif %}",
-    "{% if cookiecutter.platform_provider != bitbucket %}.bitbucket-pipelines.yml{% endif %}",
+    "{% if cookiecutter.repository_provider != github %}.github{% endif %}",
+    "{% if cookiecutter.repository_provider != gitlab %}.gitlab-ci.yml{% endif %}",
+    "{% if cookiecutter.repository_provider != bitbucket %}.bitbucket-pipelines.yml{% endif %}",
 ]
 
 
