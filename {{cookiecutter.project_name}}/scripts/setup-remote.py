@@ -37,10 +37,10 @@ def setup_remote(path: Path, repository_host: str, repository_path: str) -> None
 
 
 def get_parser() -> argparse.ArgumentParser:
-    """Creates the argument parser for setup-git."""
+    """Creates the argument parser for setup-remote."""
     parser: argparse.ArgumentParser = argparse.ArgumentParser(
-        prog="setup-git",
-        usage="python ./scripts/setup-remote.py . -h github.com -p 56kyle/robust-python-demo",
+        prog="setup-remote",
+        usage="python ./scripts/setup-remote.py . --host github.com --path 56kyle/robust-python-demo",
         description="Set up the provided cookiecutter-robust-python project's remote repo connection.",
     )
     parser.add_argument(
@@ -49,9 +49,11 @@ def get_parser() -> argparse.ArgumentParser:
         metavar="PATH",
         help="Path to the repo's root directory (must already exist).",
     )
-    parser.add_argument("-h", "--host", dest="repository_host", help="Repository host (e.g., github.com, gitlab.com).")
     parser.add_argument(
-        "-p", "--path", dest="repository_path", help="Repository path (e.g., user/repo, group/subgroup/repo)."
+        "--host", dest="repository_host", help="Repository host (e.g., github.com, gitlab.com)."
+    )
+    parser.add_argument(
+        "--path", dest="repository_path", help="Repository path (e.g., user/repo, group/subgroup/repo)."
     )
     return parser
 
