@@ -28,6 +28,7 @@ def update_demo(
         typer.secho(f"Updating demo project at {demo_path=}.", fg="yellow")
         with work_in(demo_path):
             require_clean_and_up_to_date_repo()
+            git("checkout", "develop")
             cruft.update(
                 project_dir=demo_path,
                 template_path=REPO_FOLDER,
