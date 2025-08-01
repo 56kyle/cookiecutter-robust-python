@@ -6,6 +6,8 @@ import cruft
 import typer
 from cookiecutter.utils import work_in
 
+from scripts.util import is_repo_clean_and_up_to_date
+from scripts.util import require_clean_and_up_to_date_repo
 from util import get_demo_name
 from util import git
 from util import FolderOption
@@ -26,7 +28,7 @@ def update_demo(
         demo_path: Path = demos_cache_folder / demo_name
         typer.secho(f"Updating demo project at {demo_path=}.", fg="yellow")
         with work_in(demo_path):
-            git("status", "--porcelain")
+            require_clean_and_up_to_date_repo()
             cruft.update(
                 project_dir=demo_path,
                 template_path=REPO_FOLDER,

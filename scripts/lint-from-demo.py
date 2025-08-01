@@ -5,6 +5,8 @@ import pre_commit.main
 import typer
 from retrocookie.core import retrocookie
 
+from scripts.util import is_repo_clean_and_up_to_date
+from scripts.util import require_clean_and_up_to_date_repo
 from util import git
 from util import FolderOption
 from util import in_new_demo
@@ -32,7 +34,7 @@ def lint_from_demo(
         add_rust_extension=add_rust_extension,
         no_cache=no_cache
     ) as demo_path:
-        git("status", "--porcelain")
+        require_clean_and_up_to_date_repo()
         git("checkout", "develop")
         git("branch", "-D", "temp/lint-from-demo", ignore_error=True)
         git("checkout", "-b", "temp/lint-from-demo", "develop")
