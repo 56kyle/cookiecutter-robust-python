@@ -2,6 +2,7 @@
 import json
 import shutil
 import stat
+import tempfile
 from pathlib import Path
 from typing import Any
 from typing import Callable
@@ -42,6 +43,10 @@ def remove_undesired_files() -> None:
 
     This is done to avoid issues that tend to arise when the name of the template file contains a conditional.
     """
+    tmp_dir_root: Path = Path(tempfile.gettempdir()).parent
+    if Path.cwd().is_relative_to(tmp_dir_root):
+        return
+
     for path in REMOVE_PATHS:
         if path == "":
             continue
