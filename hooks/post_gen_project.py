@@ -63,4 +63,4 @@ def remove_readonly(func: Callable[[str], Any], path: str, _: Any) -> None:
 
 
 if __name__ == "__main__":
-    reindent_cookiecutter_json()
+    post_gen_project()
