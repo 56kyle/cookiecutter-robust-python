@@ -64,7 +64,13 @@ def setup_venv(session: Session) -> None:
 def setup_remote(session: Session) -> None:
     """Set up the remote repository for the current project."""
     command: list[str] = [
-        "python", SCRIPTS_FOLDER / "setup-remote.py", REPO_ROOT, "--host", REPOSITORY_HOST, "--path", REPOSITORY_PATH
+        "python",
+        SCRIPTS_FOLDER / "setup-remote.py",
+        REPO_ROOT,
+        "--host",
+        REPOSITORY_HOST,
+        "--path",
+        REPOSITORY_PATH,
     ]
     session.run(*command, external=True)
 
