@@ -6,12 +6,11 @@ import cruft
 import typer
 from cookiecutter.utils import work_in
 
-from scripts.util import is_repo_clean_and_up_to_date
-from scripts.util import require_clean_and_up_to_date_repo
 from util import get_demo_name
 from util import git
 from util import FolderOption
 from util import REPO_FOLDER
+from util import require_clean_and_up_to_date_repo
 
 
 cli: typer.Typer = typer.Typer()

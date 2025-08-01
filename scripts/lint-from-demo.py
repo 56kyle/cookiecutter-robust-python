@@ -5,11 +5,10 @@ import pre_commit.main
 import typer
 from retrocookie.core import retrocookie
 
-from scripts.util import is_repo_clean_and_up_to_date
-from scripts.util import require_clean_and_up_to_date_repo
 from util import git
 from util import FolderOption
 from util import in_new_demo
+from util import require_clean_and_up_to_date_repo
 
 
 # These still may need linted, but retrocookie shouldn't be used on them
