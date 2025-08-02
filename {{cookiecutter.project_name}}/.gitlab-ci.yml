@@ -233,7 +233,7 @@ test-python-windows:
     - if: $CI_PIPELINE_SOURCE == "web"
       changes: *python-test-files
 
-{% if cookiecutter.add_rust_extension == 'y' -%}
+{% if cookiecutter.add_rust_extension -%}
 # Rust-specific jobs (conditional on rust extension flag)
 .rust-job: &rust-job
   image: rust:latest

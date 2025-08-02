@@ -46,7 +46,7 @@ pipelines:
         after-script:
           - echo "Python quality checks completed"
 
-{% if cookiecutter.add_rust_extension == 'y' -%}
+{% if cookiecutter.add_rust_extension -%}
     - step:
         name: Rust Quality Checks
         image: rust:latest
@@ -243,7 +243,7 @@ pipelines:
                 - tests/results/*.xml
                 - coverage.xml
 
-{% if cookiecutter.add_rust_extension == 'y' -%}
+{% if cookiecutter.add_rust_extension -%}
           - step:
               name: Test Rust
               image: rust:latest
@@ -268,7 +268,7 @@ pipelines:
             - uvx nox -t quality
             - uv cache prune --ci
 
-{% if cookiecutter.add_rust_extension == 'y' -%}
+{% if cookiecutter.add_rust_extension -%}
       - step:
           name: Rust Quality Checks
           image: rust:latest
@@ -461,7 +461,7 @@ pipelines:
                   - tests/results/*.xml
                   - coverage.xml
 
-{% if cookiecutter.add_rust_extension == 'y' -%}
+{% if cookiecutter.add_rust_extension -%}
             - step:
                 name: Test Rust
                 image: rust:latest
@@ -499,7 +499,7 @@ pipelines:
             - uvx nox -t quality
             - uv cache prune --ci
 
-{% if cookiecutter.add_rust_extension == 'y' -%}
+{% if cookiecutter.add_rust_extension -%}
       - step:
           name: Rust Quality Checks
           image: rust:latest
@@ -571,7 +571,7 @@ pipelines:
                   - uvx nox -s tests-python-3.13
                   - uv cache prune --ci
 
-{% if cookiecutter.add_rust_extension == 'y' -%}
+{% if cookiecutter.add_rust_extension -%}
             - step:
                 name: Test Rust
                 image: rust:latest

@@ -95,7 +95,7 @@ def format_python(session: Session) -> None:
     session.run("uvx", "ruff", "format", *session.posargs)
 
 
-{% if cookiecutter.add_rust_extension == "y" -%}
+{% if cookiecutter.add_rust_extension -%}
 @nox.session(python=False, name="format-rust", tags=[FORMAT, RUST])
 def format_rust(session: Session) -> None:
     """Run Rust code formatter (cargo fmt)."""
@@ -113,7 +113,7 @@ def lint_python(session: Session) -> None:
     session.run("uvx", "ruff", "check", "--fix", "--verbose")
 
 
-{% if cookiecutter.add_rust_extension == "y" -%}
+{% if cookiecutter.add_rust_extension -%}
 @nox.session(python=False, name="lint-rust", tags=[LINT, RUST])
 def lint_rust(session: Session) -> None:
     """Run Rust code linters (cargo clippy)."""
@@ -144,7 +144,7 @@ def security_python(session: Session) -> None:
     session.run("uvx", "pip-audit")
 
 
-{% if cookiecutter.add_rust_extension == 'y' -%}
+{% if cookiecutter.add_rust_extension -%}
 @nox.session(python=False, name="security-rust", tags=[SECURITY, RUST])
 def security_rust(session: Session) -> None:
     """Run code security checks (cargo audit)."""
@@ -176,7 +176,7 @@ def tests_python(session: Session) -> None:
     )
 
 
-{% if cookiecutter.add_rust_extension == 'y' -%}
+{% if cookiecutter.add_rust_extension -%}
 @nox.session(python=False, name="tests-rust", tags=[TEST, RUST, CI])
 def tests_rust(session: Session) -> None:
     """Test the project's rust crates."""
@@ -207,7 +207,7 @@ def docs_build(session: Session) -> None:
 def build_python(session: Session) -> None:
     """Build sdist and wheel packages (uv build)."""
     session.log(f"Building sdist and wheel packages with py{session.python}.")
-    {% if cookiecutter.add_rust_extension == "y" -%}
+    {% if cookiecutter.add_rust_extension -%}
     session.run("maturin", "develop", "--uv")
     {% else -%}
     session.run("uv", "build", "--sdist", "--wheel", "--out-dir", "dist/", external=True)
@@ -289,7 +289,7 @@ def publish_python(session: Session) -> None:
     session.run("uv", "publish", "dist/*", *session.posargs, external=True)
 
 
-{% if cookiecutter.add_rust_extension == "y" -%}
+{% if cookiecutter.add_rust_extension -%}
 @nox.session(python=False, name="publish-rust", tags=[RELEASE])
 def publish_rust(session: Session) -> None:
     """Publish built crates to crates.io."""
