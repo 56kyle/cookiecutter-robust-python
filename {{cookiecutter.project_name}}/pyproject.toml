@@ -6,7 +6,7 @@ authors = [
     { name = "{{cookiecutter.author}}", email = "{{cookiecutter.email}}" },
 ]
 license = "{{cookiecutter.license}}"
-license-files = ["LICENSE"]
+license-files = {file = "LICENSE"}
 readme = "README.md"
 requires-python = ">={{cookiecutter.min_python_version}},<4.0"
 keywords = [
