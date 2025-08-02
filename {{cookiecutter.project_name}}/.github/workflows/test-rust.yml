@@ -21,8 +21,8 @@ on:
 
 jobs:
   test-rust:
-    name: Run Rust Tests on ${{ matrix.os }}
-    runs-on: ${{ matrix.os }}
+    name: Run Rust Tests on {{ "${{ matrix.os }}" }}
+    runs-on: {{ "${{ matrix.os }}" }}
     strategy:
       matrix:
         include:
