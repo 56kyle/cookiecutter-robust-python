@@ -8,6 +8,10 @@ from typing import Callable
 
 
 REMOVE_PATHS: list[str] = [
+    "{% if not cookiecutter.add_rust_extension %}rust{% endif %}",
+    "{% if not cookiecutter.add_rust_extension %}.github/workflows/lint-rust.yml{% endif %}",
+    "{% if not cookiecutter.add_rust_extension %}.github/workflows/build-rust.yml{% endif %}",
+    "{% if not cookiecutter.add_rust_extension %}.github/workflows/test-rust.yml{% endif %}",
     "{% if cookiecutter.repository_provider != 'github' %}.github{% endif %}",
     "{% if cookiecutter.repository_provider != 'gitlab' %}.gitlab-ci.yml{% endif %}",
     "{% if cookiecutter.repository_provider != 'bitbucket' %}bitbucket-pipelines.yml{% endif %}",
