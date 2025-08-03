@@ -1,4 +1,5 @@
 """Script responsible for getting the release notes of the {{cookiecutter.project_name}} package."""
+
 import argparse
 from pathlib import Path
 

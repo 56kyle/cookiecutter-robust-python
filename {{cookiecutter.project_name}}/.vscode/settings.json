@@ -11,10 +11,7 @@
       "source.organizeImports": "always"
     }
   },
-  "ruff.args": [
-    "--config",
-    "${workspaceFolder}/.ruff.toml"
-  ],
+  "ruff.args": ["--config", "${workspaceFolder}/.ruff.toml"],
   "python.linting.enabled": true,
   "python.linting.ruffEnabled": true,
   // Pyright
@@ -36,8 +33,8 @@
   "rust-analyzer.checkOnSave.command": "clippy",
 
   // Prettier for non-Python text formats
-  "[json]":  { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[json]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[jsonc]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
-  "[yaml]":  { "editor.defaultFormatter": "esbenp.prettier-vscode" },
+  "[yaml]": { "editor.defaultFormatter": "esbenp.prettier-vscode" },
   "[markdown]": { "editor.defaultFormatter": "esbenp.prettier-vscode" }
 }

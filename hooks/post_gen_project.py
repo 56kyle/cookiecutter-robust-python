@@ -8,9 +8,13 @@ from typing import Callable
 
 
 REMOVE_PATHS: list[str] = [
-    "{% if cookiecutter.platform_provider != github %}.github{% endif %}",
-    "{% if cookiecutter.platform_provider != gitlab %}.gitlab-ci.yml{% endif %}",
-    "{% if cookiecutter.platform_provider != bitbucket %}.bitbucket-pipelines.yml{% endif %}",
+    "{% if not cookiecutter.add_rust_extension %}rust{% endif %}",
+    "{% if not cookiecutter.add_rust_extension %}.github/workflows/lint-rust.yml{% endif %}",
+    "{% if not cookiecutter.add_rust_extension %}.github/workflows/build-rust.yml{% endif %}",
+    "{% if not cookiecutter.add_rust_extension %}.github/workflows/test-rust.yml{% endif %}",
+    "{% if cookiecutter.repository_provider != 'github' %}.github{% endif %}",
+    "{% if cookiecutter.repository_provider != 'gitlab' %}.gitlab-ci.yml{% endif %}",
+    "{% if cookiecutter.repository_provider != 'bitbucket' %}bitbucket-pipelines.yml{% endif %}",
 ]
 
 
@@ -50,7 +54,7 @@ def remove_undesired_files() -> None:
         if path.is_dir():
             shutil.rmtree(path, onerror=remove_readonly)
         else:
-            path.unlink()
+            path.unlink(missing_ok=True)
 
 
 def remove_readonly(func: Callable[[str], Any], path: str, _: Any) -> None:
@@ -63,4 +67,4 @@ def remove_readonly(func: Callable[[str], Any], path: str, _: Any) -> None:
 
 
 if __name__ == "__main__":
-    reindent_cookiecutter_json()
+    post_gen_project()

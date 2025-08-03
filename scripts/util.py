@@ -10,11 +10,13 @@ from pathlib import Path
 from typing import Any
 from typing import Callable
 from typing import Generator
+from typing import Literal
+from typing import Optional
+from typing import overload
 
 import cruft
 import typer
 from cookiecutter.utils import work_in
-from pygments.lexers import q
 from typer.models import OptionInfo
 
 
@@ -35,12 +37,24 @@ def remove_readonly(func: Callable[[str], Any], path: str, _: Any) -> None:
     func(path)
 
 
-def run_command(command: str, *args: str) -> subprocess.CompletedProcess:
+@overload
+def run_command(command: str, *args: str, ignore_error: Literal[True]) -> Optional[subprocess.CompletedProcess]:
+    ...
+
+
+@overload
+def run_command(command: str, *args: str, ignore_error: Literal[False] = ...) -> subprocess.CompletedProcess:
+    ...
+
+
+def run_command(command: str, *args: str, ignore_error: bool = False) -> Optional[subprocess.CompletedProcess]:
     """Runs the provided command in a subprocess."""
     try:
         process = subprocess.run([command, *args], check=True, capture_output=True, text=True)
         return process
     except subprocess.CalledProcessError as error:
+        if ignore_error:
+            return None
         print(error.stdout, end="")
         print(error.stderr, end="", file=sys.stderr)
         raise
@@ -48,6 +62,28 @@ def run_command(command: str, *args: str) -> subprocess.CompletedProcess:
 
 git: partial[subprocess.CompletedProcess] = partial(run_command, "git")
 uv: partial[subprocess.CompletedProcess] = partial(run_command, "uv")
+
+
+def require_clean_and_up_to_date_repo() -> None:
+    """Checks if the repo is clean and up to date with any important branches."""
+    git("fetch")
+    git("status", "--porcelain")
+    if not is_branch_synced_with_remote("develop"):
+        raise ValueError("develop is not synced with origin/develop")
+    if not is_branch_synced_with_remote("main"):
+        raise ValueError("main is not synced with origin/main")
+    if not is_ancestor("main", "develop"):
+        raise ValueError("main is not an ancestor of develop")
+
+
+def is_branch_synced_with_remote(branch: str) -> bool:
+    """Checks if the branch is synced with its remote."""
+    return is_ancestor(branch, f"origin/{branch}") and is_ancestor(f"origin/{branch}", branch)
+
+
+def is_ancestor(ancestor: str, descendent: str) -> bool:
+    """Checks if the branch is synced with its remote."""
+    return git("merge-base", "--is-ancestor", ancestor, descendent).returncode == 0
 
 
 @contextmanager

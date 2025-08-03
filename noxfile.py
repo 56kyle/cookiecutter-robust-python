@@ -122,7 +122,7 @@ def test(session: Session) -> None:
     session.run("pytest", "tests")
 
 
-@nox.parametrize(arg_names="add_rust_extension", arg_values_list=[False], ids=["no-rust"])
+@nox.parametrize(arg_names="add_rust_extension", arg_values_list=[False, True], ids=["no-rust", "rust"])
 @nox.session(python=DEFAULT_TEMPLATE_PYTHON_VERSION, name="update-demo")
 def update_demo(session: Session, add_rust_extension: bool) -> None:
     session.log("Installing script dependencies for updating generated project demos...")

@@ -40,17 +40,20 @@ We welcome pull requests! For significant changes, it's best to open an issue fi
 ### Setting Up Your Development Environment
 
 1. **Fork and clone the repository:**
+
    ```bash
    git clone https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}.git
    cd {{ cookiecutter.project_name }}
    ```
 
 2. **Install dependencies:**
+
    ```bash
    uv sync
    ```
 
 3. **Set up pre-commit hooks:**
+
    ```bash
    uvx nox -s pre-commit -- install
    ```
@@ -65,6 +68,7 @@ We welcome pull requests! For significant changes, it's best to open an issue fi
 ### Making Changes
 
 1. **Create a feature branch:**
+
    ```bash
    git checkout -b feature/your-feature-name
    # or
@@ -74,6 +78,7 @@ We welcome pull requests! For significant changes, it's best to open an issue fi
 2. **Make your changes** following our coding standards (see below)
 
 3. **Test your changes:**
+
    ```bash
    # Run the full test suite
    uvx nox -s tests-python
@@ -86,6 +91,7 @@ We welcome pull requests! For significant changes, it's best to open an issue fi
    ```
 
 4. **Check code quality:**
+
    ```bash
    # Format code
    uvx nox -s format-python
@@ -136,6 +142,7 @@ This project follows these standards:
 
 1. **Push your branch** to your fork
 2. **Open a pull request** with:
+
    - Clear title describing the change
    - Description explaining what and why
    - Link to any relevant issues
@@ -190,9 +197,10 @@ Contributors will be recognized in our release notes and documentation. Thank yo
 
 ---
 
-*This project was generated from the [cookiecutter-robust-python][cookiecutter-robust-python] template.*
+_This project was generated from the [cookiecutter-robust-python][cookiecutter-robust-python] template._
 
 <!-- Reference Links -->
+
 [code-of-conduct]: CODE_OF_CONDUCT.md
 [issues]: https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}/issues
 {% if cookiecutter.repository_provider == 'github' %}[discussions]: https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}/discussions{% endif %}

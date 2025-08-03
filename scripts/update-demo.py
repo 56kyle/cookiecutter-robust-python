@@ -10,6 +10,7 @@ from util import get_demo_name
 from util import git
 from util import FolderOption
 from util import REPO_FOLDER
+from util import require_clean_and_up_to_date_repo
 
 
 cli: typer.Typer = typer.Typer()
@@ -26,7 +27,8 @@ def update_demo(
         demo_path: Path = demos_cache_folder / demo_name
         typer.secho(f"Updating demo project at {demo_path=}.", fg="yellow")
         with work_in(demo_path):
-            git("status", "--porcelain")
+            require_clean_and_up_to_date_repo()
+            git("checkout", "develop")
             cruft.update(
                 project_dir=demo_path,
                 template_path=REPO_FOLDER,

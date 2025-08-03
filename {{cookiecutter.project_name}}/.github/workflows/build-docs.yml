@@ -11,8 +11,8 @@ on:
       - "noxfile.py"
       - "pyproject.toml"
       - ".github/workflows/build-docs.yml"
-      - ".ruff.toml"  # Affects docstrings via linting
-      - "pyrightconfig.json"  # Affects type hints in docs
+      - ".ruff.toml" # Affects docstrings via linting
+      - "pyrightconfig.json" # Affects type hints in docs
 
   push:
     branches:

@@ -67,4 +67,4 @@ repos:
         name: Commitizen
       - id: commitizen-branch
         name: Commitizen Branch
-        stages: [ commit-msg ]
+        stages: [commit-msg]
