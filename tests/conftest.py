@@ -3,6 +3,7 @@
 import subprocess
 from pathlib import Path
 from typing import Any
+from typing import Literal
 
 import pytest
 import toml
@@ -84,16 +85,26 @@ def robust_demo__name(robust_demo__add_rust_extension: str, robust_demo__is_setu
 
 
 @pytest.fixture(scope="session")
-def robust_demo__extra_context(robust_demo__name: str, robust_demo__add_rust_extension: bool) -> dict[str, Any]:
+def robust_demo__extra_context(
+    robust_demo__name: str,
+    robust_demo__add_rust_extension: bool,
+    robust_demo__repository_provider: Literal["github", "gitlab", "bitbucket"]
+) -> dict[str, Any]:
     return {
         "project_name": robust_demo__name,
-        "add_rust_extension": robust_demo__add_rust_extension
+        "add_rust_extension": robust_demo__add_rust_extension,
+        "repository_provider": robust_demo__repository_provider,
     }
 
 
 @pytest.fixture(scope="session")
 def robust_demo__add_rust_extension(request: FixtureRequest) -> bool:
     return getattr(request, "param", False)
+
+
+@pytest.fixture(scope="session")
+def robust_demo__repository_provider(request: FixtureRequest) -> Literal["github", "gitlab", "bitbucket"]:
+    return getattr(request, "param", "github")
 
 
 @pytest.fixture(scope="session")
