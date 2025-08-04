@@ -218,6 +218,15 @@ def build_python(session: Session) -> None:
         session.log(f"- {path.name}")
 
 
+{% if cookiecutter.add_rust_extension -%}
+@nox.session(python=False, name="build-rust", tags=[BUILD, RUST])
+def build_rust(session: Session) -> None:
+    """Build standalone Rust crates for potential independent publishing."""
+    session.log("Building Rust crates...")
+    session.run("cargo", "build", "--release", "--manifest-path", "rust/Cargo.toml", external=True)
+
+
+{% endif -%}
 @nox.session(python=False, name="build-container", tags=[BUILD])
 def build_container(session: Session) -> None:
     """Build the Docker container image.
