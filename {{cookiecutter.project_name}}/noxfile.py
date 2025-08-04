@@ -99,10 +99,10 @@ def format_python(session: Session) -> None:
 @nox.session(python=False, name="format-rust", tags=[FORMAT, RUST])
 def format_rust(session: Session) -> None:
     """Run Rust code formatter (cargo fmt)."""
-    session.log("Installing formatting dependencies...")
-    session.run("cargo", "install", "cargo-fmt", external=True)
-    session.run("cargo", "fmt", "--all", "--", "--check", external=True)
-    session.run("cargo", "fmt", "--all", "--", "--write", external=True)
+    session.log("Ensuring rustfmt component is available...")
+    session.run("rustup", "component", "add", "rustfmt", external=True)
+    session.log("Formatting Rust code...")
+    session.run("cargo", "fmt", "--all", external=True)
 
 
 {% endif -%}
@@ -117,10 +117,10 @@ def lint_python(session: Session) -> None:
 @nox.session(python=False, name="lint-rust", tags=[LINT, RUST])
 def lint_rust(session: Session) -> None:
     """Run Rust code linters (cargo clippy)."""
-    session.log("Installing linting dependencies...")
-    session.run("cargo", "install", "cargo-clippy", external=True)
-    session.run("cargo", "clippy", "--all-features", "--", "--check", external=True)
-    session.run("cargo", "clippy", "--all-features", "--", "--write", external=True)
+    session.log("Ensuring clippy component is available...")
+    session.run("rustup", "component", "add", "clippy", external=True)
+    session.log("Running clippy lints...")
+    session.run("cargo", "clippy", "--all-features", "--", "-D", "warnings", external=True)
 
 
 {% endif -%}
