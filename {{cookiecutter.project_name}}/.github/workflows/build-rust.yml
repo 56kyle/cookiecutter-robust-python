@@ -1,0 +1,87 @@
+name: Build Rust Crates
+
+on:
+  pull_request:
+    paths:
+      - "rust/**/*.rs"
+      - "rust/Cargo.toml"
+      - "rust/Cargo.lock"
+      - "noxfile.py"
+      - ".github/workflows/build-rust.yml"
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - "rust/**/*.rs"
+      - "rust/Cargo.toml"
+      - "rust/Cargo.lock"
+      - "noxfile.py"
+      - ".github/workflows/build-rust.yml"
+
+  workflow_dispatch:
+
+jobs:
+  build-rust:
+    name: Build Rust Crates
+    runs-on: {{ "${{ matrix.platform.runner }}" }}
+    strategy:
+      matrix:
+        platform:
+          - runner: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+          - runner: ubuntu-latest
+            target: x86_64-unknown-linux-musl
+          - runner: ubuntu-latest
+            target: aarch64-unknown-linux-gnu
+          - runner: ubuntu-latest
+            target: aarch64-unknown-linux-musl
+          - runner: macos-latest
+            target: x86_64-apple-darwin
+          - runner: macos-latest
+            target: aarch64-apple-darwin
+          - runner: windows-latest
+            target: x86_64-pc-windows-msvc
+          - runner: windows-latest
+            target: i686-pc-windows-msvc
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: {{ "${{ matrix.platform.target }}" }}
+
+      - name: Set up cross-compilation toolchain (Linux)
+        if: contains(matrix.platform.target, 'linux')
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y gcc-multilib
+          if [[ "{{ "${{ matrix.platform.target }}" }}" == *"aarch64"* ]]; then
+            sudo apt-get install -y gcc-aarch64-linux-gnu
+          fi
+          if [[ "{{ "${{ matrix.platform.target }}" }}" == *"musl"* ]]; then
+            sudo apt-get install -y musl-tools
+          fi
+
+      - name: Set up uv
+        uses: astral-sh/setup-uv@v6
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version-file: ".github/workflows/.python-version"
+
+      - name: Build Rust crates for target
+        run: |
+          cd rust
+          cargo build --release --target {{ "${{ matrix.platform.target }}" }}
+
+      - name: Upload Rust build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: rust-artifacts-{{ "${{ matrix.platform.target }}" }}
+          path: rust/target/{{ "${{ matrix.platform.target }}" }}/release/
+          retention-days: 7
