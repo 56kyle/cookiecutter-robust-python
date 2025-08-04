@@ -148,8 +148,8 @@ def security_python(session: Session) -> None:
 @nox.session(python=False, name="security-rust", tags=[SECURITY, RUST])
 def security_rust(session: Session) -> None:
     """Run code security checks (cargo audit)."""
-    session.log("Installing security dependencies...")
-    session.run("cargo", "install", "cargo-audit", external=True)
+    session.log("Ensuring cargo-audit is available...")
+    session.run("cargo", "install", "cargo-audit", "--locked", external=True)
     session.run("cargo", "audit", "--all", external=True)
 
 
