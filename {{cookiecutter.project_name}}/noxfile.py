@@ -39,13 +39,10 @@ TYPE: str = "type"
 TEST: str = "test"
 COVERAGE: str = "coverage"
 SECURITY: str = "security"
-PERF: str = "perf"
 DOCS: str = "docs"
 BUILD: str = "build"
 RELEASE: str = "release"
 QUALITY: str = "quality"
-PYTHON: str = "python"
-RUST: str = "rust"
 
 
 @nox.session(python=False, name="setup-git", tags=[ENV])
@@ -88,7 +85,7 @@ def precommit(session: Session) -> None:
         activate_virtualenv_in_precommit_hooks(session)
 
 
-@nox.session(python=False, name="format-python", tags=[FORMAT, PYTHON, QUALITY])
+@nox.session(python=False, name="format-python", tags=[FORMAT, QUALITY])
 def format_python(session: Session) -> None:
     """Run Python code formatter (Ruff format)."""
     session.log(f"Running Ruff formatter check with py{session.python}.")
@@ -96,7 +93,7 @@ def format_python(session: Session) -> None:
 
 
 {% if cookiecutter.add_rust_extension -%}
-@nox.session(python=False, name="format-rust", tags=[FORMAT, RUST])
+@nox.session(python=False, name="format-rust", tags=[FORMAT])
 def format_rust(session: Session) -> None:
     """Run Rust code formatter (cargo fmt)."""
     session.log("Ensuring rustfmt component is available...")
@@ -106,7 +103,7 @@ def format_rust(session: Session) -> None:
 
 
 {% endif -%}
-@nox.session(python=False, name="lint-python", tags=[LINT, PYTHON, QUALITY])
+@nox.session(python=False, name="lint-python", tags=[LINT, QUALITY])
 def lint_python(session: Session) -> None:
     """Run Python code linters (Ruff check, Pydocstyle rules)."""
     session.log(f"Running Ruff check with py{session.python}.")
@@ -114,7 +111,7 @@ def lint_python(session: Session) -> None:
 
 
 {% if cookiecutter.add_rust_extension -%}
-@nox.session(python=False, name="lint-rust", tags=[LINT, RUST])
+@nox.session(python=False, name="lint-rust", tags=[LINT, QUALITY])
 def lint_rust(session: Session) -> None:
     """Run Rust code linters (cargo clippy)."""
     session.log("Ensuring clippy component is available...")
@@ -124,7 +121,7 @@ def lint_rust(session: Session) -> None:
 
 
 {% endif -%}
-@nox.session(python=PYTHON_VERSIONS, name="typecheck", tags=[TYPE, PYTHON])
+@nox.session(python=PYTHON_VERSIONS, name="typecheck")
 def typecheck(session: Session) -> None:
     """Run static type checking (Pyright) on Python code."""
     session.log("Installing type checking dependencies...")
@@ -134,7 +131,7 @@ def typecheck(session: Session) -> None:
     session.run("pyright", "--pythonversion", session.python)
 
 
-@nox.session(python=False, name="security-python", tags=[SECURITY, PYTHON])
+@nox.session(python=False, name="security-python", tags=[SECURITY])
 def security_python(session: Session) -> None:
     """Run code security checks (Bandit) on Python code."""
     session.log(f"Running Bandit static security analysis with py{session.python}.")
@@ -145,7 +142,7 @@ def security_python(session: Session) -> None:
 
 
 {% if cookiecutter.add_rust_extension -%}
-@nox.session(python=False, name="security-rust", tags=[SECURITY, RUST])
+@nox.session(python=False, name="security-rust", tags=[SECURITY])
 def security_rust(session: Session) -> None:
     """Run code security checks (cargo audit)."""
     session.log("Ensuring cargo-audit is available...")
@@ -154,7 +151,7 @@ def security_rust(session: Session) -> None:
 
 
 {% endif -%}
-@nox.session(python=PYTHON_VERSIONS, name="tests-python", tags=[TEST, PYTHON])
+@nox.session(python=PYTHON_VERSIONS, name="tests-python", tags=[TEST])
 def tests_python(session: Session) -> None:
     """Run the Python test suite (pytest with coverage)."""
     session.log("Installing test dependencies...")
@@ -177,7 +174,7 @@ def tests_python(session: Session) -> None:
 
 
 {% if cookiecutter.add_rust_extension -%}
-@nox.session(python=False, name="tests-rust", tags=[TEST, RUST, CI])
+@nox.session(python=False, name="tests-rust", tags=[TEST])
 def tests_rust(session: Session) -> None:
     """Test the project's rust crates."""
     crates: list[Path] = [cargo_toml.parent for cargo_toml in CRATES_FOLDER.glob("*/Cargo.toml")]
@@ -203,7 +200,7 @@ def docs_build(session: Session) -> None:
     session.run("sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-W")
 
 
-@nox.session(python=False, name="build-python", tags=[BUILD, PYTHON])
+@nox.session(python=False, name="build-python", tags=[BUILD])
 def build_python(session: Session) -> None:
     """Build sdist and wheel packages (uv build)."""
     session.log(f"Building sdist and wheel packages with py{session.python}.")
@@ -219,7 +216,7 @@ def build_python(session: Session) -> None:
 
 
 {% if cookiecutter.add_rust_extension -%}
-@nox.session(python=False, name="build-rust", tags=[BUILD, RUST])
+@nox.session(python=False, name="build-rust", tags=[BUILD])
 def build_rust(session: Session) -> None:
     """Build standalone Rust crates for potential independent publishing."""
     session.log("Building Rust crates...")
