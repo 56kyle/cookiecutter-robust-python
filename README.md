@@ -2,17 +2,35 @@
 
 A Python project template robust enough to follow up [cookiecutter-hypermodern-python]
 
-# Caveat
-
-I really believe this idea has a lot of good ideas and best practices, however, creating it is a ton of work.
-
-If you have any interest in this project, please don't hesitate to reach out!
-Any advice, support, PR's, etc. are welcome and would be greatly appreciated.
-
-As it stands this project is getting rather close to being ready, but not quite yet. Mainly I want to ensure the github actions pipeline is steady, but once that is done it should be alright for use.
-
 # Example Output
 For an example of this template's output, please visit the [demo](https://github.com/56kyle/robust-python-demo) which is kept up to date with the current state of this template.
+
+## Roadmap
+
+This is a really brief/condensed idea of what is planned for this template, and where it stands currently:
+<details>
+<summary>Click to expand</summary>
+
+- [x] Swap to UV, Ruff, and Pyright (maybe ty later, but at the moment of writing this isn't ready yet)
+- [x] Add cruft and commitizen
+- [x] Centralize CI/CD through noxfile using uv cache to maintain speed
+- [x] Add CI/CD for GitHub, Gitlab, and Bitbucket (Only GitHub guaranteed to work, but others should be close enough)
+- [x] Add automated integration testing with separate repos to act as demos
+- [x] Add release process for demo
+- [x] Ensure end to end process for base python template works fully
+- [ ] Ensure maturin template works locally
+- [ ] Add modified CI/CD for the maturin version
+- [ ] Add CI/CD for the cookiecutter itself
+- [ ] Add github actions to automate demo publishing on merge to main or develop in cookiecutter
+- [ ] Better define out templates for issues, pull requests, etc.
+- [ ] Improve generated changelogs
+- [ ] Clean up documentation and make it readable
+- [ ] Possibly swap documentation to follow MADR (Maybe during clean up process, but low priority for the time being)
+- [ ] Move to an organization (Will be done whenever there are other users besides myself)
+- [ ] Add any missing automation for administrative tasks
+- [ ] Designate backup plans for the projects lifecycle over time
+</details>
+
 
 # Why does this project exist?
 
