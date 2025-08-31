@@ -57,7 +57,7 @@ jobs:
       - name: Cache Rust dependencies
         uses: Swatinem/rust-cache@v2
         with:
-          workdir: rust/
+          workspaces: "rust/"
           key: {{ "${{ matrix.platform.target }}" }}
 
       - name: Set up cross-compilation toolchain (Linux)

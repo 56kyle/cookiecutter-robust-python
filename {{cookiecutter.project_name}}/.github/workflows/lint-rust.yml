@@ -36,7 +36,7 @@ jobs:
       - name: Cache Rust dependencies
         uses: Swatinem/rust-cache@v2
         with:
-          workdir: rust/
+          workspaces: "rust/"
 
       - name: Set up uv
         uses: astral-sh/setup-uv@v6
