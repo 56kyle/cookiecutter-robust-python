@@ -229,7 +229,6 @@ test-python-windows:
 # Rust-specific jobs (conditional on rust extension flag)
 .rust-job: &rust-job
   image: rust:latest
-  stage: quality
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes: *rust-files
@@ -239,6 +238,7 @@ test-python-windows:
       changes: *rust-files
 
 format-rust:
+  stage: quality
   <<: *rust-job
   before_script:
     - rustup component add rustfmt
@@ -248,6 +248,7 @@ format-rust:
     - uvx nox -s format-rust
 
 lint-rust:
+  stage: quality
   <<: *rust-job
   before_script:
     - rustup component add clippy
@@ -257,8 +258,8 @@ lint-rust:
     - uvx nox -s lint-rust
 
 test-rust:
-  <<: *rust-job
   stage: test
+  <<: *rust-job
   before_script:
     - curl -LsSf https://astral.sh/uv/install.sh | sh
     - export PATH="$PATH:/root/.cargo/bin"
