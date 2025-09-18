@@ -32,6 +32,10 @@ stages:
       - $UV_CACHE_DIR
       - $PIP_CACHE_DIR
     policy: pull-push
+  before_script:
+    - uv --version
+  after_script:
+    - uv cache prune --ci
 
 # Shared rules for when to run jobs
 .on-merge-requests-and-main: &on-merge-requests-and-main
@@ -91,10 +95,6 @@ stages:
   stage: quality
   <<: *uv-cache
   <<: *on-merge-requests-and-main
-  before_script:
-    - uv --version
-  after_script:
-    - uv cache prune --ci
 
 # Python Quality Checks Job
 quality-python:
@@ -116,12 +116,8 @@ typecheck-python:
     matrix:
       - PYTHON_VERSION: ["3.9", "3.10", "3.11", "3.12", "3.13"]
   image: ghcr.io/astral-sh/uv:latest-python$PYTHON_VERSION-bookworm-slim
-  before_script:
-    - uv --version
   script:
     - uvx nox -s typecheck-$PYTHON_VERSION
-  after_script:
-    - uv cache prune --ci
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes: *python-typecheck-files
@@ -136,8 +132,6 @@ security-python:
   <<: *uv-cache
   script:
     - uvx nox -s security-python
-  after_script:
-    - uv cache prune --ci
   allow_failure: true
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -157,8 +151,6 @@ test-python:
   image: ghcr.io/astral-sh/uv:latest-python$PYTHON_VERSION-bookworm-slim
   script:
     - uvx nox -s tests-python-${PYTHON_VERSION//.}
-  after_script:
-    - uv cache prune --ci
   artifacts:
     reports:
       junit: tests/results/*.xml
@@ -237,7 +229,6 @@ test-python-windows:
 # Rust-specific jobs (conditional on rust extension flag)
 .rust-job: &rust-job
   image: rust:latest
-  stage: quality
   rules:
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       changes: *rust-files
@@ -247,6 +238,7 @@ test-python-windows:
       changes: *rust-files
 
 format-rust:
+  stage: quality
   <<: *rust-job
   before_script:
     - rustup component add rustfmt
@@ -256,6 +248,7 @@ format-rust:
     - uvx nox -s format-rust
 
 lint-rust:
+  stage: quality
   <<: *rust-job
   before_script:
     - rustup component add clippy
@@ -265,8 +258,8 @@ lint-rust:
     - uvx nox -s lint-rust
 
 test-rust:
-  <<: *rust-job
   stage: test
+  <<: *rust-job
   before_script:
     - curl -LsSf https://astral.sh/uv/install.sh | sh
     - export PATH="$PATH:/root/.cargo/bin"
@@ -280,8 +273,6 @@ build-python:
   <<: *uv-cache
   script:
     - uvx nox -s build-python
-  after_script:
-    - uv cache prune --ci
   artifacts:
     paths:
       - dist/
@@ -297,8 +288,6 @@ build-docs:
   <<: *uv-cache
   script:
     - uvx nox -s build-docs
-  after_script:
-    - uv cache prune --ci
   artifacts:
     paths:
       - docs/_build/html/
@@ -318,8 +307,6 @@ pages:
   script:
     - uvx nox -s build-docs
     - mv docs/_build/html public
-  after_script:
-    - uv cache prune --ci
   artifacts:
     paths:
       - public
@@ -335,8 +322,6 @@ test-release-python:
   script:
     - export PYPI_URL=https://test.pypi.org/legacy/
     - uvx nox -s publish-python
-  after_script:
-    - uv cache prune --ci
   rules:
     - if: $CI_COMMIT_TAG
   environment:
@@ -349,8 +334,6 @@ release-python:
   <<: *uv-cache
   script:
     - uvx nox -s publish-python
-  after_script:
-    - uv cache prune --ci
   rules:
     - if: $CI_COMMIT_TAG
   environment:
