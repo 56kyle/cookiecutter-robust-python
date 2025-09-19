@@ -4,12 +4,12 @@ import argparse
 import subprocess
 from typing import Optional
 
+from util import REPO_FOLDER
 from util import bump_version
 from util import check_dependencies
 from util import create_release_branch
-from util import get_package_version
 from util import get_bumped_package_version
-from util import REPO_FOLDER
+from util import get_package_version
 
 
 def main() -> None:
