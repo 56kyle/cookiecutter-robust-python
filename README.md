@@ -19,11 +19,11 @@ Once you have generated your project, and preferably before opening the IDE, the
 ```terminaloutput
 cd my-repo-name
 
-# Sets up a git repo w/ a main/develop branch along with an initial commit of everything just generated.
-uvx nox -s setup-git
-
 # Pins the uv python version, generates/syncs a venv, etc.
 uvx nox -s setup-venv
+
+# Sets up a git repo w/ a main/develop branch along with an initial commit of everything just generated.
+uvx nox -s setup-git
 
 # Sets up the remote reference and ensures main/develop are pushed/synced. Requires that the remote exists (should be empty).
 uvx nos -s setup-remote

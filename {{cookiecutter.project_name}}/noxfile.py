@@ -45,16 +45,16 @@ RELEASE: str = "release"
 QUALITY: str = "quality"
 
 
-@nox.session(python=False, name="setup-git", tags=[ENV])
-def setup_git(session: Session) -> None:
-    """Set up the git repo for the current project."""
-    session.run("python", SCRIPTS_FOLDER / "setup-git.py", REPO_ROOT, external=True)
-
-
 @nox.session(python=False, name="setup-venv", tags=[ENV])
 def setup_venv(session: Session) -> None:
     """Set up the virtual environment for the current project."""
     session.run("python", SCRIPTS_FOLDER / "setup-venv.py", REPO_ROOT, "-p", PYTHON_VERSIONS[0], external=True)
+
+
+@nox.session(python=False, name="setup-git", tags=[ENV])
+def setup_git(session: Session) -> None:
+    """Set up the git repo for the current project."""
+    session.run("python", SCRIPTS_FOLDER / "setup-git.py", REPO_ROOT, external=True)
 
 
 @nox.session(python=False, name="setup-remote")
