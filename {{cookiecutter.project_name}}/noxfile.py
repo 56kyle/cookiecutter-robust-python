@@ -205,7 +205,7 @@ def build_python(session: Session) -> None:
     """Build sdist and wheel packages (uv build)."""
     session.log(f"Building sdist and wheel packages with py{session.python}.")
     {% if cookiecutter.add_rust_extension -%}
-    session.run("maturin", "develop", "--uv")
+    session.run("uvx", "maturin", "develop", "--uv")
     {% else -%}
     session.run("uv", "build", "--sdist", "--wheel", "--out-dir", "dist/", external=True)
     {% endif -%}

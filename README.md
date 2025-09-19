@@ -2,7 +2,48 @@
 
 A Python project template robust enough to follow up [cookiecutter-hypermodern-python]
 
-# Example Output
+## Usage/Installation
+
+The only prerequisite for using the template is to [install uv].
+
+From there just cd into the directory you want to create the project in and run:
+```terminaloutput
+uvx cruft create https://github.com/56kyle/cookiecutter-robust-python.git
+>  [1/15] project_name (robust-python): my-repo-name
+> ...
+```
+
+#### Local Setup
+
+Once you have generated your project, and preferably before opening the IDE, the normal workflow to setup everything would go as follows:
+```terminaloutput
+cd my-repo-name
+
+# Sets up a git repo w/ a main/develop branch along with an initial commit of everything just generated.
+uvx nox -s setup-git
+
+# Pins the uv python version, generates/syncs a venv, etc.
+uvx nox -s setup-venv
+
+# Sets up the remote reference and ensures main/develop are pushed/synced. Requires that the remote exists (should be empty).
+uvx nos -s setup-remote
+```
+
+You can also run `uvx nox -t env` for the same effect.
+
+
+## Most Notable Features
+- Modern tooling with [uv], [ruff], [cruft], etc.
+- Built for supporting most OS's (windows, linux, macos) and all currently supported [python] versions
+- Platform agnostic CI/CD ([github], [gitlab], [bitbucket])
+- CI/CD that parities local [nox] sessions for all [python]
+- [maturin] support that can be at any time during the project's lifecycle
+- Designed to be a maintainable template over time through the use of automated demos and integration tests
+- ... and much more!
+
+For a general overview of where we are at with this template, please see the [roadmap](#roadmap) section.
+
+## Example Output
 For an example of this template's output, please visit the [demo](https://github.com/56kyle/robust-python-demo) which is kept up to date with the current state of this template.
 
 ## Roadmap
@@ -137,4 +178,5 @@ of trusted individuals to ensure the project is taken care of.
 [ruff]: https://docs.astral.sh/ruff/
 [rust]: https://www.rust-lang.org/learn
 [rye]: https://rye.astral.sh/
+[install uv]: https://docs.astral.sh/uv/getting-started/installation/
 [uv]: https://docs.astral.sh/uv/

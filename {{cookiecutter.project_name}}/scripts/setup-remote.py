@@ -49,9 +49,7 @@ def get_parser() -> argparse.ArgumentParser:
         metavar="PATH",
         help="Path to the repo's root directory (must already exist).",
     )
-    parser.add_argument(
-        "--host", dest="repository_host", help="Repository host (e.g., github.com, gitlab.com)."
-    )
+    parser.add_argument("--host", dest="repository_host", help="Repository host (e.g., github.com, gitlab.com).")
     parser.add_argument(
         "--path", dest="repository_path", help="Repository path (e.g., user/repo, group/subgroup/repo)."
     )
