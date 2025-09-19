@@ -23,10 +23,9 @@ def setup_git(path: Path) -> None:
     commands: list[list[str]] = [
         ["git", "init"],
         ["git", "branch", "-m", "master", "main"],
-        ["git", "checkout", "main"],
-        ["git", "checkout", "-b", "develop", "main"],
         ["git", "add", "."],
         ["git", "commit", "-m", "feat: initial commit"],
+        ["git", "checkout", "-b", "develop", "main"],
     ]
     check_dependencies(path=path, dependencies=["git"])
 
