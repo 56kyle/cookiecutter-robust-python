@@ -21,10 +21,9 @@ def main() -> None:
 def setup_remote(path: Path, repository_host: str, repository_path: str) -> None:
     """Set up the provided cookiecutter-robust-python project's git repo."""
     commands: list[list[str]] = [
-        ["git", "fetch", "origin"],
         ["git", "remote", "add", "origin", f"https://{repository_host}/{repository_path}.git"],
         ["git", "remote", "set-url", "origin", f"https://{repository_host}/{repository_path}.git"],
-        ["git", "pull"],
+        ["git", "fetch", "origin"],
         ["git", "checkout", "main"],
         ["git", "push", "-u", "origin", "main"],
         ["git", "checkout", "develop"],
