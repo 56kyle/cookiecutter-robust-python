@@ -1,5 +1,5 @@
 {
-  "project_name": "hypermodern-python",
+  "project_name": "robust-python",
   "package_name": "{{ cookiecutter.project_name.replace('-', '_') }}",
   "friendly_name": "{{ cookiecutter.project_name.replace('-', ' ').title() }}",
   "min_python_version": "3.9",
