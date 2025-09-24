@@ -199,6 +199,21 @@ def docs_build(session: Session) -> None:
     session.log("Building documentation.")
     session.run("sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-W")
 
+@nox.session(python=DEFAULT_PYTHON_VERSION, name="docs", tags=[DOCS, BUILD])
+def docs(session: Session) -> None:
+    """Build and serve the project documentation (Sphinx)."""
+    session.log("Installing documentation dependencies...")
+    session.install("-e", ".", "--group", "docs")
+
+    session.log(f"Building documentation with py{session.python}.")
+    docs_build_dir = Path("docs") / "_build" / "html"
+
+    session.log(f"Cleaning build directory: {docs_build_dir}")
+    session.run("sphinx-build", "-b", "html", "docs", str(docs_build_dir), "-E")
+
+    session.log("Building and serving documentation.")
+    session.run("sphinx-autobuild", "--open-browser", "docs", str(docs_build_dir))
+
 
 @nox.session(python=False, name="build-python", tags=[BUILD])
 def build_python(session: Session) -> None:
