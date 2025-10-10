@@ -2,6 +2,12 @@
 
 A Python project template robust enough to follow up [cookiecutter-hypermodern-python]
 
+---
+
+**[📚 View Documentation](https://cookiecutter-robust-python.readthedocs.io/)** | **[🐛 Report a Bug](https://github.com/56kyle/cookiecutter-robust-python/issues)** | **[✨ Request a Feature](https://github.com/56kyle/cookiecutter-robust-python/issues)**
+
+---
+
 ## Usage/Installation
 
 The only prerequisite for using the template is to [install uv].
@@ -9,6 +15,9 @@ The only prerequisite for using the template is to [install uv].
 From there just cd into the directory you want to create the project in and run:
 ```terminaloutput
 uvx cruft create https://github.com/56kyle/cookiecutter-robust-python.git
+```
+Which will prompt you for a few inputs before generating the project.
+```terminaloutput
 >  [1/15] project_name (robust-python): my-repo-name
 > ...
 ```
