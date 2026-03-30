@@ -16,7 +16,6 @@ from typing import Annotated
 
 import typer
 from cookiecutter.utils import work_in
-from loguru import logger
 
 from util import get_current_branch
 from util import get_demo_name
