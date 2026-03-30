@@ -8,6 +8,7 @@
 # ]
 # ///
 import itertools
+import os
 import subprocess
 from pathlib import Path
 from subprocess import CompletedProcess
@@ -44,13 +45,13 @@ def update_demo(
     add_rust_extension: Annotated[bool, typer.Option("--add-rust-extension", "-r")] = False,
     min_python_version: Annotated[str, typer.Option("--min-python-version")] = "3.10",
     max_python_version: Annotated[str, typer.Option("--max-python-version")] = "3.14",
-    branch_override: Annotated[Optional[str], typer.Option("--branch-override")] = None
 ) -> None:
     """Runs precommit in a generated project and matches the template to the results."""
     demo_name: str = get_demo_name(add_rust_extension=add_rust_extension)
     demo_path: Path = demos_cache_folder / demo_name
 
     typer.secho(f"template:\n\tcurrent_branch: {get_current_branch()}\n\tcurrent_commit: {get_current_commit()}")
+    branch_override: Optional[str] = os.getenv("COOKIECUTTER_ROBUST_PYTHON__BRANCH_OVERRIDE", None)
     if branch_override is not None:
         typer.secho(f"Overriding current branch name for demo reference. Using '{branch_override}' instead.")
         desired_branch_name: str = branch_override
