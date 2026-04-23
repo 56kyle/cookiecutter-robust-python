@@ -56,6 +56,9 @@ docs = [
 Homepage = "https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}"
 Repository = "https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}"
 
+[tool.uv]
+exclude-newer = "1 week"
+
 [[tool.uv.index]]
 name = "testpypi"
 url = "https://test.pypi.org/simple/"
