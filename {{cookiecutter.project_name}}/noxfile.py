@@ -56,7 +56,7 @@ def setup_git(session: Session) -> None:
 @nox.session(python=False, name="setup-remote")
 def setup_remote(session: Session) -> None:
     """Set up the remote repository for the current project."""
-    command: list[str] = [
+    command: list[str | Path] = [
         "python",
         SCRIPTS_FOLDER / "setup-remote.py",
         REPO_ROOT,
