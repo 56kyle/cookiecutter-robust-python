@@ -89,7 +89,7 @@ def __get_demo_release_notes() -> str:
     """Returns the release notes for the demo."""
     temp_folder: Path = Path(tempfile.mkdtemp()).resolve()
     notes_path: Path = temp_folder / "body.md"
-    command: list[str] = ["uv", "run", "./scripts/get-release-notes.py", notes_path]
+    command: list[str | Path] = ["uv", "run", "./scripts/get-release-notes.py", notes_path]
     subprocess.run(command, check=True)
 
     notes_contents: str = notes_path.read_text()
