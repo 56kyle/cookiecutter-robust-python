@@ -53,7 +53,7 @@ def setup_release(increment: Optional[str] = None) -> None:
         raise error
 
 
-def _setup_release(increment: str, current_version: str, new_version: str) -> None:
+def _setup_release(increment: Optional[str], current_version: str, new_version: str) -> None:
     """Prepares a release of the {{cookiecutter.project_name}} package.
 
     Sets up a release branch from the branch develop, bumps the version, and creates a release commit. Does not tag the
