@@ -103,7 +103,7 @@ def run_command(command: str, *args: str, ignore_error: Literal[True]) -> Option
 
 
 @overload
-def run_command(command: str, *args: str, ignore_error: Literal[False] = ...) -> subprocess.CompletedProcess:
+def run_command(command: str, *args: str, ignore_error: Literal[False]) -> subprocess.CompletedProcess:
     ...
 
 
