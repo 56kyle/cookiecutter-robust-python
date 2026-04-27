@@ -53,7 +53,7 @@ def release_demo(
             raise error
 
         git("push", "-u")
-        _create_demo_pr()
+        _create_demo_release_pr()
 
 
 def _rollback_failed_release() -> None:
@@ -67,7 +67,7 @@ def _rollback_failed_release() -> None:
     git("branch", "-D", starting_demo_branch)
 
 
-def _create_demo_pr() -> None:
+def _create_demo_release_pr() -> None:
     """Creates a pull request to merge the demo's feature branch into ."""
     current_branch: str = get_current_branch()
     if not current_branch.startswith("release/"):
