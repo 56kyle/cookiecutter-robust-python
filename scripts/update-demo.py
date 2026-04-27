@@ -100,6 +100,10 @@ def update_demo(
         git("commit", "-m", f"chore: {last_update_commit} -> {template_commit}", "--no-verify")
         git("push", "-u", "origin", desired_branch_name)
         if desired_branch_name != "develop":
+            pr_url: Optional[str] = _get_pr_url(branch=desired_branch_name)
+            if pr_url is not None:
+                typer.secho(f"PR already found at `{pr_url}`, skipping PR creation.")
+                return
             _create_demo_pr(demo_path=demo_path, branch=desired_branch_name, commit_start=last_update_commit)
 
 
@@ -149,12 +153,9 @@ def _validate_template_main_not_checked_out(branch: str) -> None:
 def _create_demo_pr(demo_path: Path, branch: str, commit_start: str) -> None:
     """Creates a PR to merge the given branch into develop."""
     gh("repo", "set-default", f"{DEMO.app_author}/{DEMO.app_name}")
-    search_results: subprocess.CompletedProcess = gh("pr", "list", "--state", "open", "--search", branch)
-
-    if search_results.returncode == 0:
-        url: str = _get_pr_url(branch=branch)
-        typer.secho(f"Skipping PR creation due to existing PR found for branch {branch} at {url}")
-        return
+    pr_url: Optional[str] = _get_pr_url(branch=branch)
+    if pr_url is not None:
+        raise ValueError(f"Attempting to create a PR that already exists at {pr_url}.")
 
     body: str = _get_demo_feature_pr_body(demo_path=demo_path, commit_start=commit_start)
 
@@ -166,17 +167,19 @@ def _create_demo_pr(demo_path: Path, branch: str, commit_start: str) -> None:
         "--repo": f"{DEMO.app_author}/{DEMO.app_name}",
     }
     gh("pr", "create", *itertools.chain.from_iterable(pr_kwargs.items()))
-    url: str = _get_pr_url(branch=branch)
+    url: Optional[str] = _get_pr_url(branch=branch)
+    if url is None:
+        raise ValueError(f"Unable to find url for the PR just created for branch {branch}.")
     typer.secho(f"Created PR for branch '{branch}' at '{url}'.")
 
 
-def _get_pr_url(branch: str) -> str:
+def _get_pr_url(branch: str) -> Optional[str]:
     """Returns the url of the current branch's PR."""
     result: Optional[subprocess.CompletedProcess] = gh(
         "pr", "view", branch, "--json", "url", "--jq", ".url", ignore_error=True
     )
     if result is None:
-        raise ValueError(f"Failed to find a PR URL for branch {branch}.")
+        return None
     return result.stdout.strip()
 
 
