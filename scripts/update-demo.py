@@ -69,6 +69,7 @@ def update_demo(
             f"{demo_name} is already up to date with {desired_branch_name} at {last_update_commit}",
             fg=typer.colors.YELLOW
         )
+        raise typer.Abort()
 
     if not is_ancestor(last_update_commit, template_commit):
         raise ValueError(
@@ -171,8 +172,10 @@ def _create_demo_pr(demo_path: Path, branch: str, commit_start: str) -> None:
 
 def _get_pr_url(branch: str) -> str:
     """Returns the url of the current branch's PR."""
-    result: subprocess.CompletedProcess = gh("pr", "view", branch, "--json", "url", "--jq", ".url")
-    if result.returncode != 0:
+    result: Optional[subprocess.CompletedProcess] = gh(
+        "pr", "view", branch, "--json", "url", "--jq", ".url", ignore_error=True
+    )
+    if result is None:
         raise ValueError(f"Failed to find a PR URL for branch {branch}.")
     return result.stdout.strip()
 
