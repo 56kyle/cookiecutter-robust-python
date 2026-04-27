@@ -45,7 +45,7 @@ def merge_demo_feature(
         )
         pr_number: str = pr_number_query.stdout.strip()
         if pr_number == "":
-            raise ValueError("Failed to find an existing PR from {} to {DEMO.develop_branch}")
+            raise ValueError(f"Failed to find an existing PR from {branch} to {DEMO.develop_branch}")
 
         gh("pr", "merge", pr_number, "--auto", "--delete-branch", "--merge")
 
