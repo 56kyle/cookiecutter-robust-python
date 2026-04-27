@@ -69,7 +69,7 @@ def update_demo(
             f"{demo_name} is already up to date with {desired_branch_name} at {last_update_commit}",
             fg=typer.colors.YELLOW
         )
-        raise typer.Abort()
+        raise typer.Exit(code=1001)
 
     if not is_ancestor(last_update_commit, template_commit):
         raise ValueError(
