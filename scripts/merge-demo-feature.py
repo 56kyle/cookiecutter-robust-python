@@ -39,6 +39,9 @@ def merge_demo_feature(
     demo_path: Path = demos_cache_folder / demo_name
     branch: str = branch if branch is not None else get_current_branch()
 
+    if branch == "":
+        raise ValueError("Branch name provided was an empty string. Check that CICD is properly passing through.")
+
     with work_in(demo_path):
         pr_number_query: subprocess.CompletedProcess = gh(
             "pr", "list", "--head", branch, "--base", DEMO.develop_branch, "--json", "number", "--jq", ".[0].number"
