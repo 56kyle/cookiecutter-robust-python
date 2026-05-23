@@ -42,8 +42,8 @@ jobs:
       - name: Checkout Demo
         uses: actions/checkout@v4
         with:
-          repository: "${{ github.repository_owner }}/${{ inputs.demo_name }}"
-          path: ${{ inputs.demo_name }}
+          repository: "${{ github.repository_owner }}/${{ matrix.demo_name }}"
+          path: ${{ matrix.demo_name }}
           ref: develop
           token: ${{ secrets.DEMO_TOKEN }}
 
