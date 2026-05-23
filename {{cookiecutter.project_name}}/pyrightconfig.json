@@ -25,6 +25,8 @@
   },
   "reportMissingImports": true,
   "reportMissingTypeStubs": true,
+  "reportUnusedCallResult": false,
+  "reportUnusedImport": false,
 
   "reportGeneralTypeIssues": "warning",
   "reportPropertyTypeMismatch": "warning",
