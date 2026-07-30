@@ -42,7 +42,7 @@ jobs:
           - { python: "3.14", os: "windows-latest" }
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Install uv
         uses: astral-sh/setup-uv@v6

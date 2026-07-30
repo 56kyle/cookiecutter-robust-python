@@ -35,12 +35,12 @@ jobs:
       GH_TOKEN: ${{ secrets.DEMO_TOKEN }}
     steps:
       - name: Checkout Template
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: "${{ github.repository_owner }}/cookiecutter-robust-python"
 
       - name: Checkout Demo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           repository: "${{ github.repository_owner }}/${{ matrix.demo_name }}"
           path: ${{ matrix.demo_name }}
