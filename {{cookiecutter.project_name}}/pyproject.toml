@@ -53,7 +53,7 @@ docs = [
 ]
 
 [project.scripts]
-{{ cookiecutter.project_name }} = "{{ cookiecutter.project_name }}.__main__:app"
+{{ cookiecutter.project_name }} = "{{ cookiecutter.package_name }}.__main__:app"
 
 [project.urls]
 Homepage = "https://{{ cookiecutter.repository_host }}/{{ cookiecutter.repository_path }}"
