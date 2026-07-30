@@ -81,7 +81,7 @@ def _create_demo_release_pr() -> None:
         "--assignee": "@me",
         "--base": "main",
     }
-    command: list[str] = ["gh", "pr", "create", *itertools.chain(pr_kwargs.items())]
+    command: list[str] = ["gh", "pr", "create", *itertools.chain.from_iterable(pr_kwargs.items())]
     subprocess.run(command, check=True)
 
 
