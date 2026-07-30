@@ -93,3 +93,6 @@ Distributed under the terms of the **{{ cookiecutter.license }}** license. See [
 
 [cookiecutter-robust-python]: https://github.com/robust-python/cookiecutter-robust-python
 [documentation]: https://{{ cookiecutter.project_name.replace('_', '-') }}.readthedocs.io/
+[pip-documentation]: https://pip.pypa.io/en/stable/
+[nox-documentation]: https://nox.thea.codes/en/stable/
+[uv-documentation]: https://docs.astral.sh/uv/
